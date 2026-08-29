@@ -80,6 +80,12 @@
   .admin-list-item{display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:var(--panel-2); border-radius:7px; margin-bottom:8px; font-size:13px;}
   footer{text-align:center; padding:20px; color:var(--muted); font-family:var(--mono); font-size:10.5px; border-top:1px solid var(--border);}
   .hidden{display:none !important;}
+
+.question-image-wrap{margin:10px 0 16px;text-align:left;}
+.question-image{max-width:280px;max-height:220px;object-fit:contain;display:block;}
+.option-image{display:block;max-width:220px;max-height:140px;object-fit:contain;margin:8px 0 2px;}
+.option{display:flex;flex-direction:column;align-items:flex-start;gap:6px;}
+
 </style>
 </head>
 <body>
@@ -476,6 +482,7 @@ function renderMock(){
   body.innerHTML = `
     <span class="topic-tag">${q.topic || 'General'}</span>
     <div class="question" style="margin:10px 0 16px; font-size:16px; white-space:pre-line;">${mockState.idx+1}. ${questionText}</div>
+    ${q.questionImage ? `<div class="question-image-wrap"><img class="question-image" src="${q.questionImage}" alt="Question image"></div>` : ''}
     <div id="opts"></div>
     <div class="row" style="margin-top:14px;"><button class="btn hidden" id="next-q">Agla Sawaal</button></div>
   `;
@@ -483,7 +490,19 @@ function renderMock(){
   let answered=false;
   (q.options || []).forEach((opt,i)=>{
      const b = document.createElement('button'); b.className='option';
-     b.textContent = typeof opt === 'object' && opt !== null ? (opt.text || opt.label || '') : opt;
+     const text = typeof opt === 'object' && opt !== null ? (opt.text || opt.label || '') : String(opt);
+     if(text) {
+       const span = document.createElement('span');
+       span.textContent = text;
+       b.appendChild(span);
+     }
+     if(typeof opt === 'object' && opt !== null && opt.image) {
+       const img = document.createElement('img');
+       img.className = 'option-image';
+       img.src = opt.image;
+       img.alt = text || ('Option ' + (i+1));
+       b.appendChild(img);
+     }
      b.addEventListener('click', ()=>{
        if(answered) return; answered=true;
        document.querySelectorAll('#opts .option').forEach((el,j)=>{ if(j===correctIndex) el.classList.add('correct'); else if(j===i) el.classList.add('wrong'); });
@@ -621,16 +640,29 @@ function normalizeImportedJSON(raw){
       throw new Error(`Question ${index+1}: correct answer 0, 1, 2 ya 3 hona chahiye.`);
     }
 
-    const cleanOptions = options.map(o=>{
-      if(o && typeof o === 'object') return String(o.text || o.label || '').trim();
-      return String(o).trim();
+    const cleanOptions = options.map((o, optionIndex)=>{
+      if(o && typeof o === 'object'){
+        const text = String(o.text || o.label || '').trim();
+        const image = typeof o.image === 'string' && o.image.startsWith('data:image/')
+          ? o.image
+          : '';
+        if(!text && !image){
+          throw new Error(`Question ${index+1}: Option ${optionIndex+1} me text ya image nahi mila.`);
+        }
+        return image ? { text, image } : text;
+      }
+      const text = String(o).trim();
+      if(!text) throw new Error(`Question ${index+1}: Option ${optionIndex+1} empty hai.`);
+      return text;
     });
 
-    if(cleanOptions.some(o=>!o || /^\d+$/.test(o))){
-      throw new Error(`Question ${index+1}: options me actual text nahi mila. Python converter ko options ka text save karna hoga.`);
-    }
-
-    return { topic, question: String(questionText).trim(), options: cleanOptions, correctIndex: correct };
+    return {
+      topic,
+      question: String(questionText).trim(),
+      options: cleanOptions,
+      correctIndex: correct,
+      ...(item.questionImage ? {questionImage: String(item.questionImage)} : {})
+    };
   });
 }
 
