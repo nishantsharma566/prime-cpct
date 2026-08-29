@@ -221,13 +221,21 @@
     </div>
 
     <div class="panel admin-tab hidden" id="admin-bulk-q">
-      <p class="sub">Ek saath multiple questions add karne ke liye niche JSON format mein paste karein:</p>
-      <textarea id="bulk-json" rows="8" placeholder='[
+       <p class="sub">Python se bani JSON file upload karein. Purana JSON format bhi supported hai.</p>
+       <label>JSON File</label>
+       <input type="file" id="bulk-file" accept=".json,application/json">
+       <div class="row" style="margin-bottom:12px;">
+         <button class="btn ghost" id="load-json-file" type="button">JSON Load Karein</button>
+         <button class="btn ghost" id="clear-bulk" type="button">Clear</button>
+       </div>
+       <label>Ya JSON yahan paste karein</label>
+       <textarea id="bulk-json" rows="10" placeholder='[
   {"topic":"Computer Basics","q":"CPU ka full form?","opts":["Central Processing Unit","A","B","C"],"ans":0}
 ]'></textarea>
-      <button class="btn" id="save-bulk">Sab Add Karein</button>
-      <div id="bulk-msg"></div>
-    </div>
+       <p class="sub" style="margin:6px 0 12px;">Supported: <code>[{topic,q,opts,ans}]</code> aur Python format <code>{test,questions}</code>.</p>
+       <button class="btn" id="save-bulk">Sab Add Karein</button>
+       <div id="bulk-msg"></div>
+     </div>
 
     <div class="panel admin-tab hidden" id="admin-add-p">
       <label>Language</label>
@@ -461,26 +469,32 @@ function renderMock(){
     return;
   }
   const q = mockState.questions[mockState.idx];
+  const questionText = typeof q.question === 'object' && q.question !== null
+    ? [q.question.en, q.question.hi].filter(Boolean).join('\n')
+    : (q.question || q.q || '');
+  const correctIndex = Number.isInteger(q.correctIndex) ? q.correctIndex : Number(q.correctAnswer);
   body.innerHTML = `
-    <span class="topic-tag">${q.topic}</span>
-    <div class="question" style="margin:10px 0 16px; font-size:16px;">${mockState.idx+1}. ${q.question}</div>
+    <span class="topic-tag">${q.topic || 'General'}</span>
+    <div class="question" style="margin:10px 0 16px; font-size:16px; white-space:pre-line;">${mockState.idx+1}. ${questionText}</div>
     <div id="opts"></div>
     <div class="row" style="margin-top:14px;"><button class="btn hidden" id="next-q">Agla Sawaal</button></div>
   `;
   const optsDiv = document.getElementById('opts');
   let answered=false;
-  q.options.forEach((opt,i)=>{
-    const b = document.createElement('button'); b.className='option'; b.textContent = opt;
-    b.addEventListener('click', ()=>{
-      if(answered) return; answered=true;
-      document.querySelectorAll('#opts .option').forEach((el,j)=>{ if(j===q.correctIndex) el.classList.add('correct'); else if(j===i) el.classList.add('wrong'); });
-      if(!mockState.perTopic[q.topic]) mockState.perTopic[q.topic] = {correct:0,total:0};
-      mockState.perTopic[q.topic].total++;
-      if(i===q.correctIndex){ mockState.score++; mockState.perTopic[q.topic].correct++; }
-      document.getElementById('next-q').classList.remove('hidden');
-    });
-    optsDiv.appendChild(b);
-  });
+  (q.options || []).forEach((opt,i)=>{
+     const b = document.createElement('button'); b.className='option';
+     b.textContent = typeof opt === 'object' && opt !== null ? (opt.text || opt.label || '') : opt;
+     b.addEventListener('click', ()=>{
+       if(answered) return; answered=true;
+       document.querySelectorAll('#opts .option').forEach((el,j)=>{ if(j===correctIndex) el.classList.add('correct'); else if(j===i) el.classList.add('wrong'); });
+       const topic = q.topic || 'General';
+       if(!mockState.perTopic[topic]) mockState.perTopic[topic] = {correct:0,total:0};
+       mockState.perTopic[topic].total++;
+       if(i===correctIndex){ mockState.score++; mockState.perTopic[topic].correct++; }
+       document.getElementById('next-q').classList.remove('hidden');
+     });
+     optsDiv.appendChild(b);
+   });
   document.getElementById('next-q').addEventListener('click', ()=>{ mockState.idx++; renderMock(); });
 }
 async function saveMockResult(total){
@@ -567,19 +581,107 @@ document.getElementById('save-question').addEventListener('click', async ()=>{
     ['q-topic','q-text','q-opt0','q-opt1','q-opt2','q-opt3'].forEach(id=>document.getElementById(id).value='');
   }catch(e){ msg.innerHTML = `<div class="msg err">${e.message}</div>`; }
 });
+// ================================================================
+// BULK JSON IMPORT
+// Supports old website JSON and Python converter JSON
+// ================================================================
+function normalizeImportedJSON(raw){
+  let arr;
+  let defaultTopic = 'General';
+
+  if(Array.isArray(raw)){
+    arr = raw;
+  } else if(raw && Array.isArray(raw.questions)){
+    arr = raw.questions;
+    defaultTopic = raw.test && raw.test.title ? raw.test.title : 'General';
+  } else {
+    throw new Error('JSON me questions array nahi mila.');
+  }
+
+  return arr.map((item, index)=>{
+    if(!item || typeof item !== 'object') throw new Error(`Question ${index+1} invalid hai.`);
+
+    const topic = String(item.topic || defaultTopic || 'General').trim();
+    const question = item.question ?? item.q;
+    const options = item.options ?? item.opts;
+    let correct = item.correctIndex ?? item.correctAnswer ?? item.ans;
+
+    let questionText = question;
+    if(question && typeof question === 'object'){
+      questionText = [question.en, question.hi].filter(Boolean).join('\n');
+    }
+
+    if(!questionText) throw new Error(`Question ${index+1}: question missing hai.`);
+    if(!Array.isArray(options) || options.length !== 4){
+      throw new Error(`Question ${index+1}: exactly 4 options chahiye.`);
+    }
+
+    correct = Number(correct);
+    if(!Number.isInteger(correct) || correct < 0 || correct > 3){
+      throw new Error(`Question ${index+1}: correct answer 0, 1, 2 ya 3 hona chahiye.`);
+    }
+
+    const cleanOptions = options.map(o=>{
+      if(o && typeof o === 'object') return String(o.text || o.label || '').trim();
+      return String(o).trim();
+    });
+
+    if(cleanOptions.some(o=>!o || /^\d+$/.test(o))){
+      throw new Error(`Question ${index+1}: options me actual text nahi mila. Python converter ko options ka text save karna hoga.`);
+    }
+
+    return { topic, question: String(questionText).trim(), options: cleanOptions, correctIndex: correct };
+  });
+}
+
+async function importBulkJSON(raw){
+  const arr = normalizeImportedJSON(raw);
+  if(!arr.length) throw new Error('JSON me koi question nahi hai.');
+
+  const msg = document.getElementById('bulk-msg');
+  const batch = db.batch();
+  arr.forEach(item=>{
+    const ref = db.collection('questions').doc();
+    batch.set(ref, item);
+  });
+  await batch.commit();
+
+  msg.innerHTML = `<div class="msg ok">${arr.length} questions successfully add ho gaye!</div>`;
+  document.getElementById('bulk-json').value='';
+  document.getElementById('bulk-file').value='';
+}
+
+document.getElementById('load-json-file').addEventListener('click', async ()=>{
+  const msg = document.getElementById('bulk-msg');
+  const file = document.getElementById('bulk-file').files[0];
+  if(!file){ msg.innerHTML='<div class="msg err">Pehle JSON file select karein.</div>'; return; }
+  try{
+    const text = await file.text();
+    JSON.parse(text);
+    document.getElementById('bulk-json').value = text;
+    msg.innerHTML='<div class="msg ok">JSON load ho gayi. Ab "Sab Add Karein" dabayein.</div>';
+  }catch(e){
+    msg.innerHTML = `<div class="msg err">JSON read nahi ho paayi: ${e.message}</div>`;
+  }
+});
+
+document.getElementById('clear-bulk').addEventListener('click', ()=>{
+  document.getElementById('bulk-json').value='';
+  document.getElementById('bulk-file').value='';
+  document.getElementById('bulk-msg').innerHTML='';
+});
+
 document.getElementById('save-bulk').addEventListener('click', async ()=>{
   const msg = document.getElementById('bulk-msg');
   try{
-    const arr = JSON.parse(document.getElementById('bulk-json').value);
-    const batch = db.batch();
-    arr.forEach(item=>{
-      const ref = db.collection('questions').doc();
-      batch.set(ref, { topic:item.topic, question:item.q, options:item.opts, correctIndex:item.ans });
-    });
-    await batch.commit();
-    msg.innerHTML = `<div class="msg ok">${arr.length} questions add ho gaye!</div>`;
-    document.getElementById('bulk-json').value='';
-  }catch(e){ msg.innerHTML = `<div class="msg err">JSON format galat hai: ${e.message}</div>`; }
+    const text = document.getElementById('bulk-json').value.trim();
+    if(!text) throw new Error('JSON file upload ya JSON paste karein.');
+    const raw = JSON.parse(text);
+    await importBulkJSON(raw);
+  }catch(e){
+    console.error(e);
+    msg.innerHTML = `<div class="msg err">JSON import nahi hua: ${e.message}</div>`;
+  }
 });
 document.getElementById('save-paragraph').addEventListener('click', async ()=>{
   const language = document.getElementById('p-lang').value;
