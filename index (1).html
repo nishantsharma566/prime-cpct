@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ComputeLab — CPCT Mock Test, Typing &amp; Notes</title>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<style>
+  :root{
+    --bg:#0B0E14; --panel:#10141D; --panel-2:#161B26;
+    --amber:#FFB000; --teal:#5EEAD4; --paper:#EDEDED; --muted:#8B93A7;
+    --red:#FF5C5C; --green:#4ADE80; --border:#232938;
+    --mono:'JetBrains Mono','IBM Plex Mono',Consolas,monospace;
+    --sans:'IBM Plex Sans','Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:radial-gradient(ellipse at top, rgba(255,176,0,.06), transparent 60%) , var(--bg); color:var(--paper); font-family:var(--sans); min-height:100vh;}
+  header{border-bottom:1px solid var(--border); padding:16px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{width:32px;height:32px;border:1.5px solid var(--amber);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);color:var(--amber);font-weight:700;font-size:12px;}
+  .brand h1{font-family:var(--mono); font-size:16px; margin:0;}
+  .brand span{color:var(--muted); font-size:11px; font-family:var(--mono); display:block;}
+  nav{display:flex; gap:5px; flex-wrap:wrap;}
+  nav button{font-family:var(--mono); font-size:12.5px; background:var(--panel); color:var(--muted); border:1px solid var(--border); padding:8px 13px; border-radius:6px; cursor:pointer;}
+  nav button.active{background:var(--amber); color:#1a1200; font-weight:700; border-color:var(--amber);}
+  nav button:hover:not(.active){color:var(--paper);}
+  main{max-width:980px; margin:0 auto; padding:32px 18px 80px;}
+  .view{display:none;} .view.active{display:block; animation:rise .25s ease;}
+  @keyframes rise{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  .eyebrow{font-family:var(--mono); color:var(--teal); font-size:11.5px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px;}
+  h2{font-family:var(--mono); font-size:24px; margin:0 0 6px;}
+  .sub{color:var(--muted); margin:0 0 24px; font-size:13.5px;}
+  .panel{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px;}
+  input,select,textarea{width:100%; padding:11px 13px; background:#000; color:var(--paper); border:1px solid var(--border); border-radius:7px; font-family:var(--sans); font-size:14px; margin-bottom:12px;}
+  input:focus,select:focus,textarea:focus{outline:none; border-color:var(--amber);}
+  label{font-size:12px; color:var(--muted); font-family:var(--mono); display:block; margin-bottom:5px;}
+  .btn{font-family:var(--mono); background:var(--amber); color:#1a1200; border:none; padding:11px 20px; border-radius:6px; font-weight:700; cursor:pointer; font-size:13.5px;}
+  .btn.ghost{background:transparent; color:var(--muted); border:1px solid var(--border);}
+  .btn.danger{background:var(--red); color:#2a0000;}
+  .btn:hover{filter:brightness(1.1);}
+  .row{display:flex; gap:10px; flex-wrap:wrap;}
+  .msg{font-family:var(--mono); font-size:12.5px; padding:9px 12px; border-radius:6px; margin-bottom:12px;}
+  .msg.err{background:rgba(255,92,92,.12); color:var(--red); border:1px solid var(--red);}
+  .msg.ok{background:rgba(74,222,128,.12); color:var(--green); border:1px solid var(--green);}
+
+  .card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px;}
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px; cursor:pointer; transition:.15s;}
+  .card:hover{border-color:var(--amber); transform:translateY(-2px);}
+  .card .icon{font-family:var(--mono); color:var(--amber); font-size:22px; margin-bottom:10px;}
+  .card h3{font-family:var(--mono); margin:0 0 6px; font-size:15px;}
+  .card p{color:var(--muted); font-size:12.5px; margin:0;}
+
+  #typing-text{font-family:var(--mono); font-size:17px; line-height:1.9; color:var(--muted); padding:18px; background:#000; border-radius:8px; border:1px solid var(--border);}
+  #typing-text span.correct{color:var(--green);} #typing-text span.wrong{color:var(--red); background:rgba(255,92,92,.15);}
+  #typing-text span.current{background:var(--amber); color:#1a1200;}
+  .stat-row{display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;}
+  .stat{flex:1; min-width:100px; background:var(--panel-2); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;}
+  .stat .val{font-family:var(--mono); font-size:21px; color:var(--amber); font-weight:700;}
+  .stat .lbl{font-size:10px; color:var(--muted); text-transform:uppercase;}
+
+  .option{display:block; width:100%; text-align:left; padding:12px 15px; margin-bottom:9px; background:var(--panel-2); border:1px solid var(--border); border-radius:8px; color:var(--paper); font-size:13.5px; cursor:pointer;}
+  .option:hover{border-color:var(--amber);} .option.correct{border-color:var(--green); background:rgba(74,222,128,.12);}
+  .option.wrong{border-color:var(--red); background:rgba(255,92,92,.12);}
+  .progress-bar{height:5px; background:var(--panel-2); border-radius:3px; overflow:hidden; margin-bottom:20px;}
+  .progress-fill{height:100%; background:var(--amber);}
+  .result-score{font-family:var(--mono); font-size:42px; color:var(--amber); text-align:center; margin:8px 0;}
+  .topic-tag{display:inline-block; font-family:var(--mono); font-size:10.5px; background:var(--panel-2); color:var(--teal); padding:3px 9px; border-radius:20px; margin-right:6px; margin-bottom:6px;}
+
+  .bar-row{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .bar-label{width:130px; font-family:var(--mono); font-size:12px; color:var(--muted); flex-shrink:0;}
+  .bar-track{flex:1; height:16px; background:var(--panel-2); border-radius:8px; overflow:hidden;}
+  .bar-fill{height:100%; border-radius:8px;}
+  .bar-pct{width:42px; font-family:var(--mono); font-size:12px; text-align:right;}
+  .weak-word{display:inline-block; background:rgba(255,92,92,.1); border:1px solid var(--red); color:var(--red); font-family:var(--mono); font-size:12px; padding:4px 10px; border-radius:6px; margin:3px;}
+
+  .admin-list-item{display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:var(--panel-2); border-radius:7px; margin-bottom:8px; font-size:13px;}
+  footer{text-align:center; padding:20px; color:var(--muted); font-family:var(--mono); font-size:10.5px; border-top:1px solid var(--border);}
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<header id="app-header" class="hidden">
+  <div class="brand">
+    <div class="brand-mark">C:\</div>
+    <div><h1>ComputeLab</h1><span id="welcome-name">practice.terminal.local</span></div>
+  </div>
+  <nav id="main-nav"></nav>
+</header>
+
+<main>
+
+  <section id="auth" class="view active">
+    <div class="eyebrow">Student / Admin Access</div>
+    <h2 id="auth-title">Login Karein</h2>
+    <p class="sub">Apna progress track karne ke liye login karein.</p>
+    <div class="panel" style="max-width:380px;">
+      <div id="auth-msg"></div>
+      <div id="signup-extra" class="hidden">
+        <label>Naam</label>
+        <input type="text" id="auth-name" placeholder="Aapka naam">
+      </div>
+      <label>Email</label>
+      <input type="email" id="auth-email" placeholder="you@example.com">
+      <label>Password</label>
+      <input type="password" id="auth-password" placeholder="••••••••">
+      <div class="row">
+        <button class="btn" id="auth-submit">Login</button>
+        <button class="btn ghost" id="auth-toggle">Naya account banayein</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="home" class="view">
+    <div class="eyebrow">Dashboard</div>
+    <h2>Kya practice karna hai?</h2>
+    <p class="sub">Neeche se choose karein.</p>
+    <div class="card-grid">
+      <div class="card" data-action="cpct"><div class="icon">▣</div><h3>CPCT Mock Test</h3><p>Mix topics se full mock test</p></div>
+      <div class="card" data-action="hindi-typing"><div class="icon">अ</div><h3>Hindi Typing</h3><p>Hindi paragraph typing speed test</p></div>
+      <div class="card" data-action="english-typing"><div class="icon">A</div><h3>English Typing</h3><p>English paragraph typing speed test</p></div>
+      <div class="card" data-action="topic-search"><div class="icon">⌕</div><h3>Topic Wise Test</h3><p>Kisi ek topic se practice karein</p></div>
+    </div>
+  </section>
+
+  <section id="typing" class="view">
+    <div class="eyebrow" id="typing-lang-label">Typing Test</div>
+    <h2>Typing Test</h2>
+    <p class="sub">Neeche diya paragraph type karein.</p>
+    <div class="panel">
+      <div id="typing-text"></div>
+      <textarea id="typing-input" rows="4" placeholder="Yahan type karna shuru karein..."></textarea>
+      <div class="stat-row">
+        <div class="stat"><div class="val" id="stat-time">30</div><div class="lbl">Sec Left</div></div>
+        <div class="stat"><div class="val" id="stat-wpm">0</div><div class="lbl">WPM</div></div>
+        <div class="stat"><div class="val" id="stat-acc">100%</div><div class="lbl">Accuracy</div></div>
+        <div class="stat"><div class="val" id="stat-err">0</div><div class="lbl">Errors</div></div>
+      </div>
+      <div class="row" style="margin-top:16px;">
+        <button class="btn" id="restart-typing">Naya Test</button>
+        <select id="duration-select" style="width:auto;"><option value="30">30 sec</option><option value="60">60 sec</option><option value="120">120 sec</option></select>
+      </div>
+    </div>
+  </section>
+
+  <section id="topic-search" class="view">
+    <div class="eyebrow">Topic Wise</div>
+    <h2>Topic Choose Karein</h2>
+    <p class="sub">Jis topic se practice karni hai use search/select karein.</p>
+    <div class="panel">
+      <input type="text" id="topic-filter-input" placeholder="Topic search karein...">
+      <div id="topic-buttons" class="card-grid"></div>
+    </div>
+  </section>
+
+  <section id="mock" class="view">
+    <div class="eyebrow" id="mock-mode-label">Mock Test</div>
+    <h2>Mock Test</h2>
+    <p class="sub">Har jawab ke baad turant result dikhega.</p>
+    <div class="panel">
+      <div class="progress-bar"><div class="progress-fill" id="mock-progress" style="width:0%"></div></div>
+      <div id="mock-body"></div>
+    </div>
+  </section>
+
+  <section id="dashboard" class="view">
+    <div class="eyebrow">Meri Progress</div>
+    <h2>Student Dashboard</h2>
+    <p class="sub">Aapki typing aur mock test performance ka summary.</p>
+
+    <div class="panel" style="margin-bottom:18px;">
+      <h3 style="font-family:var(--mono); color:var(--teal); margin-top:0;">Typing Performance</h3>
+      <div class="stat-row" id="typing-summary-stats"></div>
+      <div style="margin-top:16px;">
+        <label>Weak Words (jinme sabse zyada galti hoti hai)</label>
+        <div id="weak-words-box">Abhi koi data nahi hai — pehle typing test try karein.</div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:18px;">
+      <h3 style="font-family:var(--mono); color:var(--teal); margin-top:0;">Mock Test — Topic Wise Accuracy</h3>
+      <div id="topic-accuracy-box">Abhi koi data nahi hai — pehle mock test try karein.</div>
+    </div>
+
+    <div class="panel">
+      <h3 style="font-family:var(--mono); color:var(--teal); margin-top:0;">Kitna % Kis Topic Se Pucha Gaya</h3>
+      <div id="topic-distribution-box">—</div>
+    </div>
+  </section>
+
+  <section id="admin" class="view">
+    <div class="eyebrow">Admin Panel</div>
+    <h2>Content Manage Karein</h2>
+    <p class="sub">Questions aur typing paragraphs add/edit/delete karein.</p>
+
+    <div class="row" style="margin-bottom:18px;">
+      <button class="btn" data-admin-tab="add-q">+ Question Add Karein</button>
+      <button class="btn ghost" data-admin-tab="bulk-q">Bulk Add (JSON)</button>
+      <button class="btn ghost" data-admin-tab="add-p">+ Typing Paragraph</button>
+      <button class="btn ghost" data-admin-tab="manage">Manage / Delete</button>
+    </div>
+
+    <div class="panel admin-tab" id="admin-add-q">
+      <label>Topic</label>
+      <input type="text" id="q-topic" placeholder="jaise: Computer Basics, GK, Reasoning">
+      <label>Question</label>
+      <textarea id="q-text" rows="2" placeholder="Sawaal likhein"></textarea>
+      <label>Options (Correct wala neeche select karein)</label>
+      <input type="text" id="q-opt0" placeholder="Option 1">
+      <input type="text" id="q-opt1" placeholder="Option 2">
+      <input type="text" id="q-opt2" placeholder="Option 3">
+      <input type="text" id="q-opt3" placeholder="Option 4">
+      <label>Sahi Jawab</label>
+      <select id="q-correct"><option value="0">Option 1</option><option value="1">Option 2</option><option value="2">Option 3</option><option value="3">Option 4</option></select>
+      <button class="btn" id="save-question">Save Question</button>
+      <div id="q-msg"></div>
+    </div>
+
+    <div class="panel admin-tab hidden" id="admin-bulk-q">
+      <p class="sub">Ek saath multiple questions add karne ke liye niche JSON format mein paste karein:</p>
+      <textarea id="bulk-json" rows="8" placeholder='[
+  {"topic":"Computer Basics","q":"CPU ka full form?","opts":["Central Processing Unit","A","B","C"],"ans":0}
+]'></textarea>
+      <button class="btn" id="save-bulk">Sab Add Karein</button>
+      <div id="bulk-msg"></div>
+    </div>
+
+    <div class="panel admin-tab hidden" id="admin-add-p">
+      <label>Language</label>
+      <select id="p-lang"><option value="hindi">Hindi</option><option value="english">English</option></select>
+      <label>Paragraph</label>
+      <textarea id="p-text" rows="4" placeholder="Typing test ke liye paragraph likhein"></textarea>
+      <button class="btn" id="save-paragraph">Save Paragraph</button>
+      <div id="p-msg"></div>
+    </div>
+
+    <div class="panel admin-tab hidden" id="admin-manage">
+      <div class="row" style="margin-bottom:14px;">
+        <select id="manage-topic-filter" style="width:auto;"><option value="">Sabhi Topics</option></select>
+      </div>
+      <div id="manage-list"></div>
+    </div>
+  </section>
+
+</main>
+<footer>ComputeLab — Firebase powered · Free hosting: GitHub Pages / Netlify</footer>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAlyvPBjkikjlqicpgmLDuy0NHYjhXXCDE",
+    authDomain: "computer-lab-ef6c0.firebaseapp.com",
+    projectId: "computer-lab-ef6c0",
+    storageBucket: "computer-lab-ef6c0.firebasestorage.app",
+    messagingSenderId: "679561272595",
+    appId: "1:679561272595:web:9c3024f35b429c14a7cee6",
+    measurementId: "G-PX2LNZL98F"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+</body>
+</html>
