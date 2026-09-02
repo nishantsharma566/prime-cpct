@@ -3,264 +3,215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ComputeLab — CPCT Mock Test, Typing &amp; Notes</title>
+<title>Prime CPCT — Mock Test, Topic Test & Typing Practice</title>
+<meta name="description" content="Prime CPCT par CPCT mock test, section-wise MCQ, topic-wise practice, English typing, Remington GAIL aur Krutidev typing practice karein.">
+<meta name="keywords" content="CPCT mock test, CPCT typing test, Remington GAIL typing, Krutidev typing, CPCT topic test">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#0B0E14">
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <style>
-  :root{
-    --bg:#0B0E14; --panel:#10141D; --panel-2:#161B26;
-    --amber:#FFB000; --teal:#5EEAD4; --paper:#EDEDED; --muted:#8B93A7;
-    --red:#FF5C5C; --green:#4ADE80; --border:#232938;
-    --mono:'JetBrains Mono','IBM Plex Mono',Consolas,monospace;
-    --sans:'IBM Plex Sans','Segoe UI',sans-serif;
-  }
-  *{box-sizing:border-box;}
-  body{margin:0; background:radial-gradient(ellipse at top, rgba(255,176,0,.06), transparent 60%) , var(--bg); color:var(--paper); font-family:var(--sans); min-height:100vh;}
-  header{border-bottom:1px solid var(--border); padding:16px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
-  .brand{display:flex; align-items:center; gap:10px;}
-  .brand-mark{width:32px;height:32px;border:1.5px solid var(--amber);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);color:var(--amber);font-weight:700;font-size:12px;}
-  .brand h1{font-family:var(--mono); font-size:16px; margin:0;}
-  .brand span{color:var(--muted); font-size:11px; font-family:var(--mono); display:block;}
-  nav{display:flex; gap:5px; flex-wrap:wrap;}
-  nav button{font-family:var(--mono); font-size:12.5px; background:var(--panel); color:var(--muted); border:1px solid var(--border); padding:8px 13px; border-radius:6px; cursor:pointer;}
-  nav button.active{background:var(--amber); color:#1a1200; font-weight:700; border-color:var(--amber);}
-  nav button:hover:not(.active){color:var(--paper);}
-  main{max-width:980px; margin:0 auto; padding:32px 18px 80px;}
-  .view{display:none;} .view.active{display:block; animation:rise .25s ease;}
-  @keyframes rise{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
-  .eyebrow{font-family:var(--mono); color:var(--teal); font-size:11.5px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px;}
-  h2{font-family:var(--mono); font-size:24px; margin:0 0 6px;}
-  .sub{color:var(--muted); margin:0 0 24px; font-size:13.5px;}
-  .panel{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px;}
-  input,select,textarea{width:100%; padding:11px 13px; background:#000; color:var(--paper); border:1px solid var(--border); border-radius:7px; font-family:var(--sans); font-size:14px; margin-bottom:12px;}
-  input:focus,select:focus,textarea:focus{outline:none; border-color:var(--amber);}
-  label{font-size:12px; color:var(--muted); font-family:var(--mono); display:block; margin-bottom:5px;}
-  .btn{font-family:var(--mono); background:var(--amber); color:#1a1200; border:none; padding:11px 20px; border-radius:6px; font-weight:700; cursor:pointer; font-size:13.5px;}
-  .btn.ghost{background:transparent; color:var(--muted); border:1px solid var(--border);}
-  .btn.danger{background:var(--red); color:#2a0000;}
-  .btn:hover{filter:brightness(1.1);}
-  .row{display:flex; gap:10px; flex-wrap:wrap;}
-  .msg{font-family:var(--mono); font-size:12.5px; padding:9px 12px; border-radius:6px; margin-bottom:12px;}
-  .msg.err{background:rgba(255,92,92,.12); color:var(--red); border:1px solid var(--red);}
-  .msg.ok{background:rgba(74,222,128,.12); color:var(--green); border:1px solid var(--green);}
-
-  .card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px;}
-  .card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px; cursor:pointer; transition:.15s;}
-  .card:hover{border-color:var(--amber); transform:translateY(-2px);}
-  .card .icon{font-family:var(--mono); color:var(--amber); font-size:22px; margin-bottom:10px;}
-  .card h3{font-family:var(--mono); margin:0 0 6px; font-size:15px;}
-  .card p{color:var(--muted); font-size:12.5px; margin:0;}
-
-  #typing-text{font-family:var(--mono); font-size:17px; line-height:1.9; color:var(--muted); padding:18px; background:#000; border-radius:8px; border:1px solid var(--border);}
-  #typing-text span.correct{color:var(--green);} #typing-text span.wrong{color:var(--red); background:rgba(255,92,92,.15);}
-  #typing-text span.current{background:var(--amber); color:#1a1200;}
-  .stat-row{display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;}
-  .stat{flex:1; min-width:100px; background:var(--panel-2); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;}
-  .stat .val{font-family:var(--mono); font-size:21px; color:var(--amber); font-weight:700;}
-  .stat .lbl{font-size:10px; color:var(--muted); text-transform:uppercase;}
-
-  .option{display:block; width:100%; text-align:left; padding:12px 15px; margin-bottom:9px; background:var(--panel-2); border:1px solid var(--border); border-radius:8px; color:var(--paper); font-size:13.5px; cursor:pointer;}
-  .option:hover{border-color:var(--amber);} .option.correct{border-color:var(--green); background:rgba(74,222,128,.12);}
-  .option.wrong{border-color:var(--red); background:rgba(255,92,92,.12);}
-  .progress-bar{height:5px; background:var(--panel-2); border-radius:3px; overflow:hidden; margin-bottom:20px;}
-  .progress-fill{height:100%; background:var(--amber);}
-  .result-score{font-family:var(--mono); font-size:42px; color:var(--amber); text-align:center; margin:8px 0;}
-  .topic-tag{display:inline-block; font-family:var(--mono); font-size:10.5px; background:var(--panel-2); color:var(--teal); padding:3px 9px; border-radius:20px; margin-right:6px; margin-bottom:6px;}
-
-  .bar-row{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
-  .bar-label{width:130px; font-family:var(--mono); font-size:12px; color:var(--muted); flex-shrink:0;}
-  .bar-track{flex:1; height:16px; background:var(--panel-2); border-radius:8px; overflow:hidden;}
-  .bar-fill{height:100%; border-radius:8px;}
-  .bar-pct{width:42px; font-family:var(--mono); font-size:12px; text-align:right;}
-  .weak-word{display:inline-block; background:rgba(255,92,92,.1); border:1px solid var(--red); color:var(--red); font-family:var(--mono); font-size:12px; padding:4px 10px; border-radius:6px; margin:3px;}
-
-  .admin-list-item{display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:var(--panel-2); border-radius:7px; margin-bottom:8px; font-size:13px;}
-  footer{text-align:center; padding:20px; color:var(--muted); font-family:var(--mono); font-size:10.5px; border-top:1px solid var(--border);}
-  .hidden{display:none !important;}
+:root{
+  --bg:#0B0E14;--panel:#10141D;--panel2:#161B26;--amber:#FFB000;--teal:#5EEAD4;
+  --paper:#EDEDED;--muted:#8B93A7;--red:#FF5C5C;--green:#4ADE80;--border:#232938;
+  --mono:Consolas,"Courier New",monospace;--sans:"Segoe UI",Arial,sans-serif
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,rgba(255,176,0,.06),transparent 60%),var(--bg);color:var(--paper);font-family:var(--sans);min-height:100vh}
+header{position:sticky;top:0;z-index:10;background:rgba(11,14,20,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}.brand-mark{width:36px;height:36px;border:1.5px solid var(--amber);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);color:var(--amber);font-weight:700}
+.brand h1{font-family:var(--mono);font-size:16px;margin:0}.brand span{color:var(--muted);font-size:11px;display:block}
+nav{display:flex;gap:6px;flex-wrap:wrap}nav button{font-family:var(--mono);font-size:12px;background:var(--panel);color:var(--muted);border:1px solid var(--border);padding:8px 12px;border-radius:6px;cursor:pointer}
+nav button.active{background:var(--amber);color:#1a1200;border-color:var(--amber);font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:30px 18px 80px}.view{display:none}.view.active{display:block;animation:rise .2s ease}
+@keyframes rise{from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:none}}
+.eyebrow{font-family:var(--mono);color:var(--teal);font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:6px}
+h2{font-family:var(--mono);font-size:24px;margin:0 0 6px}.sub{color:var(--muted);margin:0 0 22px;font-size:13.5px;line-height:1.55}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:18px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:12px}.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px;cursor:pointer;transition:.15s}
+.card:hover{border-color:var(--amber);transform:translateY(-2px)}.card .icon{font-size:25px;color:var(--amber);margin-bottom:10px}.card h3{margin:0 0 6px;font-family:var(--mono);font-size:14px}.card p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.5}
+input,select,textarea{width:100%;padding:11px 12px;background:#07090d;color:var(--paper);border:1px solid var(--border);border-radius:7px;font-family:var(--sans);font-size:14px;margin-bottom:12px}
+textarea{resize:vertical}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--amber)}
+label{font-size:12px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:5px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.btn{border:0;background:var(--amber);color:#1a1200;font-family:var(--mono);font-weight:700;padding:10px 15px;border-radius:7px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--paper);border:1px solid var(--border)}.btn.danger{background:var(--red);color:#fff}.btn:disabled{opacity:.45;cursor:not-allowed}
+.hidden{display:none!important}.msg{padding:10px 12px;border-radius:6px;margin-top:10px;font-size:13px}.msg.ok{background:rgba(74,222,128,.12);color:var(--green)}.msg.err{background:rgba(255,92,92,.12);color:var(--red)}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}.stat{background:var(--panel2);border:1px solid var(--border);padding:13px;border-radius:8px;text-align:center}.stat .val{font:700 22px var(--mono);color:var(--amber)}.stat .lbl{font:11px var(--mono);color:var(--muted);margin-top:3px}
+#typing-text{font-size:18px;line-height:1.85;background:#080a0f;border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:14px;white-space:pre-wrap}
+#typing-text .okc{color:var(--green)}#typing-text .badc{color:var(--red);text-decoration:underline}#typing-text .curc{background:rgba(255,176,0,.22)}
+#typing-input.remington,#typing-text.remington{font-family:"Kruti Dev 010","DevLys 010",Arial,sans-serif;font-size:21px}
+#typing-input.krutidev,#typing-text.krutidev{font-family:"Kruti Dev 010","DevLys 010",Arial,sans-serif;font-size:21px}
+.progress-bar{height:6px;background:#080a0f;border-radius:9px;overflow:hidden;margin-bottom:18px}.progress-fill{height:100%;background:var(--amber)}
+.question-title{font-size:18px;line-height:1.55;margin:12px 0}.option{display:block;width:100%;text-align:left;margin:9px 0;padding:12px 14px;background:var(--panel2);color:var(--paper);border:1px solid var(--border);border-radius:8px;cursor:pointer}
+.option.selected{border-color:var(--amber);background:rgba(255,176,0,.11)}.option.correct{border-color:var(--green);background:rgba(74,222,128,.10)}.option.wrong{border-color:var(--red);background:rgba(255,92,92,.10)}
+.tag,.topic-tag{display:inline-block;padding:3px 7px;border:1px solid var(--border);border-radius:999px;font:10px var(--mono);color:var(--teal);margin-right:5px}
+.analysis-item{border:1px solid var(--border);border-radius:8px;padding:14px;margin:12px 0;background:#0b0e14}.analysis-item h4{margin:4px 0 10px;font-size:14px}
+.bar-row{display:grid;grid-template-columns:minmax(120px,1.2fr) 3fr 55px;gap:8px;align-items:center;margin:9px 0}.bar-label{font-size:12px}.bar-track{height:8px;background:#07090d;border-radius:99px;overflow:hidden}.bar-fill{height:100%;background:var(--teal)}.bar-pct{text-align:right;font:11px var(--mono)}
+.admin-list-item{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid var(--border);padding:10px 0}.admin-list-item:last-child{border:0}
+.passbox{white-space:pre-wrap;padding:13px;border-left:3px solid var(--teal);background:#07090d;margin:10px 0 15px;color:#ddd;line-height:1.7}
+footer{text-align:center;padding:25px;color:var(--muted);font:11px var(--mono);border-top:1px solid var(--border)}
+@media(max-width:600px){main{padding:22px 12px 60px}.bar-row{grid-template-columns:1fr}.bar-pct{text-align:left}.row>.btn{flex:1}}
 </style>
 </head>
 <body>
-
-<header id="app-header" class="hidden">
-  <div class="brand">
-    <div class="brand-mark">C:\</div>
-    <div><h1>ComputeLab</h1><span id="welcome-name">practice.terminal.local</span></div>
-  </div>
+<header>
+  <div class="brand"><div class="brand-mark">PC</div><div><h1>Prime CPCT</h1><span>Mock Test · Topic Practice · Typing</span></div></div>
   <nav id="main-nav"></nav>
 </header>
 
 <main>
+<section id="auth" class="view active">
+  <div class="eyebrow">Student / Admin Access</div><h2 id="auth-title">Login</h2><p class="sub">Apne account se login karein.</p>
+  <div class="panel" style="max-width:480px">
+    <input id="auth-name" placeholder="Naam" class="hidden">
+    <input type="email" id="auth-email" placeholder="Email">
+    <input type="password" id="auth-password" placeholder="Password">
+    <div class="row"><button class="btn" id="auth-submit">Login</button><button class="btn ghost" id="auth-toggle">Naya account banayein</button></div>
+    <div id="auth-msg"></div>
+  </div>
+</section>
 
-  <section id="auth" class="view active">
-    <div class="eyebrow">Student / Admin Access</div>
-    <h2 id="auth-title">Login Karein</h2>
-    <p class="sub">Apna progress track karne ke liye login karein.</p>
-    <div class="panel" style="max-width:380px;">
-      <div id="auth-msg"></div>
-      <div id="signup-extra" class="hidden">
-        <label>Naam</label>
-        <input type="text" id="auth-name" placeholder="Aapka naam">
-      </div>
-      <label>Email</label>
-      <input type="email" id="auth-email" placeholder="you@example.com">
-      <label>Password</label>
-      <input type="password" id="auth-password" placeholder="••••••••">
-      <div class="row">
-        <button class="btn" id="auth-submit">Login</button>
-        <button class="btn ghost" id="auth-toggle">Naya account banayein</button>
-      </div>
+<section id="home" class="view">
+  <div class="eyebrow">Dashboard</div><h2>Kya practice karna hai?</h2><p class="sub">Full mock, section test, topic practice ya typing test choose karein.</p>
+  <div class="card-grid">
+    <div class="card" data-action="cpct"><div class="icon">▣</div><h3>Full CPCT Mock</h3><p>5 sections se balanced mock test.</p></div>
+    <div class="card" data-action="sections"><div class="icon">☷</div><h3>Section Wise MCQ</h3><p>Computer & IT, Read Comp, Maths, Reasoning, GK.</p></div>
+    <div class="card" data-action="topic-search"><div class="icon">⌕</div><h3>Topic Wise Test</h3><p>Topic search karke targeted practice.</p></div>
+    <div class="card" data-action="typing-menu"><div class="icon">⌨</div><h3>Typing Practice</h3><p>English, Remington GAIL aur Krutidev.</p></div>
+  </div>
+</section>
+
+<section id="section-menu" class="view">
+  <div class="eyebrow">MCQ Sections</div><h2>Section Choose Karein</h2><p class="sub">Sirf selected section ke questions ka test hoga.</p>
+  <div id="section-cards" class="card-grid"></div>
+</section>
+
+<section id="typing-menu" class="view">
+  <div class="eyebrow">Typing Practice</div><h2>Typing Mode Choose Karein</h2>
+  <p class="sub">Admin apne custom paragraphs bhi in modes ke liye add kar sakta hai.</p>
+  <div class="card-grid">
+    <div class="card" data-typing="english"><div class="icon">A</div><h3>English Typing</h3><p>English paragraph speed & accuracy.</p></div>
+    <div class="card" data-typing="remington"><div class="icon">र</div><h3>Remington GAIL</h3><p>Remington GAIL practice paragraphs.</p></div>
+    <div class="card" data-typing="krutidev"><div class="icon">क</div><h3>Krutidev</h3><p>Krutidev practice paragraphs.</p></div>
+  </div>
+  <div class="panel" style="margin-top:18px">
+    <label>Student Custom Paragraph (optional)</label>
+    <select id="custom-typing-mode"><option value="english">English</option><option value="remington">Remington GAIL</option><option value="krutidev">Krutidev</option></select>
+    <textarea id="custom-typing-text" rows="5" placeholder="Apna paragraph paste karke isi waqt practice karein..."></textarea>
+    <button class="btn" id="start-custom-typing">Custom Paragraph Start</button>
+  </div>
+</section>
+
+<section id="typing" class="view">
+  <div class="eyebrow" id="typing-lang-label">Typing Test</div><h2>Typing Test</h2>
+  <p class="sub" id="typing-note">Paragraph ko exactly type karein.</p>
+  <div class="panel">
+    <div id="typing-title" style="font:12px var(--mono);color:var(--teal);margin-bottom:8px"></div>
+    <div id="typing-text"></div>
+    <textarea id="typing-input" rows="5" placeholder="Yahan type karna shuru karein..."></textarea>
+    <div class="stat-row">
+      <div class="stat"><div class="val" id="stat-time">60</div><div class="lbl">Sec Left</div></div>
+      <div class="stat"><div class="val" id="stat-wpm">0</div><div class="lbl">WPM</div></div>
+      <div class="stat"><div class="val" id="stat-acc">100%</div><div class="lbl">Accuracy</div></div>
+      <div class="stat"><div class="val" id="stat-err">0</div><div class="lbl">Errors</div></div>
+      <div class="stat"><div class="val" id="stat-back">0</div><div class="lbl">Backspace</div></div>
     </div>
-  </section>
-
-  <section id="home" class="view">
-    <div class="eyebrow">Dashboard</div>
-    <h2>Kya practice karna hai?</h2>
-    <p class="sub">Neeche se choose karein.</p>
-    <div class="card-grid">
-      <div class="card" data-action="cpct"><div class="icon">▣</div><h3>CPCT Mock Test</h3><p>Mix topics se full mock test</p></div>
-      <div class="card" data-action="hindi-typing"><div class="icon">अ</div><h3>Hindi Typing</h3><p>Hindi paragraph typing speed test</p></div>
-      <div class="card" data-action="english-typing"><div class="icon">A</div><h3>English Typing</h3><p>English paragraph typing speed test</p></div>
-      <div class="card" data-action="topic-search"><div class="icon">⌕</div><h3>Topic Wise Test</h3><p>Kisi ek topic se practice karein</p></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn" id="restart-typing">Naya Test</button>
+      <select id="duration-select" style="width:auto;margin:0"><option value="30">30 sec</option><option value="60" selected>60 sec</option><option value="300">5 min</option><option value="600">10 min</option></select>
     </div>
-  </section>
+    <div id="typing-result"></div>
+  </div>
+</section>
 
-  <section id="typing" class="view">
-    <div class="eyebrow" id="typing-lang-label">Typing Test</div>
-    <h2>Typing Test</h2>
-    <p class="sub">Neeche diya paragraph type karein.</p>
-    <div class="panel">
-      <div id="typing-text"></div>
-      <textarea id="typing-input" rows="4" placeholder="Yahan type karna shuru karein..."></textarea>
-      <div class="stat-row">
-        <div class="stat"><div class="val" id="stat-time">30</div><div class="lbl">Sec Left</div></div>
-        <div class="stat"><div class="val" id="stat-wpm">0</div><div class="lbl">WPM</div></div>
-        <div class="stat"><div class="val" id="stat-acc">100%</div><div class="lbl">Accuracy</div></div>
-        <div class="stat"><div class="val" id="stat-err">0</div><div class="lbl">Errors</div></div>
-      </div>
-      <div class="row" style="margin-top:16px;">
-        <button class="btn" id="restart-typing">Naya Test</button>
-        <select id="duration-select" style="width:auto;"><option value="30">30 sec</option><option value="60">60 sec</option><option value="120">120 sec</option></select>
-      </div>
-    </div>
-  </section>
+<section id="topic-search" class="view">
+  <div class="eyebrow">Topic Wise</div><h2>Topic Search Karein</h2><p class="sub">Section filter ya topic name se test khojein.</p>
+  <div class="panel">
+    <select id="topic-section-filter"></select>
+    <input id="topic-filter-input" placeholder="Topic search karein...">
+    <div id="topic-buttons" class="card-grid"></div>
+  </div>
+</section>
 
-  <section id="topic-search" class="view">
-    <div class="eyebrow">Topic Wise</div>
-    <h2>Topic Choose Karein</h2>
-    <p class="sub">Jis topic se practice karni hai use search/select karein.</p>
-    <div class="panel">
-      <input type="text" id="topic-filter-input" placeholder="Topic search karein...">
-      <div id="topic-buttons" class="card-grid"></div>
-    </div>
-  </section>
+<section id="mock" class="view">
+  <div class="eyebrow" id="mock-mode-label">Mock Test</div><h2>MCQ Test</h2>
+  <p class="sub">Answer select karne par sirf selection save hoga. Sahi/galat final submit ke baad Analysis me dikhega.</p>
+  <div class="panel">
+    <div class="progress-bar"><div class="progress-fill" id="mock-progress"></div></div>
+    <div id="mock-body"></div>
+  </div>
+</section>
 
-  <section id="mock" class="view">
-    <div class="eyebrow" id="mock-mode-label">Mock Test</div>
-    <h2>Mock Test</h2>
-    <p class="sub">Har jawab ke baad turant result dikhega.</p>
-    <div class="panel">
-      <div class="progress-bar"><div class="progress-fill" id="mock-progress" style="width:0%"></div></div>
-      <div id="mock-body"></div>
-    </div>
-  </section>
+<section id="result" class="view">
+  <div class="eyebrow">Test Complete</div><h2>Result</h2><p class="sub">Detailed review ke liye Analysis kholein.</p>
+  <div class="panel"><div id="result-stats" class="stat-row"></div><div class="row" style="margin-top:18px"><button class="btn" id="open-analysis">Analysis</button><button class="btn ghost" id="result-home">Home</button></div></div>
+</section>
 
-  <section id="dashboard" class="view">
-    <div class="eyebrow">Meri Progress</div>
-    <h2>Student Dashboard</h2>
-    <p class="sub">Aapki typing aur mock test performance ka summary.</p>
+<section id="analysis" class="view">
+  <div class="eyebrow">Detailed Analysis</div><h2>Performance Analysis</h2><p class="sub">Overall, section-wise, topic-wise aur question-wise review.</p>
+  <div id="analysis-summary"></div>
+  <div class="panel"><h3>Section Wise</h3><div id="section-analysis"></div></div>
+  <div class="panel"><h3>Topic Wise</h3><div id="topic-analysis"></div></div>
+  <div class="panel"><h3>Question Review</h3><div id="question-analysis"></div></div>
+</section>
 
-    <div class="panel" style="margin-bottom:18px;">
-      <h3 style="font-family:var(--mono); color:var(--teal); margin-top:0;">Typing Performance</h3>
-      <div class="stat-row" id="typing-summary-stats"></div>
-      <div style="margin-top:16px;">
-        <label>Weak Words (jinme sabse zyada galti hoti hai)</label>
-        <div id="weak-words-box">Abhi koi data nahi hai — pehle typing test try karein.</div>
-      </div>
-    </div>
+<section id="dashboard" class="view">
+  <div class="eyebrow">Meri Progress</div><h2>Student Dashboard</h2><p class="sub">Recent typing aur MCQ performance.</p>
+  <div class="panel"><h3>Typing Performance</h3><div class="stat-row" id="typing-summary-stats"></div></div>
+  <div class="panel"><h3>MCQ Topic Wise Accuracy</h3><div id="topic-accuracy-box">Abhi data nahi hai.</div></div>
+  <div class="panel"><h3>MCQ Section Wise Accuracy</h3><div id="section-accuracy-box">Abhi data nahi hai.</div></div>
+</section>
 
-    <div class="panel" style="margin-bottom:18px;">
-      <h3 style="font-family:var(--mono); color:var(--teal); margin-top:0;">Mock Test — Topic Wise Accuracy</h3>
-      <div id="topic-accuracy-box">Abhi koi data nahi hai — pehle mock test try karein.</div>
-    </div>
+<section id="admin" class="view">
+  <div class="eyebrow">Admin Panel</div><h2>Content Manage Karein</h2><p class="sub">MCQ classification, bulk import aur custom typing paragraphs.</p>
+  <div class="row" style="margin-bottom:18px">
+    <button class="btn" data-admin-tab="add-q">+ Question</button>
+    <button class="btn ghost" data-admin-tab="bulk-q">Bulk JSON</button>
+    <button class="btn ghost" data-admin-tab="add-p">+ Typing Paragraph</button>
+    <button class="btn ghost" data-admin-tab="manage">Manage</button>
+  </div>
 
-    <div class="panel">
-      <h3 style="font-family:var(--mono); color:var(--teal); margin-top:0;">Kitna % Kis Topic Se Pucha Gaya</h3>
-      <div id="topic-distribution-box">—</div>
-    </div>
-  </section>
+  <div class="panel admin-tab" id="admin-add-q">
+    <label>Section</label><select id="q-section"></select>
+    <label>Topic</label><input id="q-topic" placeholder="Topic (blank chhodenge to keyword se suggest hoga)">
+    <label>Reading Comprehension Paragraph (sirf Read Comp ke liye, optional)</label><textarea id="q-passage" rows="4" placeholder="Passage yahan paste karein..."></textarea>
+    <label>Question</label><textarea id="q-text" rows="2"></textarea>
+    <label>Options</label>
+    <input id="q-opt0" placeholder="Option 1"><input id="q-opt1" placeholder="Option 2"><input id="q-opt2" placeholder="Option 3"><input id="q-opt3" placeholder="Option 4">
+    <label>Sahi Jawab</label><select id="q-correct"><option value="0">Option 1</option><option value="1">Option 2</option><option value="2">Option 3</option><option value="3">Option 4</option></select>
+    <label>Explanation (Analysis me dikhega)</label><textarea id="q-explanation" rows="3" placeholder="Answer kyun sahi hai?"></textarea>
+    <button class="btn" id="save-question">Save Question</button><div id="q-msg"></div>
+  </div>
 
-  <section id="admin" class="view">
-    <div class="eyebrow">Admin Panel</div>
-    <h2>Content Manage Karein</h2>
-    <p class="sub">Questions aur typing paragraphs add/edit/delete karein.</p>
+  <div class="panel admin-tab hidden" id="admin-bulk-q">
+    <p class="sub">Purane JSON bhi supported hain. Section/topic missing ho to keyword rules se auto-detect ki koshish hogi.</p>
+    <input type="file" id="bulk-file" accept=".json,application/json">
+    <div class="row"><button class="btn ghost" id="load-json-file">JSON Load</button><button class="btn ghost" id="clear-bulk">Clear</button></div>
+    <textarea id="bulk-json" rows="10" placeholder='[{"section":"computer","topic":"Computer Basics","q":"CPU?","opts":["A","B","C","D"],"ans":0}]'></textarea>
+    <button class="btn" id="save-bulk">Sab Add Karein</button><div id="bulk-msg"></div>
+  </div>
 
-    <div class="row" style="margin-bottom:18px;">
-      <button class="btn" data-admin-tab="add-q">+ Question Add Karein</button>
-      <button class="btn ghost" data-admin-tab="bulk-q">Bulk Add (JSON)</button>
-      <button class="btn ghost" data-admin-tab="add-p">+ Typing Paragraph</button>
-      <button class="btn ghost" data-admin-tab="manage">Manage / Delete</button>
-    </div>
+  <div class="panel admin-tab hidden" id="admin-add-p">
+    <label>Typing Mode</label>
+    <select id="p-lang"><option value="english">English</option><option value="remington">Remington GAIL</option><option value="krutidev">Krutidev</option></select>
+    <label>Paragraph Name</label><input id="p-title" placeholder="jaise Practice Set 01">
+    <label>Difficulty</label><select id="p-level"><option>Easy</option><option>Medium</option><option>Hard</option></select>
+    <label>Paragraph</label><textarea id="p-text" rows="7" placeholder="Typing paragraph yahan paste karein"></textarea>
+    <button class="btn" id="save-paragraph">Save Paragraph</button><div id="p-msg"></div>
+  </div>
 
-    <div class="panel admin-tab" id="admin-add-q">
-      <label>Topic</label>
-      <input type="text" id="q-topic" placeholder="jaise: Computer Basics, GK, Reasoning">
-      <label>Question</label>
-      <textarea id="q-text" rows="2" placeholder="Sawaal likhein"></textarea>
-      <label>Options (Correct wala neeche select karein)</label>
-      <input type="text" id="q-opt0" placeholder="Option 1">
-      <input type="text" id="q-opt1" placeholder="Option 2">
-      <input type="text" id="q-opt2" placeholder="Option 3">
-      <input type="text" id="q-opt3" placeholder="Option 4">
-      <label>Sahi Jawab</label>
-      <select id="q-correct"><option value="0">Option 1</option><option value="1">Option 2</option><option value="2">Option 3</option><option value="3">Option 4</option></select>
-      <button class="btn" id="save-question">Save Question</button>
-      <div id="q-msg"></div>
-    </div>
-
-    <div class="panel admin-tab hidden" id="admin-bulk-q">
-       <p class="sub">Python se bani JSON file upload karein. Purana JSON format bhi supported hai.</p>
-       <label>JSON File</label>
-       <input type="file" id="bulk-file" accept=".json,application/json">
-       <div class="row" style="margin-bottom:12px;">
-         <button class="btn ghost" id="load-json-file" type="button">JSON Load Karein</button>
-         <button class="btn ghost" id="clear-bulk" type="button">Clear</button>
-       </div>
-       <label>Ya JSON yahan paste karein</label>
-       <textarea id="bulk-json" rows="10" placeholder='[
-  {"topic":"Computer Basics","q":"CPU ka full form?","opts":["Central Processing Unit","A","B","C"],"ans":0}
-]'></textarea>
-       <p class="sub" style="margin:6px 0 12px;">Supported: <code>[{topic,q,opts,ans}]</code> aur Python format <code>{test,questions}</code>.</p>
-       <button class="btn" id="save-bulk">Sab Add Karein</button>
-       <div id="bulk-msg"></div>
-     </div>
-
-    <div class="panel admin-tab hidden" id="admin-add-p">
-      <label>Language</label>
-      <select id="p-lang"><option value="hindi">Hindi</option><option value="english">English</option></select>
-      <label>Paragraph</label>
-      <textarea id="p-text" rows="4" placeholder="Typing test ke liye paragraph likhein"></textarea>
-      <button class="btn" id="save-paragraph">Save Paragraph</button>
-      <div id="p-msg"></div>
-    </div>
-
-    <div class="panel admin-tab hidden" id="admin-manage">
-      <div class="row" style="margin-bottom:14px;">
-        <select id="manage-topic-filter" style="width:auto;"><option value="">Sabhi Topics</option></select>
-      </div>
-      <div id="manage-list"></div>
-    </div>
-  </section>
-
+  <div class="panel admin-tab hidden" id="admin-manage">
+    <div class="row"><select id="manage-section-filter" style="width:auto"></select><select id="manage-topic-filter" style="width:auto"></select></div>
+    <div id="manage-list"></div>
+  </div>
+</section>
 </main>
-<footer>ComputeLab — Firebase powered · Free hosting: GitHub Pages / Netlify</footer>
+<footer>Prime CPCT · Firebase powered · GitHub Pages ready</footer>
 
 <script>
-/* ====================================================================
-   FIREBASE SETUP — YAHAN APNA CONFIG PASTE KAREIN
-   ==================================================================== */
 const firebaseConfig = {
   apiKey: "AIzaSyAlyvPBjkikjlqicpgmLDuy0NHYjhXXCDE",
   authDomain: "computer-lab-ef6c0.firebaseapp.com",
@@ -270,529 +221,305 @@ const firebaseConfig = {
   appId: "1:679561272595:web:9c3024f35b429c14a7cee6"
 };
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+const auth=firebase.auth(), db=firebase.firestore();
 
-let currentUser = null;
-let isSignupMode = false;
+const SECTIONS=[
+  {id:"computer",name:"Computer & IT",icon:"💻"},
+  {id:"readcomp",name:"Read Comp",icon:"📖"},
+  {id:"maths",name:"Maths",icon:"∑"},
+  {id:"reasoning",name:"Reasoning",icon:"◈"},
+  {id:"gk",name:"GK",icon:"🌐"}
+];
+const sectionName=id=>(SECTIONS.find(s=>s.id===id)||{name:id||"General"}).name;
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const textOf=q=>typeof q==="object" ? [q.en,q.hi].filter(Boolean).join(" / ") : String(q??"");
+const optText=o=>typeof o==="object" ? [o.en,o.hi].filter(Boolean).join(" / ") : String(o??"");
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+
+let currentUser=null, registerMode=false, typingState={}, mockState={}, lastResult=null;
 
 function showView(id){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('#main-nav button').forEach(b=>b.classList.toggle('active', b.dataset.view===id));
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  const v=document.getElementById(id); if(v)v.classList.add("active");
+  document.querySelectorAll("#main-nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
+  window.scrollTo({top:0,behavior:"smooth"});
 }
-function buildNav(){
-  const nav = document.getElementById('main-nav');
-  let items = [ {id:'home', label:'Home'}, {id:'dashboard', label:'Dashboard'} ];
-  if(currentUser && currentUser.isAdmin) items.push({id:'admin', label:'Admin Panel'});
-  nav.innerHTML = items.map(i=>`<button data-view="${i.id}">${i.label}</button>`).join('') + `<button id="logout-btn">Logout</button>`;
-  nav.querySelectorAll('button[data-view]').forEach(b=>b.addEventListener('click',()=>{ showView(b.dataset.view); if(b.dataset.view==='dashboard') loadDashboard(); if(b.dataset.view==='admin') loadAdminTopics(); }));
-  document.getElementById('logout-btn').addEventListener('click', ()=> auth.signOut());
+function renderNav(){
+  const n=document.getElementById("main-nav");
+  if(!currentUser){n.innerHTML="";return}
+  let items=[["home","Home"],["dashboard","Progress"]];
+  if(currentUser.isAdmin)items.push(["admin","Admin"]);
+  n.innerHTML=items.map(([id,t])=>`<button data-view="${id}">${t}</button>`).join("")+`<button id="logout">Logout</button>`;
+  n.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{showView(b.dataset.view);if(b.dataset.view==="dashboard")loadDashboard();if(b.dataset.view==="admin")loadAdminFilters()});
+  document.getElementById("logout").onclick=()=>auth.signOut();
 }
-
-document.getElementById('auth-toggle').addEventListener('click', ()=>{
-  isSignupMode = !isSignupMode;
-  document.getElementById('signup-extra').classList.toggle('hidden', !isSignupMode);
-  document.getElementById('auth-title').textContent = isSignupMode ? 'Naya Account Banayein' : 'Login Karein';
-  document.getElementById('auth-submit').textContent = isSignupMode ? 'Sign Up' : 'Login';
-  document.getElementById('auth-toggle').textContent = isSignupMode ? 'Pehle se account hai? Login karein' : 'Naya account banayein';
-});
-document.getElementById('auth-submit').addEventListener('click', async ()=>{
-  const email = document.getElementById('auth-email').value.trim();
-  const password = document.getElementById('auth-password').value;
-  const msgBox = document.getElementById('auth-msg');
-  msgBox.innerHTML='';
-  try{
-    if(isSignupMode){
-      const name = document.getElementById('auth-name').value.trim() || 'Student';
-      const cred = await auth.createUserWithEmailAndPassword(email, password);
-      await db.collection('users').doc(cred.user.uid).set({ name, email, isAdmin:false });
-    } else {
-      await auth.signInWithEmailAndPassword(email, password);
-    }
-  }catch(err){ msgBox.innerHTML = `<div class="msg err">${err.message}</div>`; }
-});
-
-auth.onAuthStateChanged(async (user)=>{
-  if(user){
-    const doc = await db.collection('users').doc(user.uid).get();
-    const data = doc.exists ? doc.data() : { name:'Student', isAdmin:false };
-    currentUser = { uid:user.uid, name:data.name, isAdmin:!!data.isAdmin };
-    document.getElementById('app-header').classList.remove('hidden');
-    document.getElementById('welcome-name').textContent = `Welcome, ${currentUser.name}${currentUser.isAdmin ? ' (Admin)' : ''}`;
-    buildNav();
-    showView('home');
-  } else {
-    currentUser = null;
-    document.getElementById('app-header').classList.add('hidden');
-    showView('auth');
-  }
-});
-
-document.querySelectorAll('#home .card').forEach(card=>{
-  card.addEventListener('click', ()=>{
-    const action = card.dataset.action;
-    if(action==='cpct') startMockTest('cpct', null);
-    else if(action==='hindi-typing') startTypingTest('hindi');
-    else if(action==='english-typing') startTypingTest('english');
-    else if(action==='topic-search'){ showView('topic-search'); loadTopicSearchList(); }
+function fillSectionSelects(){
+  const options=SECTIONS.map(s=>`<option value="${s.id}">${s.name}</option>`).join("");
+  ["q-section","topic-section-filter","manage-section-filter"].forEach(id=>{
+    const e=document.getElementById(id);if(!e)return;
+    e.innerHTML=(id!=="q-section"?'<option value="">Sabhi Sections</option>':"")+options;
   });
-});
+  document.getElementById("section-cards").innerHTML=SECTIONS.map(s=>`<div class="card" data-section="${s.id}"><div class="icon">${s.icon}</div><h3>${s.name}</h3><p>${s.name} ke questions practice karein.</p></div>`).join("");
+  document.querySelectorAll("[data-section]").forEach(c=>c.onclick=()=>startMockTest("section",c.dataset.section));
+}
+fillSectionSelects();
 
-const fallbackParagraphs = {
-  hindi:["Computer ek electronic machine hai jo data ko input leti hai, usse process karti hai aur output ke roop mein result deti hai.",
-         "Typing speed badhane ke liye roz practice karna zaroori hai. Sahi finger position rakhein aur bina keyboard dekhe type karne ki koshish karein."],
-  english:["A computer is an electronic device that takes input, processes it and produces output as a result.",
-           "Regular practice is the key to improving typing speed. Keep your fingers on the home row and try not to look at the keyboard."]
+document.getElementById("auth-toggle").onclick=()=>{
+  registerMode=!registerMode;
+  document.getElementById("auth-title").textContent=registerMode?"Naya Account":"Login";
+  document.getElementById("auth-name").classList.toggle("hidden",!registerMode);
+  document.getElementById("auth-submit").textContent=registerMode?"Register":"Login";
+  document.getElementById("auth-toggle").textContent=registerMode?"Already account hai":"Naya account banayein";
 };
-let typingState = {};
-
-async function startTypingTest(lang){
-  showView('typing');
-  document.getElementById('typing-lang-label').textContent = lang==='hindi' ? 'Hindi Typing Test' : 'English Typing Test';
-  let text;
+document.getElementById("auth-submit").onclick=async()=>{
+  const email=document.getElementById("auth-email").value.trim(), password=document.getElementById("auth-password").value, name=document.getElementById("auth-name").value.trim(), msg=document.getElementById("auth-msg");
   try{
-    const snap = await db.collection('typingParagraphs').where('language','==',lang).get();
-    const list = snap.docs.map(d=>d.data().text);
-    text = list.length ? list[Math.floor(Math.random()*list.length)] : fallbackParagraphs[lang][Math.floor(Math.random()*fallbackParagraphs[lang].length)];
-  }catch(e){ text = fallbackParagraphs[lang][0]; }
-  loadPassage(text, lang);
-}
-function loadPassage(text, lang){
-  const el = document.getElementById('typing-text');
-  el.innerHTML = text.split('').map((ch,i)=>`<span data-i="${i}">${ch}</span>`).join('');
-  typingState = { text, lang, startTime:null, timer:null, duration:parseInt(document.getElementById('duration-select').value), timeLeft:0, finished:false };
-  typingState.timeLeft = typingState.duration;
-  document.getElementById('typing-input').value=''; document.getElementById('typing-input').disabled=false;
-  document.getElementById('stat-time').textContent = typingState.duration;
-  document.getElementById('stat-wpm').textContent='0'; document.getElementById('stat-acc').textContent='100%'; document.getElementById('stat-err').textContent='0';
-}
-function startTimer(){
-  typingState.startTime = Date.now();
-  typingState.timer = setInterval(()=>{
-    typingState.timeLeft--;
-    document.getElementById('stat-time').textContent = typingState.timeLeft;
-    if(typingState.timeLeft<=0) finishTyping();
-  },1000);
-}
-async function finishTyping(){
-  clearInterval(typingState.timer);
-  typingState.finished = true;
-  document.getElementById('typing-input').disabled = true;
-  const typed = document.getElementById('typing-input').value;
-  const originalWords = typingState.text.split(' ');
-  const typedWords = typed.split(' ');
-  const mistaken = [];
-  originalWords.forEach((w,i)=>{ if(typedWords[i] && typedWords[i]!==w) mistaken.push(w); });
-  const wpm = parseInt(document.getElementById('stat-wpm').textContent) || 0;
-  const acc = parseInt(document.getElementById('stat-acc').textContent) || 0;
-  const errors = parseInt(document.getElementById('stat-err').textContent) || 0;
-  if(currentUser){
-    try{
-      await db.collection('users').doc(currentUser.uid).collection('typingResults').add({
-        wpm, accuracy:acc, errors, mistakenWords:mistaken, language:typingState.lang,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }catch(e){ console.error(e); }
-  }
-}
-document.getElementById('typing-input').addEventListener('input',(e)=>{
-  if(typingState.finished) return;
-  if(!typingState.startTime) startTimer();
-  const typed = e.target.value;
-  const spans = document.querySelectorAll('#typing-text span');
-  let correct=0, errors=0;
-  spans.forEach((s,i)=>{
-    s.classList.remove('correct','wrong','current');
-    if(i<typed.length){ if(typed[i]===typingState.text[i]){s.classList.add('correct'); correct++;} else {s.classList.add('wrong'); errors++;} }
-  });
-  const cur = document.querySelector(`#typing-text span[data-i="${typed.length}"]`); if(cur) cur.classList.add('current');
-  document.getElementById('stat-err').textContent = errors;
-  const acc = typed.length ? Math.max(0, Math.round((correct/typed.length)*100)) : 100;
-  document.getElementById('stat-acc').textContent = acc+'%';
-  const elapsedMin = (Date.now()-typingState.startTime)/60000;
-  document.getElementById('stat-wpm').textContent = elapsedMin>0 ? Math.round((correct/5)/elapsedMin) : 0;
-  if(typed.length >= typingState.text.length) finishTyping();
+    if(registerMode){
+      if(!name)throw new Error("Naam bharein.");
+      const c=await auth.createUserWithEmailAndPassword(email,password);
+      await db.collection("users").doc(c.user.uid).set({name,email,isAdmin:false},{merge:true});
+    }else await auth.signInWithEmailAndPassword(email,password);
+  }catch(e){msg.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
+};
+auth.onAuthStateChanged(async user=>{
+  if(!user){currentUser=null;renderNav();showView("auth");return}
+  let data={name:"Student",isAdmin:false};
+  try{const d=await db.collection("users").doc(user.uid).get();if(d.exists)data={...data,...d.data()}}catch(e){}
+  currentUser={uid:user.uid,name:data.name||"Student",isAdmin:!!data.isAdmin};renderNav();showView("home");
 });
-document.getElementById('restart-typing').addEventListener('click', ()=> startTypingTest(typingState.lang||'hindi'));
-document.getElementById('duration-select').addEventListener('change', ()=> startTypingTest(typingState.lang||'hindi'));
 
-async function loadTopicSearchList(){
-  const snap = await db.collection('questions').get();
-  const topics = [...new Set(snap.docs.map(d=>d.data().topic))];
-  renderTopicButtons(topics);
-  document.getElementById('topic-filter-input').oninput = (e)=>{
-    const val = e.target.value.toLowerCase();
-    renderTopicButtons(topics.filter(t=>t.toLowerCase().includes(val)));
-  };
-}
-function renderTopicButtons(topics){
-  const box = document.getElementById('topic-buttons');
-  if(!topics.length){ box.innerHTML = '<p class="sub">Koi topic nahi mila. Admin panel se questions add karwayein.</p>'; return; }
-  box.innerHTML = topics.map(t=>`<div class="card" data-topic="${t}"><div class="icon">▣</div><h3>${t}</h3><p>Is topic se test start karein</p></div>`).join('');
-  box.querySelectorAll('.card').forEach(c=> c.addEventListener('click', ()=> startMockTest('topic', c.dataset.topic)));
-}
+document.querySelectorAll("#home .card").forEach(c=>c.onclick=()=>{
+  const a=c.dataset.action;
+  if(a==="cpct")startMockTest("cpct");
+  if(a==="sections")showView("section-menu");
+  if(a==="topic-search"){showView("topic-search");loadTopicSearchList()}
+  if(a==="typing-menu")showView("typing-menu");
+});
+document.querySelectorAll("[data-typing]").forEach(c=>c.onclick=()=>startTypingTest(c.dataset.typing));
+document.getElementById("start-custom-typing").onclick=()=>{
+  const text=document.getElementById("custom-typing-text").value.trim(), mode=document.getElementById("custom-typing-mode").value;
+  if(!text)return alert("Custom paragraph paste karein.");
+  loadPassage(text,mode,"Student Custom Paragraph");
+};
 
-let mockState = {};
-async function startMockTest(mode, topic){
-  showView('mock');
-  document.getElementById('mock-mode-label').textContent = mode==='cpct' ? 'CPCT Mock Test' : `Topic: ${topic}`;
-  let questions = [];
+const fallbackParagraphs={
+  english:["Regular practice is the key to improving typing speed. Keep your fingers on the home row and focus on accuracy before speed."],
+  remington:[";g ,d mnkgj.k ikB gSA bls vius Remington GAIL paragraph ls replace djsaA"],
+  krutidev:[";g ,d mnkgj.k ikB gSA bls vius Krutidev paragraph ls replace djsaA"]
+};
+
+async function startTypingTest(mode){
+  showView("typing");
+  let list=[];
   try{
-    let snap;
-    if(mode==='topic') snap = await db.collection('questions').where('topic','==',topic).get();
-    else snap = await db.collection('questions').get();
-    questions = snap.docs.map(d=>({id:d.id, ...d.data()}));
-    if(mode==='cpct' && questions.length>20) questions = questions.sort(()=>0.5-Math.random()).slice(0,20);
-  }catch(e){ console.error(e); }
-  if(!questions.length){
-    document.getElementById('mock-body').innerHTML = '<p class="sub">Is section ke liye abhi koi question available nahi hai. Admin panel se add karwayein.</p>';
-    return;
+    const s=await db.collection("typingParagraphs").where("language","==",mode).get();
+    list=s.docs.map(d=>({id:d.id,...d.data()}));
+  }catch(e){}
+  const p=list.length?list[Math.floor(Math.random()*list.length)]:{text:fallbackParagraphs[mode][0],title:"Default Practice"};
+  loadPassage(p.text,mode,p.title||"Practice Paragraph");
+}
+function loadPassage(text,mode,title){
+  showView("typing");
+  clearInterval(typingState.timer);
+  const label=mode==="english"?"English Typing":mode==="remington"?"Remington GAIL Typing":"Krutidev Typing";
+  document.getElementById("typing-lang-label").textContent=label;
+  document.getElementById("typing-title").textContent=title||"";
+  document.getElementById("typing-note").textContent=mode==="english"?"Accuracy par focus karein.":"Is mode ka paragraph usi keyboard/font setup ke saath use karein jo aapke system me configured hai.";
+  const box=document.getElementById("typing-text"), inp=document.getElementById("typing-input");
+  box.className=mode;inp.className=mode;
+  box.innerHTML=[...text].map((ch,i)=>`<span data-i="${i}">${esc(ch)}</span>`).join("");
+  inp.value="";inp.disabled=false;
+  const dur=+document.getElementById("duration-select").value;
+  typingState={text,mode,title,start:null,timer:null,duration:dur,timeLeft:dur,finished:false,backspace:0};
+  ["stat-wpm","stat-err"].forEach(id=>document.getElementById(id).textContent="0");
+  document.getElementById("stat-acc").textContent="100%";document.getElementById("stat-time").textContent=dur;document.getElementById("stat-back").textContent="0";document.getElementById("typing-result").innerHTML="";
+  inp.focus();
+}
+function typingMetrics(){
+  const typed=document.getElementById("typing-input").value, target=typingState.text||"";
+  let correct=0;for(let i=0;i<typed.length;i++)if(typed[i]===target[i])correct++;
+  const errors=Math.max(0,typed.length-correct), mins=typingState.start?Math.max((Date.now()-typingState.start)/60000,1/60):1/60;
+  const wpm=Math.max(0,Math.round((correct/5)/mins)), acc=typed.length?Math.round(correct/typed.length*100):100;
+  return{typed,correct,errors,wpm,acc};
+}
+document.getElementById("typing-input").addEventListener("keydown",e=>{if(e.key==="Backspace"){typingState.backspace=(typingState.backspace||0)+1;document.getElementById("stat-back").textContent=typingState.backspace}});
+document.getElementById("typing-input").addEventListener("input",()=>{
+  if(typingState.finished)return;
+  if(!typingState.start){
+    typingState.start=Date.now();typingState.timer=setInterval(()=>{
+      typingState.timeLeft--;document.getElementById("stat-time").textContent=Math.max(0,typingState.timeLeft);
+      if(typingState.timeLeft<=0)finishTyping();
+    },1000);
   }
-  mockState = { questions, idx:0, score:0, mode, topic, perTopic:{} };
+  const m=typingMetrics();
+  document.getElementById("stat-wpm").textContent=m.wpm;document.getElementById("stat-acc").textContent=m.acc+"%";document.getElementById("stat-err").textContent=m.errors;
+  document.querySelectorAll("#typing-text span").forEach((sp,i)=>{sp.className=i<m.typed.length?(m.typed[i]===typingState.text[i]?"okc":"badc"):(i===m.typed.length?"curc":"")});
+  if(m.typed.length>=typingState.text.length)finishTyping();
+});
+async function finishTyping(){
+  if(typingState.finished)return;typingState.finished=true;clearInterval(typingState.timer);document.getElementById("typing-input").disabled=true;
+  const m=typingMetrics();
+  document.getElementById("typing-result").innerHTML=`<div class="msg ok">Result: ${m.wpm} WPM · ${m.acc}% Accuracy · ${m.errors} Errors · ${typingState.backspace||0} Backspace</div>`;
+  if(currentUser)try{await db.collection("users").doc(currentUser.uid).collection("typingResults").add({language:typingState.mode,wpm:m.wpm,accuracy:m.acc,errors:m.errors,backspace:typingState.backspace||0,title:typingState.title||"",timestamp:firebase.firestore.FieldValue.serverTimestamp()})}catch(e){}
+}
+document.getElementById("restart-typing").onclick=()=>startTypingTest(typingState.mode||"english");
+document.getElementById("duration-select").onchange=()=>{if(typingState.text)loadPassage(typingState.text,typingState.mode,typingState.title)};
+
+function autoSection(text){
+  const s=String(text).toLowerCase();
+  if(/computer|cpu|ram|rom|windows|internet|email|excel|word|powerpoint|hardware|software|network|keyboard|operating system|shortcut/.test(s))return"computer";
+  if(/passage|according to|paragraph|author|comprehension|read the following/.test(s))return"readcomp";
+  if(/percent|percentage|ratio|average|profit|loss|interest|number|fraction|equation|area|perimeter|speed|distance|time|math/.test(s))return"maths";
+  if(/series|analogy|coding|decoding|blood relation|direction|odd one|reasoning|pattern|syllogism/.test(s))return"reasoning";
+  return"gk";
+}
+function autoTopic(text,section){
+  const s=String(text).toLowerCase();
+  const maps={
+    computer:[["MS Word",/word|docx/],["MS Excel",/excel|spreadsheet|formula/],["Internet",/internet|browser|url|http|email/],["Computer Basics",/cpu|ram|rom|hardware|software|input|output/],["Operating System",/windows|linux|operating system/]],
+    readcomp:[["Reading Comprehension",/.*/]],
+    maths:[["Percentage",/percent|percentage/],["Ratio & Proportion",/ratio|proportion/],["Average",/average/],["Profit & Loss",/profit|loss/],["Time Speed Distance",/speed|distance/]],
+    reasoning:[["Series",/series|sequence/],["Coding-Decoding",/coding|decoding/],["Blood Relation",/blood relation|father|mother|brother|sister/],["Direction",/direction|north|south|east|west/],["Analogy",/analogy/]],
+    gk:[["General Knowledge",/.*/]]
+  };
+  for(const [name,re] of maps[section]||maps.gk)if(re.test(s))return name;
+  return sectionName(section);
+}
+async function loadTopicSearchList(){
+  const box=document.getElementById("topic-buttons"), q=document.getElementById("topic-filter-input").value.trim().toLowerCase(), sec=document.getElementById("topic-section-filter").value;
+  let docs=[];try{const s=await db.collection("questions").get();docs=s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){}
+  const map=new Map();
+  docs.forEach(x=>{const section=x.section||autoSection(textOf(x.question));if(sec&&section!==sec)return;const topic=x.topic||autoTopic(textOf(x.question),section);const k=section+"||"+topic;if(!map.has(k))map.set(k,{section,topic,count:0});map.get(k).count++});
+  let arr=[...map.values()].filter(x=>!q||x.topic.toLowerCase().includes(q)||sectionName(x.section).toLowerCase().includes(q));
+  box.innerHTML=arr.length?arr.sort((a,b)=>a.topic.localeCompare(b.topic)).map(x=>`<div class="card topic-card" data-section="${x.section}" data-topic="${esc(x.topic)}"><span class="tag">${sectionName(x.section)}</span><h3>${esc(x.topic)}</h3><p>${x.count} questions</p></div>`).join(""):'<p class="sub">Koi matching topic nahi mila.</p>';
+  box.querySelectorAll(".topic-card").forEach(c=>c.onclick=()=>startMockTest("topic",c.dataset.topic,c.dataset.section));
+}
+document.getElementById("topic-filter-input").oninput=loadTopicSearchList;document.getElementById("topic-section-filter").onchange=loadTopicSearchList;
+
+async function startMockTest(mode,value=null,sectionHint=null){
+  showView("mock");document.getElementById("mock-body").innerHTML='<p class="sub">Questions load ho rahe hain...</p>';
+  let all=[];try{const s=await db.collection("questions").get();all=s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){}
+  all=all.map(q=>({...q,section:q.section||autoSection(textOf(q.question)),topic:q.topic||autoTopic(textOf(q.question),q.section||autoSection(textOf(q.question)))}));
+  let qs=[];
+  if(mode==="cpct"){
+    SECTIONS.forEach(sec=>qs.push(...shuffle(all.filter(q=>q.section===sec.id)).slice(0,4)));
+    if(qs.length<20)qs=shuffle(all).slice(0,20);
+  }else if(mode==="section")qs=shuffle(all.filter(q=>q.section===value)).slice(0,20);
+  else qs=shuffle(all.filter(q=>q.topic===value&&(!sectionHint||q.section===sectionHint))).slice(0,20);
+  if(!qs.length){document.getElementById("mock-body").innerHTML='<div class="msg err">Is test ke liye abhi questions available nahi hain.</div>';return}
+  mockState={mode,value,sectionHint,questions:qs,index:0,answers:Array(qs.length).fill(null)};
+  document.getElementById("mock-mode-label").textContent=mode==="cpct"?"Full CPCT Mock":mode==="section"?sectionName(value):"Topic: "+value;
   renderMock();
 }
 function renderMock(){
-  const body = document.getElementById('mock-body');
-  document.getElementById('mock-progress').style.width = (mockState.idx/mockState.questions.length*100)+'%';
-  if(mockState.idx >= mockState.questions.length){
-    document.getElementById('mock-progress').style.width='100%';
-    const total = mockState.questions.length;
-    body.innerHTML = `
-      <div class="eyebrow">Result</div>
-      <div class="result-score">${mockState.score} / ${total}</div>
-      <p style="text-align:center; color:var(--muted); font-family:var(--mono);">${mockState.score/total>=0.7?'Bahut badhiya!':mockState.score/total>=0.4?'Achha, aur practice karein.':'Notes dobara padhein aur retry karein.'}</p>
-      <div class="row" style="justify-content:center;"><button class="btn" id="retry-mock">Dobara Try Karein</button></div>
-    `;
-    document.getElementById('retry-mock').addEventListener('click', ()=> startMockTest(mockState.mode, mockState.topic));
-    saveMockResult(total);
-    return;
-  }
-  const q = mockState.questions[mockState.idx];
-  const questionText = typeof q.question === 'object' && q.question !== null
-    ? [q.question.en, q.question.hi].filter(Boolean).join('\n')
-    : (q.question || q.q || '');
-  const correctIndex = Number.isInteger(q.correctIndex) ? q.correctIndex : Number(q.correctAnswer);
-  body.innerHTML = `
-    <span class="topic-tag">${q.topic || 'General'}</span>
-    <div class="question" style="margin:10px 0 16px; font-size:16px; white-space:pre-line;">${mockState.idx+1}. ${questionText}</div>
-    ${q.questionImage ? `<div style="margin:8px 0 16px;"><img src="${q.questionImage}" style="max-width:320px;max-height:240px;object-fit:contain;" alt="Question image"></div>` : ''}
-    <div id="opts"></div>
-    <div class="row" style="margin-top:14px;"><button class="btn hidden" id="next-q">Agla Sawaal</button></div>
-  `;
-  const optsDiv = document.getElementById('opts');
-  let answered=false;
-  (q.options || []).forEach((opt,i)=>{
-     const b = document.createElement('button');
-     b.className='option';
-
-     if(opt && typeof opt === 'object'){
-       const en = String(opt.en ?? opt.text ?? opt.label ?? '').trim();
-       const hi = String(opt.hi ?? '').trim();
-
-       if(en || hi){
-         const wrap = document.createElement('div');
-         if(en){
-           const e = document.createElement('div');
-           e.textContent = en;
-           wrap.appendChild(e);
-         }
-         if(hi && hi !== en){
-           const h = document.createElement('div');
-           h.textContent = hi;
-           h.style.marginTop = '3px';
-           h.style.opacity = '0.85';
-           wrap.appendChild(h);
-         }
-         b.appendChild(wrap);
-       }
-
-       if(opt.image && String(opt.image).startsWith('data:image/')){
-         const img = document.createElement('img');
-         img.src = opt.image;
-         img.alt = en || hi || ('Option ' + (i+1));
-         img.style.maxWidth = '260px';
-         img.style.maxHeight = '180px';
-         img.style.objectFit = 'contain';
-         img.style.display = 'block';
-         img.style.marginTop = '8px';
-         b.appendChild(img);
-       }
-     } else {
-       b.textContent = String(opt ?? '');
-     }
-
-     b.addEventListener('click', ()=>{
-       if(answered) return; answered=true;
-       document.querySelectorAll('#opts .option').forEach((el,j)=>{ if(j===correctIndex) el.classList.add('correct'); else if(j===i) el.classList.add('wrong'); });
-       const topic = q.topic || 'General';
-       if(!mockState.perTopic[topic]) mockState.perTopic[topic] = {correct:0,total:0};
-       mockState.perTopic[topic].total++;
-       if(i===correctIndex){ mockState.score++; mockState.perTopic[topic].correct++; }
-       document.getElementById('next-q').classList.remove('hidden');
-     });
-     optsDiv.appendChild(b);
-   });
-  document.getElementById('next-q').addEventListener('click', ()=>{ mockState.idx++; renderMock(); });
+  const i=mockState.index,q=mockState.questions[i],sel=mockState.answers[i],body=document.getElementById("mock-body");
+  document.getElementById("mock-progress").style.width=((i+1)/mockState.questions.length*100)+"%";
+  const passage=q.passage?`<div class="passbox">${esc(q.passage)}</div>`:"";
+  body.innerHTML=`<div><span class="tag">${sectionName(q.section)}</span><span class="tag">${esc(q.topic)}</span><span class="tag">Q ${i+1}/${mockState.questions.length}</span></div>
+    ${passage}<div class="question-title">${esc(textOf(q.question))}</div>
+    <div>${q.options.map((o,j)=>`<button class="option ${sel===j?"selected":""}" data-opt="${j}">${String.fromCharCode(65+j)}. ${esc(optText(o))}</button>`).join("")}</div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn ghost" id="prev-q" ${i===0?"disabled":""}>← Previous</button>
+      ${i<mockState.questions.length-1?'<button class="btn" id="next-q">Next →</button>':'<button class="btn" id="submit-test">Final Submit</button>'}
+    </div>`;
+  body.querySelectorAll("[data-opt]").forEach(b=>b.onclick=()=>{mockState.answers[i]=+b.dataset.opt;renderMock()});
+  const p=document.getElementById("prev-q");if(p)p.onclick=()=>{mockState.index--;renderMock()};
+  const n=document.getElementById("next-q");if(n)n.onclick=()=>{mockState.index++;renderMock()};
+  const s=document.getElementById("submit-test");if(s)s.onclick=submitMock;
 }
-async function saveMockResult(total){
-  if(!currentUser) return;
-  try{
-    await db.collection('users').doc(currentUser.uid).collection('mockResults').add({
-      mode: mockState.mode, score: mockState.score, total, perTopic: mockState.perTopic,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
-  }catch(e){ console.error(e); }
+async function submitMock(){
+  const qs=mockState.questions, ans=mockState.answers;let correct=0,wrong=0,unattempted=0,perSection={},perTopic={};
+  const review=qs.map((q,i)=>{
+    const selected=ans[i],ok=selected!==null&&Number(q.correctIndex)===selected;if(selected===null)unattempted++;else if(ok)correct++;else wrong++;
+    for(const [key,obj] of [[q.section,perSection],[q.topic,perTopic]]){if(!obj[key])obj[key]={correct:0,wrong:0,unattempted:0,total:0};obj[key].total++;if(selected===null)obj[key].unattempted++;else if(ok)obj[key].correct++;else obj[key].wrong++}
+    return{questionId:q.id,section:q.section,topic:q.topic,question:q.question,options:q.options,passage:q.passage||"",selectedIndex:selected,correctIndex:Number(q.correctIndex),correct:ok,explanation:q.explanation||""};
+  });
+  lastResult={mode:mockState.mode,value:mockState.value,total:qs.length,correct,wrong,unattempted,score:correct,perSection,perTopic,answers:review};
+  if(currentUser)try{await db.collection("users").doc(currentUser.uid).collection("mockResults").add({...lastResult,timestamp:firebase.firestore.FieldValue.serverTimestamp()})}catch(e){}
+  renderResult();
 }
+function renderResult(){
+  showView("result");const r=lastResult,pct=Math.round(r.correct/r.total*100);
+  document.getElementById("result-stats").innerHTML=[
+    ["Score",`${r.correct}/${r.total}`],["Percentage",pct+"%"],["Correct",r.correct],["Wrong",r.wrong],["Unattempted",r.unattempted]
+  ].map(x=>`<div class="stat"><div class="val">${x[1]}</div><div class="lbl">${x[0]}</div></div>`).join("");
+}
+function renderBars(obj){
+  return Object.entries(obj).sort((a,b)=>(a[1].correct/a[1].total)-(b[1].correct/b[1].total)).map(([k,v])=>{const pct=Math.round(v.correct/v.total*100);return`<div class="bar-row"><div class="bar-label">${esc(k==="computer"||k==="readcomp"||k==="maths"||k==="reasoning"||k==="gk"?sectionName(k):k)}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div><div class="bar-pct">${pct}%</div></div>`}).join("");
+}
+function openAnalysis(){
+  if(!lastResult)return;showView("analysis");const r=lastResult;
+  const weakSec=Object.entries(r.perSection).sort((a,b)=>(a[1].correct/a[1].total)-(b[1].correct/b[1].total))[0];
+  const weakTopic=Object.entries(r.perTopic).sort((a,b)=>(a[1].correct/a[1].total)-(b[1].correct/b[1].total))[0];
+  document.getElementById("analysis-summary").innerHTML=`<div class="panel"><div class="stat-row">
+    <div class="stat"><div class="val">${r.correct}/${r.total}</div><div class="lbl">Score</div></div>
+    <div class="stat"><div class="val">${r.correct}</div><div class="lbl">Correct</div></div>
+    <div class="stat"><div class="val">${r.wrong}</div><div class="lbl">Wrong</div></div>
+    <div class="stat"><div class="val">${r.unattempted}</div><div class="lbl">Unattempted</div></div></div>
+    <p class="sub" style="margin-top:15px;margin-bottom:0">Weakest Section: <b>${weakSec?sectionName(weakSec[0]):"-"}</b> · Weakest Topic: <b>${weakTopic?esc(weakTopic[0]):"-"}</b></p></div>`;
+  document.getElementById("section-analysis").innerHTML=renderBars(r.perSection);
+  document.getElementById("topic-analysis").innerHTML=renderBars(r.perTopic);
+  document.getElementById("question-analysis").innerHTML=r.answers.map((a,i)=>{
+    const user=a.selectedIndex===null?"Not Attempted":optText(a.options[a.selectedIndex]), correct=optText(a.options[a.correctIndex]);
+    return`<div class="analysis-item"><div><span class="tag">${sectionName(a.section)}</span><span class="tag">${esc(a.topic)}</span></div>${a.passage?`<div class="passbox">${esc(a.passage)}</div>`:""}<h4>Q${i+1}. ${esc(textOf(a.question))}</h4><div style="color:${a.correct?"var(--green)":"var(--red)"}">Your Answer: ${esc(user)}</div><div style="color:var(--green);margin-top:5px">Correct Answer: ${esc(correct)}</div>${a.explanation?`<p class="sub" style="margin-top:8px;margin-bottom:0">Explanation: ${esc(a.explanation)}</p>`:""}</div>`
+  }).join("");
+}
+document.getElementById("open-analysis").onclick=openAnalysis;document.getElementById("result-home").onclick=()=>showView("home");
 
 async function loadDashboard(){
-  if(!currentUser) return;
-  const typingSnap = await db.collection('users').doc(currentUser.uid).collection('typingResults').orderBy('timestamp','desc').limit(20).get();
-  const typingResults = typingSnap.docs.map(d=>d.data());
-  const statsBox = document.getElementById('typing-summary-stats');
-  if(typingResults.length){
-    const avgWpm = Math.round(typingResults.reduce((a,r)=>a+r.wpm,0)/typingResults.length);
-    const bestWpm = Math.max(...typingResults.map(r=>r.wpm));
-    const avgAcc = Math.round(typingResults.reduce((a,r)=>a+r.accuracy,0)/typingResults.length);
-    statsBox.innerHTML = `
-      <div class="stat"><div class="val">${avgWpm}</div><div class="lbl">Avg WPM</div></div>
-      <div class="stat"><div class="val">${bestWpm}</div><div class="lbl">Best WPM</div></div>
-      <div class="stat"><div class="val">${avgAcc}%</div><div class="lbl">Avg Accuracy</div></div>
-      <div class="stat"><div class="val">${typingResults.length}</div><div class="lbl">Tests Taken</div></div>
-    `;
-    const wordFreq = {};
-    typingResults.forEach(r=> (r.mistakenWords||[]).forEach(w=> wordFreq[w]=(wordFreq[w]||0)+1));
-    const topWords = Object.entries(wordFreq).sort((a,b)=>b[1]-a[1]).slice(0,10);
-    document.getElementById('weak-words-box').innerHTML = topWords.length
-      ? topWords.map(([w,c])=>`<span class="weak-word">${w} (${c}x)</span>`).join('')
-      : 'Koi baar-baar galti hone wala word nahi mila — accuracy achhi hai!';
-  } else {
-    statsBox.innerHTML = '<p class="sub">Abhi koi typing test nahi diya.</p>';
-  }
-
-  const mockSnap = await db.collection('users').doc(currentUser.uid).collection('mockResults').orderBy('timestamp','desc').limit(30).get();
-  const mockResults = mockSnap.docs.map(d=>d.data());
-  const topicAgg = {};
-  mockResults.forEach(r=>{
-    Object.entries(r.perTopic||{}).forEach(([topic,val])=>{
-      if(!topicAgg[topic]) topicAgg[topic] = {correct:0,total:0};
-      topicAgg[topic].correct += val.correct; topicAgg[topic].total += val.total;
-    });
-  });
-  const topicEntries = Object.entries(topicAgg);
-  const accBox = document.getElementById('topic-accuracy-box');
-  const distBox = document.getElementById('topic-distribution-box');
-  if(topicEntries.length){
-    const totalQ = topicEntries.reduce((a,[,v])=>a+v.total,0);
-    accBox.innerHTML = topicEntries.map(([topic,v])=>{
-      const pct = Math.round((v.correct/v.total)*100);
-      const color = pct>=70? 'var(--green)' : pct>=40? 'var(--amber)' : 'var(--red)';
-      return `<div class="bar-row"><div class="bar-label">${topic}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${color};"></div></div><div class="bar-pct">${pct}%</div></div>`;
-    }).join('') + `<p class="sub" style="margin-top:14px;">Sabse kamzor topic: <strong style="color:var(--red)">${topicEntries.sort((a,b)=>(a[1].correct/a[1].total)-(b[1].correct/b[1].total))[0][0]}</strong> — isi pe zyada practice karein.</p>`;
-    distBox.innerHTML = topicEntries.map(([topic,v])=>{
-      const pct = Math.round((v.total/totalQ)*100);
-      return `<div class="bar-row"><div class="bar-label">${topic}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:var(--teal);"></div></div><div class="bar-pct">${pct}%</div></div>`;
-    }).join('');
-  } else {
-    accBox.innerHTML = '<p class="sub">Abhi koi mock test nahi diya.</p>';
-    distBox.innerHTML = '—';
-  }
+  if(!currentUser)return;
+  let ts=[],ms=[];try{
+    const a=await db.collection("users").doc(currentUser.uid).collection("typingResults").orderBy("timestamp","desc").limit(30).get();ts=a.docs.map(d=>d.data());
+    const b=await db.collection("users").doc(currentUser.uid).collection("mockResults").orderBy("timestamp","desc").limit(30).get();ms=b.docs.map(d=>d.data());
+  }catch(e){}
+  const av=(arr,k)=>arr.length?Math.round(arr.reduce((s,x)=>s+(+x[k]||0),0)/arr.length):0;
+  document.getElementById("typing-summary-stats").innerHTML=[["Tests",ts.length],["Avg WPM",av(ts,"wpm")],["Avg Accuracy",av(ts,"accuracy")+"%"],["Avg Errors",av(ts,"errors")]].map(x=>`<div class="stat"><div class="val">${x[1]}</div><div class="lbl">${x[0]}</div></div>`).join("");
+  const t={},s={};ms.forEach(r=>{Object.entries(r.perTopic||{}).forEach(([k,v])=>{if(!t[k])t[k]={correct:0,total:0};t[k].correct+=v.correct;t[k].total+=v.total});Object.entries(r.perSection||{}).forEach(([k,v])=>{if(!s[k])s[k]={correct:0,total:0};s[k].correct+=v.correct;s[k].total+=v.total})});
+  document.getElementById("topic-accuracy-box").innerHTML=Object.keys(t).length?renderBars(t):'<p class="sub">Abhi mock data nahi hai.</p>';
+  document.getElementById("section-accuracy-box").innerHTML=Object.keys(s).length?renderBars(s):'<p class="sub">Abhi mock data nahi hai.</p>';
 }
 
-document.querySelectorAll('[data-admin-tab]').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.admin-tab').forEach(t=>t.classList.add('hidden'));
-    document.getElementById('admin-'+btn.dataset.adminTab).classList.remove('hidden');
-    if(btn.dataset.adminTab==='manage') loadManageList();
-  });
+document.querySelectorAll("[data-admin-tab]").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".admin-tab").forEach(x=>x.classList.add("hidden"));document.getElementById("admin-"+b.dataset.adminTab).classList.remove("hidden");if(b.dataset.adminTab==="manage")loadManageList();
 });
-document.getElementById('save-question').addEventListener('click', async ()=>{
-  const topic = document.getElementById('q-topic').value.trim();
-  const question = document.getElementById('q-text').value.trim();
-  const options = [0,1,2,3].map(i=>document.getElementById('q-opt'+i).value.trim());
-  const correctIndex = parseInt(document.getElementById('q-correct').value);
-  const msg = document.getElementById('q-msg');
-  if(!topic || !question || options.some(o=>!o)){ msg.innerHTML = '<div class="msg err">Sabhi fields bharein.</div>'; return; }
-  try{
-    await db.collection('questions').add({ topic, question, options, correctIndex });
-    msg.innerHTML = '<div class="msg ok">Question add ho gaya!</div>';
-    ['q-topic','q-text','q-opt0','q-opt1','q-opt2','q-opt3'].forEach(id=>document.getElementById(id).value='');
-  }catch(e){ msg.innerHTML = `<div class="msg err">${e.message}</div>`; }
-});
-// ================================================================
-// BULK JSON IMPORT
-// Supports old website JSON and Python converter JSON
-// ================================================================
+document.getElementById("save-question").onclick=async()=>{
+  const section=document.getElementById("q-section").value, question=document.getElementById("q-text").value.trim(), passage=document.getElementById("q-passage").value.trim(), options=[0,1,2,3].map(i=>document.getElementById("q-opt"+i).value.trim()), msg=document.getElementById("q-msg");
+  let topic=document.getElementById("q-topic").value.trim();if(!topic)topic=autoTopic(question+" "+passage,section);
+  if(!question||options.some(x=>!x)){msg.innerHTML='<div class="msg err">Question aur 4 options bharein.</div>';return}
+  try{await db.collection("questions").add({section,topic,question,options,correctIndex:+document.getElementById("q-correct").value,explanation:document.getElementById("q-explanation").value.trim(),...(passage?{passage}:{}),createdAt:firebase.firestore.FieldValue.serverTimestamp()});msg.innerHTML=`<div class="msg ok">Question add ho gaya. Topic: ${esc(topic)}</div>`;["q-topic","q-text","q-passage","q-opt0","q-opt1","q-opt2","q-opt3","q-explanation"].forEach(id=>document.getElementById(id).value="")}catch(e){msg.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
+};
+
 function normalizeImportedJSON(raw){
-  let arr;
-  let defaultTopic = 'General';
-
-  if(Array.isArray(raw)){
-    arr = raw;
-  } else if(raw && Array.isArray(raw.questions)){
-    arr = raw.questions;
-    defaultTopic = raw.test && raw.test.title ? raw.test.title : 'General';
-  } else {
-    throw new Error('JSON me questions array nahi mila.');
-  }
-
-  return arr.map((item, index)=>{
-    if(!item || typeof item !== 'object') throw new Error(`Question ${index+1} invalid hai.`);
-
-    const topic = String(item.topic || defaultTopic || 'General').trim();
-    const question = item.question ?? item.q;
-    const options = item.options ?? item.opts;
-    let correct = item.correctIndex ?? item.correctAnswer ?? item.ans;
-
-    let questionText = question;
-    if(question && typeof question === 'object'){
-      questionText = [question.en, question.hi].filter(Boolean).join('\n');
-    }
-
-    if(!questionText) throw new Error(`Question ${index+1}: question missing hai.`);
-    if(!Array.isArray(options) || options.length !== 4){
-      throw new Error(`Question ${index+1}: exactly 4 options chahiye.`);
-    }
-
-    correct = Number(correct);
-    if(!Number.isInteger(correct) || correct < 0 || correct > 3){
-      throw new Error(`Question ${index+1}: correct answer 0, 1, 2 ya 3 hona chahiye.`);
-    }
-
-    // Supports:
-    // 1) old string option: "Webcam"
-    // 2) old object: {text:"Webcam"}
-    // 3) new bilingual object: {en:"Webcam", hi:"वेबकैम"}
-    // 4) image option: {en:"", hi:"", image:"data:image/png;base64,..."}
-    const cleanOptions = options.map((o, optionIndex)=>{
-      if(o && typeof o === 'object'){
-        const en = String(o.en ?? o.text ?? o.label ?? '').trim();
-        const hi = String(o.hi ?? '').trim();
-        const image = String(o.image ?? '').trim();
-
-        if(!en && !hi && !image){
-          throw new Error(`Question ${index+1}: Option ${optionIndex+1} me English/Hindi text ya image nahi mila.`);
-        }
-
-        if(image && !image.startsWith('data:image/')){
-          throw new Error(`Question ${index+1}: Option ${optionIndex+1} ki image invalid hai.`);
-        }
-
-        return image ? {en, hi, image} : {en, hi};
-      }
-
-      const text = String(o ?? '').trim();
-      if(!text){
-        throw new Error(`Question ${index+1}: Option ${optionIndex+1} empty hai.`);
-      }
-
-      return {en:text, hi:''};
-    });
-
-    const normalizedQuestion =
-      question && typeof question === 'object'
-        ? {
-            en: String(question.en ?? '').trim(),
-            hi: String(question.hi ?? '').trim()
-          }
-        : {en:String(questionText).trim(), hi:''};
-
-    return {
-      topic,
-      question: normalizedQuestion,
-      options: cleanOptions,
-      correctIndex: correct,
-      ...(item.questionImage ? {questionImage:String(item.questionImage)} : {})
-    };
+  const arr=Array.isArray(raw)?raw:(raw&&Array.isArray(raw.questions)?raw.questions:null);if(!arr)throw new Error("questions array nahi mila.");
+  return arr.map((it,i)=>{
+    const question=it.question??it.q, options=it.options??it.opts, correct=Number(it.correctIndex??it.correctAnswer??it.ans);
+    if(!question||!Array.isArray(options)||options.length!==4||!Number.isInteger(correct)||correct<0||correct>3)throw new Error(`Question ${i+1} invalid.`);
+    const passage=String(it.passage??it.paragraph??"").trim(), plain=textOf(question)+" "+passage, section=String(it.section||autoSection(plain)).toLowerCase().replace(/\s+/g,"");
+    const sec=SECTIONS.some(s=>s.id===section)?section:autoSection(plain), topic=String(it.topic||autoTopic(plain,sec)).trim();
+    return{section:sec,topic,question,options,correctIndex:correct,explanation:String(it.explanation||""),...(passage?{passage}:{}),...(it.questionImage?{questionImage:String(it.questionImage)}:{})};
   });
 }
+document.getElementById("load-json-file").onclick=async()=>{const f=document.getElementById("bulk-file").files[0],m=document.getElementById("bulk-msg");if(!f){m.innerHTML='<div class="msg err">JSON file select karein.</div>';return}try{const t=await f.text();JSON.parse(t);document.getElementById("bulk-json").value=t;m.innerHTML='<div class="msg ok">JSON loaded.</div>'}catch(e){m.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}};
+document.getElementById("clear-bulk").onclick=()=>{document.getElementById("bulk-json").value="";document.getElementById("bulk-file").value="";document.getElementById("bulk-msg").innerHTML=""};
+document.getElementById("save-bulk").onclick=async()=>{const m=document.getElementById("bulk-msg");try{const arr=normalizeImportedJSON(JSON.parse(document.getElementById("bulk-json").value));for(let i=0;i<arr.length;i+=400){const batch=db.batch();arr.slice(i,i+400).forEach(x=>batch.set(db.collection("questions").doc(),x));await batch.commit()}m.innerHTML=`<div class="msg ok">${arr.length} questions add ho gaye.</div>`}catch(e){m.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}};
 
-async function importBulkJSON(raw){
-  const arr = normalizeImportedJSON(raw);
-  if(!arr.length) throw new Error('JSON me koi question nahi hai.');
+document.getElementById("save-paragraph").onclick=async()=>{
+  const language=document.getElementById("p-lang").value,text=document.getElementById("p-text").value.trim(),title=document.getElementById("p-title").value.trim()||"Practice Paragraph",difficulty=document.getElementById("p-level").value,msg=document.getElementById("p-msg");
+  if(!text){msg.innerHTML='<div class="msg err">Paragraph likhein.</div>';return}
+  try{await db.collection("typingParagraphs").add({language,text,title,difficulty,createdAt:firebase.firestore.FieldValue.serverTimestamp()});msg.innerHTML=`<div class="msg ok">${esc(title)} ${language} me add ho gaya.</div>`;document.getElementById("p-text").value="";document.getElementById("p-title").value=""}catch(e){msg.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
+};
 
-  const msg = document.getElementById('bulk-msg');
-  const batch = db.batch();
-  arr.forEach(item=>{
-    const ref = db.collection('questions').doc();
-    batch.set(ref, item);
-  });
-  await batch.commit();
-
-  msg.innerHTML = `<div class="msg ok">${arr.length} questions successfully add ho gaye!</div>`;
-  document.getElementById('bulk-json').value='';
-  document.getElementById('bulk-file').value='';
-}
-
-document.getElementById('load-json-file').addEventListener('click', async ()=>{
-  const msg = document.getElementById('bulk-msg');
-  const file = document.getElementById('bulk-file').files[0];
-  if(!file){ msg.innerHTML='<div class="msg err">Pehle JSON file select karein.</div>'; return; }
-  try{
-    const text = await file.text();
-    JSON.parse(text);
-    document.getElementById('bulk-json').value = text;
-    msg.innerHTML='<div class="msg ok">JSON load ho gayi. Ab "Sab Add Karein" dabayein.</div>';
-  }catch(e){
-    msg.innerHTML = `<div class="msg err">JSON read nahi ho paayi: ${e.message}</div>`;
-  }
-});
-
-document.getElementById('clear-bulk').addEventListener('click', ()=>{
-  document.getElementById('bulk-json').value='';
-  document.getElementById('bulk-file').value='';
-  document.getElementById('bulk-msg').innerHTML='';
-});
-
-document.getElementById('save-bulk').addEventListener('click', async ()=>{
-  const msg = document.getElementById('bulk-msg');
-  try{
-    const text = document.getElementById('bulk-json').value.trim();
-    if(!text) throw new Error('JSON file upload ya JSON paste karein.');
-    const raw = JSON.parse(text);
-    await importBulkJSON(raw);
-  }catch(e){
-    console.error(e);
-    msg.innerHTML = `<div class="msg err">JSON import nahi hua: ${e.message}</div>`;
-  }
-});
-document.getElementById('save-paragraph').addEventListener('click', async ()=>{
-  const language = document.getElementById('p-lang').value;
-  const text = document.getElementById('p-text').value.trim();
-  const msg = document.getElementById('p-msg');
-  if(!text){ msg.innerHTML = '<div class="msg err">Paragraph likhein.</div>'; return; }
-  try{
-    await db.collection('typingParagraphs').add({ language, text });
-    msg.innerHTML = '<div class="msg ok">Paragraph add ho gaya!</div>';
-    document.getElementById('p-text').value='';
-  }catch(e){ msg.innerHTML = `<div class="msg err">${e.message}</div>`; }
-});
-async function loadAdminTopics(){
-  const snap = await db.collection('questions').get();
-  const topics = [...new Set(snap.docs.map(d=>d.data().topic))];
-  const sel = document.getElementById('manage-topic-filter');
-  sel.innerHTML = '<option value="">Sabhi Topics</option>' + topics.map(t=>`<option value="${t}">${t}</option>`).join('');
-  sel.onchange = loadManageList;
+async function loadAdminFilters(){
+  let docs=[];try{const x=await db.collection("questions").get();docs=x.docs.map(d=>d.data())}catch(e){}
+  const topics=[...new Set(docs.map(q=>q.topic).filter(Boolean))].sort(),sel=document.getElementById("manage-topic-filter");
+  sel.innerHTML='<option value="">Sabhi Topics</option>'+topics.map(t=>`<option>${esc(t)}</option>`).join("");sel.onchange=loadManageList;document.getElementById("manage-section-filter").onchange=loadManageList;
 }
 async function loadManageList(){
-  const filter = document.getElementById('manage-topic-filter').value;
-  const list = document.getElementById('manage-list');
-  const snap = await db.collection('questions').get();
-  let docs = snap.docs;
-  if(filter) docs = docs.filter(d=>d.data().topic===filter);
-  list.innerHTML = docs.length ? docs.map(d=>{
-    const q = d.data();
-    const qTitle = q.question && typeof q.question === 'object'
-      ? [q.question.en, q.question.hi].filter(Boolean).join(' / ')
-      : (q.question || '');
-    return `<div class="admin-list-item"><span><span class="topic-tag">${q.topic}</span>${qTitle}</span><button class="btn danger" data-del="${d.id}" style="padding:6px 12px; font-size:11px;">Delete</button></div>`;
-  }).join('') : '<p class="sub">Koi question nahi mila.</p>';
-  list.querySelectorAll('[data-del]').forEach(btn=>{
-    btn.addEventListener('click', async ()=>{
-      await db.collection('questions').doc(btn.dataset.del).delete();
-      loadManageList();
-    });
-  });
+  const sec=document.getElementById("manage-section-filter").value,topic=document.getElementById("manage-topic-filter").value,list=document.getElementById("manage-list");
+  let docs=[];try{const s=await db.collection("questions").get();docs=s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){}
+  docs=docs.filter(q=>(!sec||(q.section||autoSection(textOf(q.question)))===sec)&&(!topic||q.topic===topic));
+  list.innerHTML=docs.length?docs.map(q=>`<div class="admin-list-item"><span><span class="topic-tag">${sectionName(q.section||autoSection(textOf(q.question)))}</span><span class="topic-tag">${esc(q.topic||"")}</span>${esc(textOf(q.question)).slice(0,120)}</span><button class="btn danger" data-del="${q.id}">Delete</button></div>`).join(""):'<p class="sub">Koi question nahi mila.</p>';
+  list.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{if(confirm("Question delete karein?")){await db.collection("questions").doc(b.dataset.del).delete();loadManageList()}});
 }
 </script>
 </body>
