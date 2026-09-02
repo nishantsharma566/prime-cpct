@@ -54,112 +54,7 @@ label{font-size:12px;color:var(--muted);font-family:var(--mono);display:block;ma
 .passbox{white-space:pre-wrap;padding:13px;border-left:3px solid var(--teal);background:#07090d;margin:10px 0 15px;color:#ddd;line-height:1.7}
 footer{text-align:center;padding:25px;color:var(--muted);font:11px var(--mono);border-top:1px solid var(--border)}
 @media(max-width:600px){main{padding:22px 12px 60px}.bar-row{grid-template-columns:1fr}.bar-pct{text-align:left}.row>.btn{flex:1}}
-
-.review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
-.review-card{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:10px}
-.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:7px;margin:12px 0}
-.palette button{padding:9px 4px;border:1px solid var(--border);background:var(--panel-2);color:var(--paper);border-radius:6px;cursor:pointer;font-family:var(--mono)}
-.palette button.answered{border-color:var(--teal)}.palette button.current{background:var(--amber);color:#111}.palette button.marked{box-shadow:0 0 0 2px var(--red) inset}
-.history-item{padding:12px;border:1px solid var(--border);border-radius:8px;margin:8px 0;background:var(--panel-2)}
-.question-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.note-box{margin-top:10px}
-.bookmark-btn.active{border-color:var(--amber);color:var(--amber)}
-.difficulty{font:10px var(--mono);color:var(--muted);padding:3px 7px;border:1px solid var(--border);border-radius:99px}
 </style>
-
-<style id="ux-extension-css">
-/* ===== PRIME CPCT COMPLETE PLATFORM UI/UX EXTENSION ===== */
-.ux-shell{max-width:1180px;margin:0 auto;padding:18px}
-.ux-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.ux-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px}
-.ux-card:hover{border-color:var(--amber)}
-.ux-card h3{margin:0 0 7px;font-size:15px}
-.ux-card p{color:var(--muted);font-size:12px;line-height:1.55}
-.ux-kpi{font:700 25px var(--mono);color:var(--amber)}
-.ux-small{font-size:11px;color:var(--muted)}
-.ux-table{width:100%;border-collapse:collapse;font-size:12px}
-.ux-table th,.ux-table td{padding:10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
-.ux-table th{color:var(--teal);font-family:var(--mono)}
-.ux-badge{display:inline-block;padding:4px 8px;border-radius:99px;border:1px solid var(--border);font:10px var(--mono)}
-.ux-success{color:var(--green)}.ux-warning{color:var(--amber)}.ux-danger{color:var(--red)}
-.ux-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-.ux-search{display:flex;gap:8px}.ux-search input{margin:0}
-.ux-progress{height:8px;background:#080a0f;border-radius:99px;overflow:hidden}.ux-progress>i{display:block;height:100%;background:var(--teal)}
-.ux-sidebar{display:grid;grid-template-columns:210px 1fr;gap:16px}
-.ux-side{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px;height:max-content}
-.ux-side button{display:block;width:100%;text-align:left;background:transparent;color:var(--paper);border:0;padding:10px;border-radius:7px;cursor:pointer;font-family:var(--mono);font-size:11px}
-.ux-side button:hover,.ux-side button.active{background:var(--panel2);color:var(--amber)}
-.ux-modal{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
-.ux-modal>div{max-width:620px;width:100%;max-height:90vh;overflow:auto;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px}
-.ux-hidden{display:none!important}
-.ux-hero{padding:28px;border:1px solid var(--border);border-radius:14px;background:linear-gradient(135deg,rgba(255,176,0,.08),rgba(94,234,212,.04))}
-.ux-hero h1{font:700 30px var(--mono);margin:0 0 8px}
-.ux-hero p{color:var(--muted);max-width:700px;line-height:1.6}
-.ux-step{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
-.ux-step:last-child{border:0}.ux-num{width:28px;height:28px;border-radius:50%;background:var(--amber);color:#111;display:grid;place-items:center;font:700 12px var(--mono);flex:none}
-.ux-chip{padding:5px 8px;border:1px solid var(--border);border-radius:7px;font-size:11px;display:inline-block;margin:3px}
-.ux-exam-top{position:sticky;top:0;z-index:20;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:12px}
-.ux-timer{font:700 20px var(--mono);color:var(--amber)}
-.ux-palette-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
-.ux-palette-grid button{padding:8px 2px;background:var(--panel2);color:var(--paper);border:1px solid var(--border);border-radius:6px}
-.ux-palette-grid button.ans{border-color:var(--teal)}.ux-palette-grid button.rev{box-shadow:inset 0 0 0 2px var(--red)}
-@media(max-width:800px){.ux-sidebar{grid-template-columns:1fr}.ux-side{display:flex;overflow:auto;gap:5px}.ux-side button{min-width:max-content;width:auto}.ux-palette-grid{grid-template-columns:repeat(6,1fr)}}
-@media(max-width:600px){.ux-hero h1{font-size:23px}.ux-search{display:block}.ux-search input{margin-bottom:8px}.ux-table{font-size:11px}}
-</style>
-
-<!--
-CPCT IMPORT CONTRACT v2
-Future PDF→HTML→JSON generator should emit:
-{
-  "questionNo": 1,
-  "section": "computer|readcomp|maths|reasoning|gk",
-  "topic": "stable topic name",
-  "subtopic": "optional",
-  "type": "mcq|comprehension|typing",
-  "question": {"en":"...", "hi":"..."},
-  "options": [{"en":"...","hi":""}, ... exactly 4 for MCQ],
-  "correctIndex": 0,
-  "passage": "... optional shared passage ...",
-  "questionImage": "... optional image/data URL/path ...",
-  "source": "...",
-  "difficulty": "Easy|Medium|Hard"
-}
-Important: English + Hindi of the same question must be ONE object, not two questions.
-Comprehension 53–57 share one passage.
-Typing questions are type="typing" and do not require 4 options.
--->
-
-
-<style id="phase3-professional-css">
-.p3-builder{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.p3-builder .full{grid-column:1/-1}
-.p3-counts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
-.p3-counts label{margin:0}
-.p3-counts input{margin-top:5px}
-.p3-summary{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.p3-chip{padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:var(--panel2);font-size:12px}
-.p3-exambar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.p3-timer{font:700 22px var(--mono);color:var(--amber);padding:7px 12px;border:1px solid var(--border);border-radius:9px;background:var(--panel2)}
-.p3-timer.danger{color:var(--red)}
-.p3-meta{font-size:12px;color:var(--muted)}
-.p3-palette{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:12px 0}
-.p3-palette button{padding:7px 2px;background:var(--panel2);color:var(--paper);border:1px solid var(--border);border-radius:6px;cursor:pointer}
-.p3-palette button.current{outline:2px solid var(--amber)}
-.p3-palette button.answered{border-color:var(--teal)}
-.p3-palette button.review{box-shadow:inset 0 0 0 2px var(--red)}
-.p3-palette button.answered.review{background:rgba(94,234,212,.10)}
-.p3-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
-.p3-dot{display:inline-block;width:10px;height:10px;border-radius:3px;border:1px solid var(--border);vertical-align:-1px;margin-right:3px}
-.p3-section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.p3-review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.p3-review-card{border:1px solid var(--border);border-radius:10px;padding:12px;background:var(--panel2)}
-@media(max-width:700px){
-  .p3-builder,.p3-review-grid{grid-template-columns:1fr}
-  .p3-counts{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .p3-palette{grid-template-columns:repeat(6,1fr)}
-}
-</style>
-
 </head>
 <body>
 <header>
@@ -182,10 +77,10 @@ Typing questions are type="typing" and do not require 4 options.
 <section id="home" class="view">
   <div class="eyebrow">Dashboard</div><h2>Kya practice karna hai?</h2><p class="sub">Full mock, section test, topic practice ya typing test choose karein.</p>
   <div class="card-grid">
-    <div class="card" data-action="cpct"><div class="icon">▣</div><h3>Full CPCT Mock</h3><p>5 sections se balanced mock test.</p></div><div class="card" data-action="builder"><div class="icon">⚙</div><h3>Test Builder</h3><p>75-question CPCT ya custom test banayein.</p></div>
+    <div class="card" data-action="cpct"><div class="icon">▣</div><h3>Full CPCT Mock</h3><p>5 sections se balanced mock test.</p></div>
     <div class="card" data-action="sections"><div class="icon">☷</div><h3>Section Wise MCQ</h3><p>Computer & IT, Read Comp, Maths, Reasoning, GK.</p></div>
     <div class="card" data-action="topic-search"><div class="icon">⌕</div><h3>Topic Wise Test</h3><p>Topic search karke targeted practice.</p></div>
-    <div class="card" data-action="typing-menu"><div class="icon">⌨</div><h3>Typing Practice</h3><p>English, Remington GAIL aur Krutidev.</p></div><div class="card" data-action="bookmarks"><div class="icon">🔖</div><h3>My Bookmarks</h3><p>Saved questions revise karein.</p></div><div class="card" data-action="mistakes"><div class="icon">↻</div><h3>My Mistakes</h3><p>Galat questions practice karein.</p></div>
+    <div class="card" data-action="typing-menu"><div class="icon">⌨</div><h3>Typing Practice</h3><p>English, Remington GAIL aur Krutidev.</p></div>
   </div>
 </section>
 
@@ -241,58 +136,6 @@ Typing questions are type="typing" and do not require 4 options.
   </div>
 </section>
 
-
-<section id="test-builder" class="view">
-  <div class="eyebrow">Phase 3 · Test Builder</div>
-  <h2>Professional Test Builder</h2>
-  <p class="sub">CPCT paper structure ke hisab se full mock ya custom section test banayein.</p>
-  <div class="panel">
-    <div class="p3-builder">
-      <div>
-        <label>Test Type</label>
-        <select id="p3-test-type">
-          <option value="cpct">Full CPCT Pattern — 75 MCQ</option>
-          <option value="custom">Custom Test</option>
-        </select>
-      </div>
-      <div>
-        <label>Time Limit</label>
-        <select id="p3-duration">
-          <option value="30">30 minutes</option>
-          <option value="60">60 minutes</option>
-          <option value="90">90 minutes</option>
-          <option value="120" selected>120 minutes</option>
-          <option value="180">180 minutes</option>
-        </select>
-      </div>
-      <div class="full" id="p3-custom-box" style="display:none">
-        <label>Custom Question Counts</label>
-        <div class="p3-counts">
-          <label>Computer<input type="number" id="p3-c" min="0" value="20"></label>
-          <label>Read Comp<input type="number" id="p3-r" min="0" value="5"></label>
-          <label>Maths<input type="number" id="p3-m" min="0" value="6"></label>
-          <label>Reasoning<input type="number" id="p3-re" min="0" value="6"></label>
-          <label>GK<input type="number" id="p3-g" min="0" value="6"></label>
-        </div>
-      </div>
-      <div class="full">
-        <label>Negative Marking</label>
-        <select id="p3-negative">
-          <option value="0" selected>No Negative Marking</option>
-          <option value="0.25">-0.25 for each wrong answer</option>
-          <option value="0.50">-0.50 for each wrong answer</option>
-        </select>
-      </div>
-    </div>
-    <div id="p3-builder-summary" class="p3-summary"></div>
-    <div class="row" style="margin-top:16px">
-      <button class="btn" id="p3-start">Start Test</button>
-      <button class="btn ghost" id="p3-cpct">Quick Full CPCT</button>
-    </div>
-    <div id="p3-builder-msg"></div>
-  </div>
-</section>
-
 <section id="mock" class="view">
   <div class="eyebrow" id="mock-mode-label">Mock Test</div><h2>MCQ Test</h2>
   <p class="sub">Answer select karne par sirf selection save hoga. Sahi/galat final submit ke baad Analysis me dikhega.</p>
@@ -316,33 +159,17 @@ Typing questions are type="typing" and do not require 4 options.
 </section>
 
 <section id="dashboard" class="view">
-  <div class="eyebrow">Meri Progress</div><h2>Student Dashboard</h2>
-  <p class="sub">Aapki complete practice progress.</p>
-  <div class="review-grid">
-    <div class="review-card"><div class="stat"><div class="val" id="dash-tests">0</div><div class="lbl">MCQ Tests</div></div></div>
-    <div class="review-card"><div class="stat"><div class="val" id="dash-best">0%</div><div class="lbl">Best Score</div></div></div>
-    <div class="review-card"><div class="stat"><div class="val" id="dash-q">0</div><div class="lbl">Questions</div></div></div>
-    <div class="review-card"><div class="stat"><div class="val" id="dash-wpm">0</div><div class="lbl">Best WPM</div></div></div>
-  </div>
-  <div class="panel"><h3>Typing Performance</h3><div class="stat-row" id="typing-summary-stats"></div><div style="margin-top:15px"><label>Weak Words</label><div id="weak-words-box">—</div></div></div>
-  <div class="panel"><h3>MCQ Section Wise Accuracy</h3><div id="section-accuracy-box">Abhi data nahi hai.</div></div>
+  <div class="eyebrow">Meri Progress</div><h2>Student Dashboard</h2><p class="sub">Recent typing aur MCQ performance.</p>
+  <div class="panel"><h3>Typing Performance</h3><div class="stat-row" id="typing-summary-stats"></div></div>
   <div class="panel"><h3>MCQ Topic Wise Accuracy</h3><div id="topic-accuracy-box">Abhi data nahi hai.</div></div>
-  <div class="panel"><h3>Test History</h3><div id="test-history-box">Loading...</div></div>
-</section>
-<section id="bookmarks" class="view">
-  <div class="eyebrow">Saved Questions</div><h2>My Bookmarks</h2><p class="sub">Saved questions ko revise karein.</p>
-  <div class="panel"><div id="bookmark-list">Loading...</div></div>
-</section>
-<section id="mistakes" class="view">
-  <div class="eyebrow">Revision</div><h2>My Mistakes</h2><p class="sub">Pehle galat kiye questions se practice karein.</p>
-  <div class="panel"><button class="btn" id="start-mistakes">Mistake Test Start</button><div id="mistake-list" style="margin-top:15px">Loading...</div></div>
+  <div class="panel"><h3>MCQ Section Wise Accuracy</h3><div id="section-accuracy-box">Abhi data nahi hai.</div></div>
 </section>
 
 <section id="admin" class="view">
   <div class="eyebrow">Admin Panel</div><h2>Content Manage Karein</h2><p class="sub">MCQ classification, bulk import aur custom typing paragraphs.</p>
   <div class="row" style="margin-bottom:18px">
     <button class="btn" data-admin-tab="add-q">+ Question</button>
-    <button class="btn ghost" data-admin-tab="bulk-q">Bulk JSON</button><button class="btn ghost" data-admin-tab="import-safe">Import Validator</button>
+    <button class="btn ghost" data-admin-tab="bulk-q">Bulk JSON</button>
     <button class="btn ghost" data-admin-tab="add-p">+ Typing Paragraph</button>
     <button class="btn ghost" data-admin-tab="manage">Manage</button>
   </div>
@@ -355,7 +182,7 @@ Typing questions are type="typing" and do not require 4 options.
     <label>Options</label>
     <input id="q-opt0" placeholder="Option 1"><input id="q-opt1" placeholder="Option 2"><input id="q-opt2" placeholder="Option 3"><input id="q-opt3" placeholder="Option 4">
     <label>Sahi Jawab</label><select id="q-correct"><option value="0">Option 1</option><option value="1">Option 2</option><option value="2">Option 3</option><option value="3">Option 4</option></select>
-    <label>Explanation (Analysis me dikhega)</label><textarea id="q-explanation" rows="3" placeholder="Answer kyun sahi hai?"></textarea><label>Difficulty</label><select id="q-difficulty"><option>Easy</option><option selected>Medium</option><option>Hard</option></select><label>Question Image URL (optional)</label><input id="q-image" placeholder="https://...">
+    <label>Explanation (Analysis me dikhega)</label><textarea id="q-explanation" rows="3" placeholder="Answer kyun sahi hai?"></textarea>
     <button class="btn" id="save-question">Save Question</button><div id="q-msg"></div>
   </div>
 
@@ -365,18 +192,6 @@ Typing questions are type="typing" and do not require 4 options.
     <div class="row"><button class="btn ghost" id="load-json-file">JSON Load</button><button class="btn ghost" id="clear-bulk">Clear</button></div>
     <textarea id="bulk-json" rows="10" placeholder='[{"section":"computer","topic":"Computer Basics","q":"CPU?","opts":["A","B","C","D"],"ans":0}]'></textarea>
     <button class="btn" id="save-bulk">Sab Add Karein</button><div id="bulk-msg"></div>
-  </div>
-
-
-  <div class="panel admin-tab hidden" id="admin-import-safe">
-    <h3>PDF → HTML → JSON Import Validator</h3>
-    <p class="sub">CPCT paper structure के हिसाब से bilingual MCQ, comprehension, typing, topic/subtopic, answer formats और image fields को normalize करता है। Import से पहले errors दिखेंगे।</p>
-    <div class="row">
-      <button class="btn ghost" id="validate-json-btn">Validate JSON</button>
-      <button class="btn ghost" id="download-normalized-btn">Download Normalized JSON</button>
-    </div>
-    <div id="import-safe-summary" class="msg" style="display:none"></div>
-    <pre id="import-safe-report" style="white-space:pre-wrap;max-height:360px;overflow:auto;margin-top:12px"></pre>
   </div>
 
   <div class="panel admin-tab hidden" id="admin-add-p">
@@ -390,126 +205,9 @@ Typing questions are type="typing" and do not require 4 options.
 
   <div class="panel admin-tab hidden" id="admin-manage">
     <div class="row"><select id="manage-section-filter" style="width:auto"></select><select id="manage-topic-filter" style="width:auto"></select></div>
-    <div id="manage-list"></div><hr style="border-color:var(--border);margin:22px 0"><h3>Typing Paragraphs</h3><div id="paragraph-manage-list">Loading...</div>
+    <div id="manage-list"></div>
   </div>
 </section>
-
-<!-- ===== COMPLETE PLATFORM PAGES: PHASE 1–5 ===== -->
-<section id="ux-platform" class="view">
-  <div class="ux-shell">
-    <div class="ux-hero">
-      <div class="eyebrow">Prime CPCT · Complete Platform</div>
-      <h1>One PDF → Complete Online CBT</h1>
-      <p>Phase 1 से Phase 5 तक का scalable UI shell. Existing Firebase question bank और typing system के साथ designed है.</p>
-      <div class="ux-actions">
-        <button class="btn" onclick="uxGo('ux-student')">Student Dashboard</button>
-        <button class="btn ghost" onclick="uxGo('ux-admin-dashboard')">Admin Dashboard</button>
-        <button class="btn ghost" onclick="uxGo('ux-roadmap')">Phase Roadmap</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="ux-student" class="view">
-  <div class="ux-shell">
-    <div class="eyebrow">Phase 1–3</div><h2>Student Dashboard</h2>
-    <p class="sub">Mock tests, typing, progress और personalized practice का central hub.</p>
-    <div class="ux-grid">
-      <div class="ux-card"><div class="ux-kpi" id="ux-kpi-tests">0</div><div class="ux-small">MCQ Tests</div></div>
-      <div class="ux-card"><div class="ux-kpi" id="ux-kpi-best">0%</div><div class="ux-small">Best Score</div></div>
-      <div class="ux-card"><div class="ux-kpi" id="ux-kpi-questions">0</div><div class="ux-small">Questions Practiced</div></div>
-      <div class="ux-card"><div class="ux-kpi" id="ux-kpi-wpm">0</div><div class="ux-small">Best WPM</div></div>
-    </div>
-    <div class="ux-actions">
-      <button class="btn" onclick="startMockTest('cpct')">Start Mock</button>
-      <button class="btn ghost" onclick="showView('topic-search');loadTopicSearchList()">Topic Practice</button>
-      <button class="btn ghost" onclick="showView('typing-menu')">Typing</button>
-      <button class="btn ghost" onclick="uxGo('ux-performance')">Analytics</button>
-      <button class="btn ghost" onclick="uxGo('ux-certificates')">Certificates</button>
-    </div>
-    <div class="ux-grid">
-      <div class="ux-card"><h3>🎯 Weak Topics</h3><div id="ux-weak-topics">Test attempts के बाद recommendations यहाँ आएँगी.</div></div>
-      <div class="ux-card"><h3>🔥 Daily Practice</h3><p>10-question daily quiz, streak और revision workflow.</p><button class="btn" onclick="startMockTest('section','computer')">Start Daily Practice</button></div>
-      <div class="ux-card"><h3>🏆 Leaderboard</h3><p>Daily, weekly और institute-wise ranking.</p><button class="btn ghost" onclick="uxGo('ux-leaderboard')">View Ranking</button></div>
-    </div>
-  </div>
-</section>
-
-<section id="ux-performance" class="view">
-  <div class="ux-shell">
-    <div class="eyebrow">Student Analytics</div><h2>Performance Analytics</h2>
-    <div class="ux-grid">
-      <div class="ux-card"><h3>Overall Accuracy</h3><div class="ux-kpi" id="ux-acc">—</div></div>
-      <div class="ux-card"><h3>Average Score</h3><div class="ux-kpi" id="ux-avg">—</div></div>
-      <div class="ux-card"><h3>Attempts</h3><div class="ux-kpi" id="ux-attempts">—</div></div>
-    </div>
-    <div class="ux-card" style="margin-top:14px"><h3>Section Performance</h3><div id="ux-section-bars">No data yet.</div></div>
-    <div class="ux-card"><h3>Topic Performance</h3><div id="ux-topic-bars">No data yet.</div></div>
-    <div class="ux-card"><h3>AI-style Recommendations</h3><div id="ux-recommendations">Weak topics will be detected from your attempts.</div></div>
-  </div>
-</section>
-
-<section id="ux-certificates" class="view">
-  <div class="ux-shell">
-    <div class="eyebrow">Achievement</div><h2>Certificates</h2>
-    <div class="ux-card">
-      <h3>Certificate Verification Ready</h3>
-      <p>Future phase में certificate ID + QR verification backend से connect किया जा सकता है.</p>
-      <div class="ux-chip">Certificate ID: CPCT-2026-DEMO</div>
-      <div class="ux-actions"><button class="btn" onclick="uxDemoCertificate()">Preview Certificate</button></div>
-      <div id="ux-cert-preview"></div>
-    </div>
-  </div>
-</section>
-
-<section id="ux-leaderboard" class="view">
-  <div class="ux-shell">
-    <div class="eyebrow">Ranking</div><h2>Leaderboard</h2>
-    <div class="ux-card">
-      <table class="ux-table"><thead><tr><th>#</th><th>Student</th><th>Score</th><th>Accuracy</th></tr></thead>
-      <tbody id="ux-leaderboard-body"><tr><td>1</td><td>Demo Student</td><td>95%</td><td>96%</td></tr><tr><td>2</td><td>Practice User</td><td>92%</td><td>94%</td></tr><tr><td>3</td><td>You</td><td>—</td><td>—</td></tr></tbody></table>
-    </div>
-  </div>
-</section>
-
-<section id="ux-admin-dashboard" class="view">
-  <div class="ux-shell">
-    <div class="eyebrow">Phase 1–5</div><h2>Admin Control Center</h2>
-    <p class="sub">Question bank से SaaS management तक पूरा control structure.</p>
-    <div class="ux-sidebar">
-      <div class="ux-side" id="ux-admin-nav">
-        <button class="active" onclick="uxAdminTab('overview',this)">📊 Overview</button>
-        <button onclick="uxAdminTab('questions',this)">📚 Question Bank</button>
-        <button onclick="uxAdminTab('builder',this)">🧪 Test Builder</button>
-        <button onclick="uxAdminTab('pdf',this)">📄 PDF Import</button>
-        <button onclick="uxAdminTab('students',this)">👥 Students</button>
-        <button onclick="uxAdminTab('institutes',this)">🏫 Institutes</button>
-        <button onclick="uxAdminTab('payments',this)">💳 Payments</button>
-        <button onclick="uxAdminTab('ai',this)">🤖 AI Lab</button>
-        <button onclick="uxAdminTab('saas',this)">☁️ SaaS Settings</button>
-      </div>
-      <div id="ux-admin-content" class="ux-card"></div>
-    </div>
-  </div>
-</section>
-
-<section id="ux-roadmap" class="view">
-  <div class="ux-shell">
-    <div class="eyebrow">Product Roadmap</div><h2>Phase 1 → Phase 5</h2>
-    <div class="ux-card">
-      <div class="ux-step"><div class="ux-num">1</div><div><b>Core CBT</b><p>Login, dashboard, question bank, test builder, timer, palette, review, bilingual UI, randomization, result और analytics.</p></div></div>
-      <div class="ux-step"><div class="ux-num">2</div><div><b>Professional</b><p>PDF/OCR import, green-tick detection workflow, JSON import/export, typing, previous papers, advanced analytics और leaderboard.</p></div></div>
-      <div class="ux-step"><div class="ux-num">3</div><div><b>Business</b><p>Paid tests, subscriptions, coupons, payment gateway, certificates, notifications, institutes और teacher dashboard.</p></div></div>
-      <div class="ux-step"><div class="ux-num">4</div><div><b>AI</b><p>AI question generator, PDF parser, topic/difficulty detection, explanations और personalized practice.</p></div></div>
-      <div class="ux-step"><div class="ux-num">5</div><div><b>SaaS</b><p>Multi-tenant institutes, roles, APIs, PWA, backups, audit logs, scalable database और advanced security.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<div id="ux-modal" class="ux-modal ux-hidden" onclick="if(event.target===this)uxCloseModal()">
-  <div id="ux-modal-body"></div>
-</div>
-
 </main>
 <footer>Prime CPCT · Firebase powered · GitHub Pages ready</footer>
 
@@ -526,11 +224,11 @@ firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth(), db=firebase.firestore();
 
 const SECTIONS=[
-  {id:"computer",name:"Computer Proficiency & General IT",icon:"💻"},
-  {id:"readcomp",name:"Reading Comprehension",icon:"📖"},
-  {id:"maths",name:"Quantitative Aptitude",icon:"∑"},
+  {id:"computer",name:"Computer & IT",icon:"💻"},
+  {id:"readcomp",name:"Read Comp",icon:"📖"},
+  {id:"maths",name:"Maths",icon:"∑"},
   {id:"reasoning",name:"Reasoning",icon:"◈"},
-  {id:"gk",name:"General Awareness",icon:"🌐"}
+  {id:"gk",name:"GK",icon:"🌐"}
 ];
 const sectionName=id=>(SECTIONS.find(s=>s.id===id)||{name:id||"General"}).name;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
@@ -549,10 +247,10 @@ function showView(id){
 function renderNav(){
   const n=document.getElementById("main-nav");
   if(!currentUser){n.innerHTML="";return}
-  let items=[["home","Home"],["dashboard","Progress"],["bookmarks","Bookmarks"],["mistakes","Mistakes"]];
+  let items=[["home","Home"],["dashboard","Progress"]];
   if(currentUser.isAdmin)items.push(["admin","Admin"]);
   n.innerHTML=items.map(([id,t])=>`<button data-view="${id}">${t}</button>`).join("")+`<button id="logout">Logout</button>`;
-  n.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{showView(b.dataset.view);if(b.dataset.view==="dashboard")loadDashboard();if(b.dataset.view==="bookmarks")loadBookmarks();if(b.dataset.view==="mistakes")loadMistakes();if(b.dataset.view==="admin")loadAdminFilters()});
+  n.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{showView(b.dataset.view);if(b.dataset.view==="dashboard")loadDashboard();if(b.dataset.view==="admin")loadAdminFilters()});
   document.getElementById("logout").onclick=()=>auth.signOut();
 }
 function fillSectionSelects(){
@@ -595,7 +293,7 @@ document.querySelectorAll("#home .card").forEach(c=>c.onclick=()=>{
   if(a==="cpct")startMockTest("cpct");
   if(a==="sections")showView("section-menu");
   if(a==="topic-search"){showView("topic-search");loadTopicSearchList()}
-  if(a==="typing-menu")showView("typing-menu");if(a==="bookmarks"){showView("bookmarks");loadBookmarks()}if(a==="mistakes"){showView("mistakes");loadMistakes()}
+  if(a==="typing-menu")showView("typing-menu");
 });
 document.querySelectorAll("[data-typing]").forEach(c=>c.onclick=()=>startTypingTest(c.dataset.typing));
 document.getElementById("start-custom-typing").onclick=()=>{
@@ -667,129 +365,26 @@ async function finishTyping(){
 document.getElementById("restart-typing").onclick=()=>startTypingTest(typingState.mode||"english");
 document.getElementById("duration-select").onchange=()=>{if(typingState.text)loadPassage(typingState.text,typingState.mode,typingState.title)};
 
-function normalizeSectionId(v){
-  const s=String(v??"").toLowerCase().replace(/[^a-z0-9]+/g,"");
-  const aliases={
-    computer:"computer",computerandit:"computer",computerscience:"computer",
-    computerproficiency:"computer",generalitskills:"computer",networking:"computer",
-    readcomp:"readcomp",readingcomprehension:"readcomp",comprehension:"readcomp",
-    maths:"maths",math:"maths",quantitativeaptitude:"maths",
-    reasoning:"reasoning",generalmartabilityandreasoning:"reasoning",mentalability:"reasoning",
-    gk:"gk",generalknowledge:"gk",generalawareness:"gk",generalaawareness:"gk",
-    typing:"typing"
-  };
-  return aliases[s]||"";
-}
 function autoSection(text){
   const s=String(text).toLowerCase();
-  if(/ms[-\s]?excel|openoffice calc|spreadsheet|workbook|worksheet|cell reference|chart|formula|percentage format|lookup function/.test(s))return"computer";
-  if(/ms[-\s]?word|mail merge|margins|ribbon menu|document/.test(s))return"computer";
-  if(/linux|unix|fedora|operating system|boot firmware/.test(s))return"computer";
-  if(/wifi|wlan|ethernet|tcp|udp|ftp|url|uri|browser|email|internet|broadband|hyperlink|e-governance|e-transport/.test(s))return"computer";
-  if(/computer|cpu|ram|rom|motherboard|keyboard|mouse|printer|plotter|hard disk|barcode|binary|hexadecimal|assembler|compiler|interpreter|software|malware|virus|trojan|animation/.test(s))return"computer";
-  if(/passage|according to|writer|author|gizmo|read the following|sub questions/.test(s))return"readcomp";
-  if(/percent|percentage|ratio|average|profit|loss|interest|fraction|equation|area|perimeter|speed|distance|time|simple interest|sets|universal set/.test(s))return"maths";
-  if(/series|analogy|coding|decoding|blood relation|direction|odd one|reasoning|pattern|syllogism|alphabetical order|number-pairs|code for/.test(s))return"reasoning";
+  if(/computer|cpu|ram|rom|windows|internet|email|excel|word|powerpoint|hardware|software|network|keyboard|operating system|shortcut/.test(s))return"computer";
+  if(/passage|according to|paragraph|author|comprehension|read the following/.test(s))return"readcomp";
+  if(/percent|percentage|ratio|average|profit|loss|interest|number|fraction|equation|area|perimeter|speed|distance|time|math/.test(s))return"maths";
+  if(/series|analogy|coding|decoding|blood relation|direction|odd one|reasoning|pattern|syllogism/.test(s))return"reasoning";
   return"gk";
 }
 function autoTopic(text,section){
   const s=String(text).toLowerCase();
   const maps={
-    computer:[
-      ["MS Excel 2019",/ms[-\s]?excel|workbook|worksheet|spreadsheet|cell reference|lookup function|bar chart|doughnut chart|number format|percentage format/],
-      ["MS Word 2019",/ms[-\s]?word|mail merge|margins|ribbon menu/],
-      ["OpenOffice Calc",/openoffice calc/],
-      ["Software Testing",/software tester|bugs, errors|statement coverage|dead code|unused branches|testing/],
-      ["Operating Systems",/fedora|linux|unix|operating system|boot firmware|partitioning|raid arrays/],
-      ["Computer Fundamentals",/computer generation|third generation|binary|number system|cpu|ram|rom|motherboard|form factor|port|mouse|input device|swapping|language translating|assembler|compiler|interpreter/],
-      ["Storage & Devices",/optical disc|cd-recordable|floppy|hard drive|pen drive|hard disk|tracks|sectors|printer|plotter|dot matrix/],
-      ["Networking",/wlan|wi-fi|wifi|ethernet|tcp|udp|ftp|broadband|network|protocol/],
-      ["Internet & Web",/internet|browser|url|uri|hyperlink|www|email address|gmail|mailing lists|instant messaging|voip/],
-      ["E-Governance",/e-governance|e-transport|government services|vehicle registration|driving license/],
-      ["Cyber Security",/malware|virus|worm|trojan|encryption|intrusion detection/],
-      ["Multimedia & Graphics",/animation|low contrast images|intensity values|plotter|vector graphics/],
-      ["File Formats",/extension|\.wmv|\.mp4|csv|comma separated values/],
-      ["Cryptography",/block cipher|stream cipher|cipher/],
-      ["Keyboard & Shortcuts",/keyboard shortcut|ctrl \+|page down|function key|modifier keys|f9/],
-      ["Barcode & Inventory",/barcode|inventory management/]
-    ],
+    computer:[["MS Word",/word|docx/],["MS Excel",/excel|spreadsheet|formula/],["Internet",/internet|browser|url|http|email/],["Computer Basics",/cpu|ram|rom|hardware|software|input|output/],["Operating System",/windows|linux|operating system/]],
     readcomp:[["Reading Comprehension",/.*/]],
-    maths:[
-      ["Simple Interest",/simple interest|rate of interest/],
-      ["Percentage",/percent|percentage/],
-      ["Algebra & Expressions",/x\s*=|y\s*=|z\s*=|algebraic|expression/],
-      ["Set Theory",/universal set|sets? a and b|complements|a'|b'|intersection/],
-      ["Number System",/number|integers|fraction|divisibility/],
-      ["Arithmetic",/.*/]
-    ],
-    reasoning:[
-      ["Number Pair / Odd One Out",/number-pairs|odd one|do not belong|group/],
-      ["Coding-Decoding",/code|coded|coding|decoding/],
-      ["Letter/Alphabet Analogy",/letters|alphabetical order|related to|same logic/],
-      ["Alphabetical Arrangement",/arranged in alphabetical order|position.*letters/],
-      ["Analogy",/analogy/],
-      ["Series & Pattern",/series|sequence|pattern/]
-    ],
-    gk:[["General Awareness",/.*/]]
+    maths:[["Percentage",/percent|percentage/],["Ratio & Proportion",/ratio|proportion/],["Average",/average/],["Profit & Loss",/profit|loss/],["Time Speed Distance",/speed|distance/]],
+    reasoning:[["Series",/series|sequence/],["Coding-Decoding",/coding|decoding/],["Blood Relation",/blood relation|father|mother|brother|sister/],["Direction",/direction|north|south|east|west/],["Analogy",/analogy/]],
+    gk:[["General Knowledge",/.*/]]
   };
-  for(const [name,re] of (maps[section]||maps.gk)) if(re.test(s)) return name;
+  for(const [name,re] of maps[section]||maps.gk)if(re.test(s))return name;
   return sectionName(section);
 }
-const CPCT_TOPIC_OVERRIDES={
-  1:["computer","Software Testing"],
-  2:["computer","MS Excel 2019"],
-  3:["computer","OpenOffice Calc"],
-  4:["computer","Storage & Devices"],
-  5:["computer","Operating Systems"],
-  6:["computer","MS Word 2019"],
-  7:["computer","Barcode & Inventory"],
-  8:["computer","Computer Fundamentals"],
-  9:["computer","Storage & Devices"],
-  10:["computer","Barcode & Inventory"],
-  11:["computer","Computer Fundamentals"],
-  12:["computer","Computer Fundamentals"],
-  13:["computer","Computer Fundamentals"],
-  14:["computer","Operating Systems"],
-  15:["computer","Computer Fundamentals"],
-  16:["computer","Storage & Devices"],
-  17:["computer","Computer Fundamentals"],
-  18:["computer","Cryptography"],
-  19:["computer","Networking"],
-  20:["computer","Storage & Devices"],
-  21:["computer","Keyboard & Shortcuts"],
-  22:["computer","Operating Systems"],
-  23:["computer","File Formats"],
-  24:["computer","File Formats"],
-  25:["computer","File Formats"],
-  26:["computer","Multimedia & Graphics"],
-  27:["computer","Multimedia & Graphics"],
-  28:["computer","Computer Fundamentals"],
-  29:["computer","Cyber Security"],
-  30:["computer","Software Testing"],
-  31:["computer","Internet & Web"],
-  32:["computer","Internet & Web"],
-  33:["computer","Internet & Web"],
-  34:["computer","Networking"],
-  35:["computer","E-Governance"],
-  36:["computer","E-Governance"],
-  37:["computer","Networking"],
-  38:["computer","Internet & Web"],
-  39:["computer","Internet & Web"],
-  40:["computer","Internet & Web"],
-  41:["computer","Internet & Web"],
-  42:["computer","MS Word 2019"],
-  43:["computer","Operating Systems"],
-  44:["computer","Computer Fundamentals"],
-  45:["computer","Computer Fundamentals"],
-  46:["computer","MS Excel 2019"],
-  47:["computer","MS Excel 2019"],
-  48:["computer","MS Excel 2019"],
-  49:["computer","MS Excel 2019"],
-  50:["computer","MS Excel 2019"],
-  51:["computer","MS Excel 2019"],
-  52:["computer","MS Excel 2019"]
-};
-
 async function loadTopicSearchList(){
   const box=document.getElementById("topic-buttons"), q=document.getElementById("topic-filter-input").value.trim().toLowerCase(), sec=document.getElementById("topic-section-filter").value;
   let docs=[];try{const s=await db.collection("questions").get();docs=s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){}
@@ -812,33 +407,26 @@ async function startMockTest(mode,value=null,sectionHint=null){
   }else if(mode==="section")qs=shuffle(all.filter(q=>q.section===value)).slice(0,20);
   else qs=shuffle(all.filter(q=>q.topic===value&&(!sectionHint||q.section===sectionHint))).slice(0,20);
   if(!qs.length){document.getElementById("mock-body").innerHTML='<div class="msg err">Is test ke liye abhi questions available nahi hain.</div>';return}
-  mockState={mode,value,sectionHint,questions:qs,index:0,answers:Array(qs.length).fill(null),marked:Array(qs.length).fill(false),notes:{},bookmarks:{}};
+  mockState={mode,value,sectionHint,questions:qs,index:0,answers:Array(qs.length).fill(null)};
   document.getElementById("mock-mode-label").textContent=mode==="cpct"?"Full CPCT Mock":mode==="section"?sectionName(value):"Topic: "+value;
   renderMock();
 }
 function renderMock(){
   const i=mockState.index,q=mockState.questions[i],sel=mockState.answers[i],body=document.getElementById("mock-body");
   document.getElementById("mock-progress").style.width=((i+1)/mockState.questions.length*100)+"%";
-  const palette=document.getElementById("mock-palette");
-  palette.innerHTML=mockState.questions.map((x,n)=>`<button class="${mockState.answers[n]!==null?"answered ":""}${n===i?"current ":""}${mockState.marked[n]?"marked":""}" data-p="${n}">${n+1}</button>`).join("");
-  palette.querySelectorAll("[data-p]").forEach(x=>x.onclick=()=>{saveCurrentNote();mockState.index=+x.dataset.p;renderMock()});
   const passage=q.passage?`<div class="passbox">${esc(q.passage)}</div>`:"";
-  const bm=!!mockState.bookmarks[q.id];
-  body.innerHTML=`<div><span class="tag">${sectionName(q.section)}</span><span class="tag">${esc(q.topic)}</span><span class="tag">Q ${i+1}/${mockState.questions.length}</span><span class="difficulty">${esc(q.difficulty||"Medium")}</span></div>
-  ${passage}<div class="question-title">${esc(textOf(q.question))}</div>
-  ${q.questionImage?`<img src="${esc(q.questionImage)}" alt="Question" style="max-width:100%;max-height:260px;object-fit:contain;margin:8px 0">`:""}
-  <div>${q.options.map((o,j)=>`<button class="option ${sel===j?"selected":""}" data-opt="${j}">${String.fromCharCode(65+j)}. ${esc(optText(o))}</button>`).join("")}</div>
-  <div class="question-tools"><button class="btn ghost bookmark-btn ${bm?"active":""}" id="bookmark-current">${bm?"🔖 Saved":"🔖 Bookmark"}</button><button class="btn ghost" id="mark-review">${mockState.marked[i]?"🔴 Marked":"⚪ Mark for Review"}</button></div>
-  <div class="note-box"><label>Personal Note</label><textarea id="question-note" rows="2" placeholder="Apni note likhein...">${esc(mockState.notes[q.id]||"")}</textarea></div>
-  <div class="row" style="margin-top:16px"><button class="btn ghost" id="prev-q" ${i===0?"disabled":""}>← Previous</button>${i<mockState.questions.length-1?'<button class="btn" id="next-q">Next →</button>':'<button class="btn" id="submit-test">Final Submit</button>'}</div>`;
-  body.querySelectorAll("[data-opt]").forEach(x=>x.onclick=()=>{mockState.answers[i]=+x.dataset.opt;renderMock()});
-  document.getElementById("prev-q").onclick=()=>{saveCurrentNote();mockState.index--;renderMock()};
-  const n=document.getElementById("next-q");if(n)n.onclick=()=>{saveCurrentNote();mockState.index++;renderMock()};
-  const s=document.getElementById("submit-test");if(s)s.onclick=()=>{saveCurrentNote();submitMock()};
-  document.getElementById("mark-review").onclick=()=>{mockState.marked[i]=!mockState.marked[i];renderMock()};
-  document.getElementById("bookmark-current").onclick=()=>toggleBookmark(q);
+  body.innerHTML=`<div><span class="tag">${sectionName(q.section)}</span><span class="tag">${esc(q.topic)}</span><span class="tag">Q ${i+1}/${mockState.questions.length}</span></div>
+    ${passage}<div class="question-title">${esc(textOf(q.question))}</div>
+    <div>${q.options.map((o,j)=>`<button class="option ${sel===j?"selected":""}" data-opt="${j}">${String.fromCharCode(65+j)}. ${esc(optText(o))}</button>`).join("")}</div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn ghost" id="prev-q" ${i===0?"disabled":""}>← Previous</button>
+      ${i<mockState.questions.length-1?'<button class="btn" id="next-q">Next →</button>':'<button class="btn" id="submit-test">Final Submit</button>'}
+    </div>`;
+  body.querySelectorAll("[data-opt]").forEach(b=>b.onclick=()=>{mockState.answers[i]=+b.dataset.opt;renderMock()});
+  const p=document.getElementById("prev-q");if(p)p.onclick=()=>{mockState.index--;renderMock()};
+  const n=document.getElementById("next-q");if(n)n.onclick=()=>{mockState.index++;renderMock()};
+  const s=document.getElementById("submit-test");if(s)s.onclick=submitMock;
 }
-function saveCurrentNote(){const q=mockState.questions[mockState.index],n=document.getElementById("question-note");if(q&&n)mockState.notes[q.id]=n.value.trim()}
 async function submitMock(){
   const qs=mockState.questions, ans=mockState.answers;let correct=0,wrong=0,unattempted=0,perSection={},perTopic={};
   const review=qs.map((q,i)=>{
@@ -891,174 +479,29 @@ async function loadDashboard(){
   document.getElementById("section-accuracy-box").innerHTML=Object.keys(s).length?renderBars(s):'<p class="sub">Abhi mock data nahi hai.</p>';
 }
 
-
-async function toggleBookmark(q){
- if(!currentUser)return alert("Bookmark ke liye login zaroori hai.");
- const ref=db.collection("users").doc(currentUser.uid).collection("bookmarks").doc(q.id);
- try{const s=await ref.get();if(s.exists){await ref.delete();mockState.bookmarks[q.id]=false}else{await ref.set({questionId:q.id,section:q.section||"",topic:q.topic||"",question:q.question,options:q.options,correctIndex:Number(q.correctIndex),explanation:q.explanation||"",passage:q.passage||"",questionImage:q.questionImage||"",savedAt:firebase.firestore.FieldValue.serverTimestamp()});mockState.bookmarks[q.id]=true}renderMock()}catch(e){alert(e.message)}
-}
-async function loadBookmarks(){
- const box=document.getElementById("bookmark-list");if(!currentUser)return;
- try{const s=await db.collection("users").doc(currentUser.uid).collection("bookmarks").orderBy("savedAt","desc").limit(100).get();
- box.innerHTML=s.empty?"<p class='sub'>Abhi koi bookmark nahi hai.</p>":s.docs.map(d=>{const q=d.data();return`<div class="analysis-item"><span class="tag">${sectionName(q.section)}</span><span class="tag">${esc(q.topic)}</span><h4>${esc(textOf(q.question))}</h4><div>${(q.options||[]).map((o,i)=>`<div style="padding:5px">${String.fromCharCode(65+i)}. ${esc(optText(o))}</div>`).join("")}</div><p class="sub">Correct: <b style="color:var(--green)">${esc(optText((q.options||[])[q.correctIndex]))}</b></p>${q.explanation?`<p class="sub">Explanation: ${esc(q.explanation)}</p>`:""}<button class="btn danger" data-unbookmark="${d.id}">Remove</button></div>`}).join("");
- box.querySelectorAll("[data-unbookmark]").forEach(b=>b.onclick=async()=>{await db.collection("users").doc(currentUser.uid).collection("bookmarks").doc(b.dataset.unbookmark).delete();loadBookmarks()});
- }catch(e){box.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
-}
-async function loadMistakes(){
- const box=document.getElementById("mistake-list");if(!currentUser)return;
- try{const s=await db.collection("users").doc(currentUser.uid).collection("mockResults").orderBy("timestamp","desc").limit(50).get();const bad={};
- s.docs.forEach(d=>(d.data().answers||[]).forEach(a=>{if(a.selectedIndex!==null&&!a.correct)bad[a.questionId]=a}));
- const arr=Object.values(bad);window._mistakeQuestions=arr;
- box.innerHTML=arr.length?arr.map(a=>`<div class="analysis-item"><span class="tag">${sectionName(a.section)}</span><span class="tag">${esc(a.topic)}</span><h4>${esc(textOf(a.question))}</h4><div style="color:var(--red)">Your: ${esc(optText(a.options[a.selectedIndex]))}</div><div style="color:var(--green)">Correct: ${esc(optText(a.options[a.correctIndex]))}</div></div>`).join(""):"<p class='sub'>Abhi mistakes nahi mili.</p>";
- }catch(e){box.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
-}
-document.getElementById("start-mistakes").onclick=()=>{const arr=(window._mistakeQuestions||[]).map(a=>({...a,id:a.questionId}));if(!arr.length)return alert("Mistake questions available nahi hain.");mockState={mode:"mistakes",value:"mistakes",sectionHint:null,questions:shuffle(arr),index:0,answers:Array(arr.length).fill(null),marked:Array(arr.length).fill(false),notes:{},bookmarks:{}};showView("mock");renderMock()};
-
 document.querySelectorAll("[data-admin-tab]").forEach(b=>b.onclick=()=>{
-  document.querySelectorAll(".admin-tab").forEach(x=>x.classList.add("hidden"));document.getElementById("admin-"+b.dataset.adminTab).classList.remove("hidden");if(b.dataset.adminTab==="manage"){loadManageList();loadParagraphManageList();}
+  document.querySelectorAll(".admin-tab").forEach(x=>x.classList.add("hidden"));document.getElementById("admin-"+b.dataset.adminTab).classList.remove("hidden");if(b.dataset.adminTab==="manage")loadManageList();
 });
 document.getElementById("save-question").onclick=async()=>{
   const section=document.getElementById("q-section").value, question=document.getElementById("q-text").value.trim(), passage=document.getElementById("q-passage").value.trim(), options=[0,1,2,3].map(i=>document.getElementById("q-opt"+i).value.trim()), msg=document.getElementById("q-msg");
   let topic=document.getElementById("q-topic").value.trim();if(!topic)topic=autoTopic(question+" "+passage,section);
   if(!question||options.some(x=>!x)){msg.innerHTML='<div class="msg err">Question aur 4 options bharein.</div>';return}
-  try{await db.collection("questions").add({section,topic,question,options,correctIndex:+document.getElementById("q-correct").value,explanation:document.getElementById("q-explanation").value.trim(),difficulty:document.getElementById("q-difficulty").value,questionImage:document.getElementById("q-image").value.trim(),...(passage?{passage}:{}),createdAt:firebase.firestore.FieldValue.serverTimestamp()});msg.innerHTML=`<div class="msg ok">Question add ho gaya. Topic: ${esc(topic)}</div>`;["q-topic","q-text","q-passage","q-opt0","q-opt1","q-opt2","q-opt3","q-explanation"].forEach(id=>document.getElementById(id).value="")}catch(e){msg.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
+  try{await db.collection("questions").add({section,topic,question,options,correctIndex:+document.getElementById("q-correct").value,explanation:document.getElementById("q-explanation").value.trim(),...(passage?{passage}:{}),createdAt:firebase.firestore.FieldValue.serverTimestamp()});msg.innerHTML=`<div class="msg ok">Question add ho gaya. Topic: ${esc(topic)}</div>`;["q-topic","q-text","q-passage","q-opt0","q-opt1","q-opt2","q-opt3","q-explanation"].forEach(id=>document.getElementById(id).value="")}catch(e){msg.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
 };
 
 function normalizeImportedJSON(raw){
-  const source=raw&&typeof raw==="object"?raw:{};
-  const arr=Array.isArray(raw)?raw:(Array.isArray(source.questions)?source.questions:(Array.isArray(source.items)?source.items:null));
-  if(!arr)throw new Error("JSON में questions/questions array नहीं मिला.");
-
-  const out=[],errors=[],seen=new Set();
-  const sectionAliases={computer:"computer",readcomp:"readcomp",maths:"maths",reasoning:"reasoning",gk:"gk"};
-  const asText=v=>typeof v==="string"?v:(v&&typeof v==="object"?String(v.text??v.value??""):"");
-  const normalizeBilingual=(v)=>{
-    if(v&&typeof v==="object"&&!Array.isArray(v)) return {
-      en:String(v.en??v.english??v.text??"").trim(),
-      hi:String(v.hi??v.hindi??"").trim()
-    };
-    return {en:String(v??"").trim(),hi:""};
-  };
-  const normalizeOptions=(v)=>{
-    if(!Array.isArray(v))return [];
-    return v.map(x=>{
-      if(x&&typeof x==="object"&&!Array.isArray(x))
-        return {en:String(x.en??x.english??x.text??x.value??"").trim(),hi:String(x.hi??x.hindi??"").trim()};
-      return {en:String(x??"").trim(),hi:""};
-    });
-  };
-  const normalizeAnswer=(it,options)=>{
-    const candidates=[it.correctIndex,it.correctAnswer,it.answerIndex,it.ans,it.answer,it.correctOption,it.correct];
-    for(const rawAns of candidates){
-      if(rawAns===undefined||rawAns===null||rawAns==="")continue;
-      if(typeof rawAns==="number" && Number.isInteger(rawAns)){
-        if(rawAns>=0&&rawAns<options.length)return rawAns;
-        if(rawAns>=1&&rawAns<=options.length)return rawAns-1;
-      }
-      const s=String(rawAns).trim().toUpperCase();
-      if(/^[ABCD]$/.test(s))return s.charCodeAt(0)-65;
-      if(/^[1-4]$/.test(s))return Number(s)-1;
-      const idx=options.findIndex(o=>o.en.toLowerCase()===s.toLowerCase()||o.hi.toLowerCase()===String(rawAns).toLowerCase());
-      if(idx>=0)return idx;
-    }
-    return null;
-  };
-
-  arr.forEach((it,i)=>{
-    try{
-      const qNo=Number(it.questionNo??it.questionNumber??it.number??(i+1));
-      const q=normalizeBilingual(it.question??it.q??it.text);
-      const options=normalizeOptions(it.options??it.opts??it.choices);
-      const passage=String(it.passage??it.comprehension?.passage??it.paragraph??"").trim();
-      const explicitSection=normalizeSectionId(it.section??it.sectionName??it.subject);
-      const section=sectionAliases[explicitSection]?explicitSection:autoSection([q.en,q.hi,passage].join(" "));
-      const override=CPCT_TOPIC_OVERRIDES[qNo];
-      const topic=String(it.topic??(override?override[1]:"")).trim() || autoTopic([q.en,q.hi,passage].join(" "),section);
-      const subtopic=String(it.subtopic??it.subTopic??it.chapter??"").trim() || "";
-      const type=String(it.type??it.questionType??(passage?"comprehension":"mcq")).toLowerCase();
-      const correctIndex=normalizeAnswer(it,options);
-      const key=String(qNo)+"|"+q.en+"|"+q.hi;
-      if(seen.has(key))throw new Error("duplicate question");
-      seen.add(key);
-
-      if(!q.en&&!q.hi)throw new Error("question text missing");
-      if(type!=="typing"&&type!=="typing test"&&options.length!==4)throw new Error(`options must be 4 (got ${options.length})`);
-      if(type!=="typing"&&type!=="typing test"&&correctIndex===null)throw new Error("correct answer missing/invalid");
-
-      out.push({
-        id:String(it.id??it.questionId??`import-${qNo}`),
-        questionNo:qNo,
-        section,
-        topic,
-        ...(subtopic?{subtopic}:{}),
-        type:type==="typing test"?"typing":type,
-        question:q,
-        options,
-        ...(correctIndex!==null?{correctIndex}:{}),
-        ...(passage?{passage}:{}),
-        ...(it.explanation?{explanation:String(it.explanation)}:{}),
-        ...(it.questionImage||it.image||it.imageUrl?{questionImage:String(it.questionImage??it.image??it.imageUrl)}:{}),
-        ...(it.passageId?{passageId:String(it.passageId)}:{}),
-        source:String(it.source??"CPCT PDF import"),
-        difficulty:String(it.difficulty??"Medium")
-      });
-    }catch(e){errors.push(`Q${i+1}: ${e.message}`)}
+  const arr=Array.isArray(raw)?raw:(raw&&Array.isArray(raw.questions)?raw.questions:null);if(!arr)throw new Error("questions array nahi mila.");
+  return arr.map((it,i)=>{
+    const question=it.question??it.q, options=it.options??it.opts, correct=Number(it.correctIndex??it.correctAnswer??it.ans);
+    if(!question||!Array.isArray(options)||options.length!==4||!Number.isInteger(correct)||correct<0||correct>3)throw new Error(`Question ${i+1} invalid.`);
+    const passage=String(it.passage??it.paragraph??"").trim(), plain=textOf(question)+" "+passage, section=String(it.section||autoSection(plain)).toLowerCase().replace(/\s+/g,"");
+    const sec=SECTIONS.some(s=>s.id===section)?section:autoSection(plain), topic=String(it.topic||autoTopic(plain,sec)).trim();
+    return{section:sec,topic,question,options,correctIndex:correct,explanation:String(it.explanation||""),...(passage?{passage}:{}),...(it.questionImage?{questionImage:String(it.questionImage)}:{})};
   });
-
-  // Preserve section order used by CPCT rather than alphabetical sorting.
-  const order={computer:1,readcomp:2,maths:3,reasoning:4,gk:5,typing:6};
-  out.sort((a,b)=>(order[a.section]||99)-(order[b.section]||99)||a.questionNo-b.questionNo);
-
-  if(errors.length)throw new Error("Import validation failed:\n"+errors.join("\n"));
-  return out;
 }
-
-
-function getBulkRawJSON(){
-  const txt=document.getElementById("bulk-json").value.trim();
-  if(!txt)throw new Error("पहले JSON paste/load करें.");
-  try{return JSON.parse(txt)}catch(e){throw new Error("Invalid JSON: "+e.message)}
-}
-function buildImportReport(arr){
-  const counts={};
-  arr.forEach(q=>{
-    const k=(q.section||"unknown")+" → "+(q.topic||"General");
-    counts[k]=(counts[k]||0)+1;
-  });
-  const lines=[
-    `Valid questions: ${arr.length}`,
-    "",
-    ...Object.entries(counts).sort().map(([k,v])=>`${k}: ${v}`)
-  ];
-  return lines.join("\n");
-}
-document.getElementById("validate-json-btn").onclick=()=>{
-  const box=document.getElementById("import-safe-report"),sum=document.getElementById("import-safe-summary");
-  try{
-    const arr=normalizeImportedJSON(getBulkRawJSON());
-    box.textContent=buildImportReport(arr);
-    sum.style.display="block";sum.className="msg ok";
-    sum.textContent=`✓ ${arr.length} questions valid हैं और import के लिए normalized हैं.`;
-    window.__lastNormalizedImport=arr;
-  }catch(e){
-    box.textContent=e.message;
-    sum.style.display="block";sum.className="msg err";
-    sum.textContent="✕ Import में समस्या है. नीचे report देखें.";
-    window.__lastNormalizedImport=null;
-  }
-};
-document.getElementById("download-normalized-btn").onclick=()=>{
-  try{
-    const arr=window.__lastNormalizedImport||normalizeImportedJSON(getBulkRawJSON());
-    const blob=new Blob([JSON.stringify({version:"cpct-v2",questions:arr},null,2)],{type:"application/json"});
-    const a=document.createElement("a");a.href=URL.createObjectURL(blob);
-    a.download="cpct-normalized-import.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-  }catch(e){alert(e.message)}
-};
-
 document.getElementById("load-json-file").onclick=async()=>{const f=document.getElementById("bulk-file").files[0],m=document.getElementById("bulk-msg");if(!f){m.innerHTML='<div class="msg err">JSON file select karein.</div>';return}try{const t=await f.text();JSON.parse(t);document.getElementById("bulk-json").value=t;m.innerHTML='<div class="msg ok">JSON loaded.</div>'}catch(e){m.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}};
 document.getElementById("clear-bulk").onclick=()=>{document.getElementById("bulk-json").value="";document.getElementById("bulk-file").value="";document.getElementById("bulk-msg").innerHTML=""};
-document.getElementById("save-bulk").onclick=async()=>{const m=document.getElementById("bulk-msg");try{const arr=normalizeImportedJSON(JSON.parse(document.getElementById("bulk-json").value));window.__lastNormalizedImport=arr;for(let i=0;i<arr.length;i+=400){const batch=db.batch();arr.slice(i,i+400).forEach(x=>batch.set(db.collection("questions").doc(),x));await batch.commit()}m.innerHTML=`<div class="msg ok">${arr.length} questions add ho gaye.</div>`}catch(e){m.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}};
+document.getElementById("save-bulk").onclick=async()=>{const m=document.getElementById("bulk-msg");try{const arr=normalizeImportedJSON(JSON.parse(document.getElementById("bulk-json").value));for(let i=0;i<arr.length;i+=400){const batch=db.batch();arr.slice(i,i+400).forEach(x=>batch.set(db.collection("questions").doc(),x));await batch.commit()}m.innerHTML=`<div class="msg ok">${arr.length} questions add ho gaye.</div>`}catch(e){m.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}};
 
 document.getElementById("save-paragraph").onclick=async()=>{
   const language=document.getElementById("p-lang").value,text=document.getElementById("p-text").value.trim(),title=document.getElementById("p-title").value.trim()||"Practice Paragraph",difficulty=document.getElementById("p-level").value,msg=document.getElementById("p-msg");
@@ -1079,434 +522,5 @@ async function loadManageList(){
   list.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{if(confirm("Question delete karein?")){await db.collection("questions").doc(b.dataset.del).delete();loadManageList()}});
 }
 </script>
-
-<script>
-/* ===== COMPLETE PLATFORM EXTENSION ===== */
-(function(){
-  const originalShowView = window.showView;
-  window.uxGo = function(id){
-    if(typeof originalShowView==="function") originalShowView(id);
-    else {document.querySelectorAll(".view").forEach(v=>v.classList.remove("active")); document.getElementById(id)?.classList.add("active");}
-    if(id==="ux-student") uxLoadStudent();
-    if(id==="ux-performance") uxLoadPerformance();
-  };
-
-  window.uxCloseModal=function(){document.getElementById("ux-modal")?.classList.add("ux-hidden")};
-  window.uxModal=function(title,body){
-    const m=document.getElementById("ux-modal"), b=document.getElementById("ux-modal-body");
-    b.innerHTML="<h3>"+title+"</h3>"+body+"<div class='ux-actions'><button class='btn ghost' onclick='uxCloseModal()'>Close</button></div>";
-    m.classList.remove("ux-hidden");
-  };
-
-  window.uxDemoCertificate=function(){
-    uxModal("Certificate Preview",
-      "<div class='ux-card' style='text-align:center'><div class='eyebrow'>CERTIFICATE OF ACHIEVEMENT</div><h2>Prime CPCT</h2><p>This certifies that</p><h2>Student Name</h2><p>has successfully completed the CPCT Mock Test Series.</p><div class='ux-chip'>Score: 89%</div> <div class='ux-chip'>ID: CPCT-2026-DEMO</div><p class='ux-small'>QR verification will be connected in Phase 3.</p></div>");
-  };
-
-  window.uxAdminTab=function(tab,btn){
-    document.querySelectorAll("#ux-admin-nav button").forEach(x=>x.classList.remove("active"));
-    btn?.classList.add("active");
-    const box=document.getElementById("ux-admin-content");
-    const screens={
-      overview:`<h3>📊 Admin Overview</h3><div class="ux-grid">
-        <div class="ux-card"><div class="ux-kpi" id="ux-admin-q">—</div><div class="ux-small">Questions</div></div>
-        <div class="ux-card"><div class="ux-kpi">—</div><div class="ux-small">Students</div></div>
-        <div class="ux-card"><div class="ux-kpi">—</div><div class="ux-small">Tests</div></div>
-      </div><p class="sub" style="margin-top:14px">Existing Firebase Question Bank नीचे वाले modules से continue किया जा सकता है.</p>`,
-      questions:`<h3>📚 Question Bank</h3><p>Existing Admin Question + Bulk JSON module active है.</p>
-        <div class="ux-actions"><button class="btn" onclick="showView('admin')">Open Existing Question Manager</button><button class="btn ghost" onclick="uxGo('ux-roadmap')">Architecture</button></div>`,
-      builder:`<h3>🧪 Test Builder</h3>
-        <label>Test Name</label><input id="ux-test-name" placeholder="CPCT Full Mock #01">
-        <div class="ux-grid"><div><label>Questions</label><input id="ux-test-count" type="number" value="20"></div><div><label>Duration (minutes)</label><input id="ux-test-duration" type="number" value="120"></div><div><label>Negative Marks</label><input id="ux-test-negative" type="number" step="0.25" value="0.25"></div></div>
-        <label>Question Source</label><select id="ux-test-source"><option>Random from Question Bank</option><option>Manual Selection</option><option>Topic Based</option></select>
-        <label><input id="ux-random-q" type="checkbox" checked style="width:auto;margin:0 6px 0 0"> Random Questions</label>
-        <label><input id="ux-random-o" type="checkbox" checked style="width:auto;margin:0 6px 0 0"> Random Options</label>
-        <div class="ux-actions"><button class="btn" onclick="uxSaveTestDraft()">Save Test Draft</button><button class="btn ghost" onclick="uxPreviewTest()">Preview</button></div>
-        <div id="ux-builder-msg"></div>`,
-      pdf:`<h3>📄 PDF → Question Pipeline</h3>
-        <div class="ux-card"><label>Select PDF</label><input type="file" id="ux-pdf-file" accept=".pdf">
-        <div class="ux-actions"><button class="btn" onclick="uxProcessPDF()">Start Processing</button></div><div id="ux-pdf-status"></div></div>
-        <div class="ux-step"><div class="ux-num">1</div><div>Upload PDF</div></div>
-        <div class="ux-step"><div class="ux-num">2</div><div>OCR / text extraction</div></div>
-        <div class="ux-step"><div class="ux-num">3</div><div>Question + options detection</div></div>
-        <div class="ux-step"><div class="ux-num">4</div><div>Green tick / answer detection</div></div>
-        <div class="ux-step"><div class="ux-num">5</div><div>Preview → Correct → Approve → Question Bank</div></div>`,
-      students:`<h3>👥 Student Management</h3><p>Student profile, attempts, accuracy, typing performance, disable/enable account और institute assignment के लिए UI shell.</p>
-        <table class="ux-table"><thead><tr><th>Student</th><th>Tests</th><th>Accuracy</th><th>Status</th></tr></thead><tbody><tr><td>Demo Student</td><td>24</td><td>84%</td><td><span class="ux-badge ux-success">Active</span></td></tr></tbody></table>`,
-      institutes:`<h3>🏫 Institute Management</h3><div class="ux-actions"><button class="btn" onclick="uxModal('Add Institute','<label>Institute Name</label><input placeholder=\"Institute Name\"><label>Admin Email</label><input type=\"email\" placeholder=\"admin@example.com\"><button class=\"btn\">Create</button>')">+ Add Institute</button></div><div class="ux-card"><b>Institute Dashboard</b><p>Batches → Teachers → Students → Assigned Tests → Reports.</p></div>`,
-      payments:`<h3>💳 Business / Payments</h3><div class="ux-grid"><div class="ux-card"><h3>Free Tests</h3><p>Public practice tests.</p></div><div class="ux-card"><h3>Premium</h3><p>Subscription, paid tests और packages.</p></div><div class="ux-card"><h3>Coupons</h3><p>Discount codes और campaign tracking.</p></div></div><p class="sub">Actual payment gateway के लिए secure server/backend integration आवश्यक होगा.</p>`,
-      ai:`<h3>🤖 AI Lab</h3><label>Topic</label><input id="ux-ai-topic" placeholder="MS Excel">
-        <label>Questions</label><input id="ux-ai-count" type="number" value="10">
-        <div class="ux-actions"><button class="btn" onclick="uxAIStub()">Generate Draft</button></div><div id="ux-ai-output"></div>
-        <p class="sub">यह UI Phase 4 integration point है; वास्तविक AI API key browser में expose नहीं करनी चाहिए.</p>`,
-      saas:`<h3>☁️ SaaS Architecture</h3><div class="ux-chip">Super Admin</div><div class="ux-chip">Institute Admin</div><div class="ux-chip">Teacher</div><div class="ux-chip">Student</div><div class="ux-chip">API</div><div class="ux-chip">PWA</div>
-        <p>Phase 5 में multi-tenant data isolation, role-based access, audit logs, backups और server-side security लागू करनी होगी.</p>`
-    };
-    box.innerHTML=screens[tab]||screens.overview;
-    if(tab==="overview") uxCountQuestions();
-  };
-
-  window.uxCountQuestions=async function(){
-    try{
-      const s=await db.collection("questions").get();
-      const el=document.getElementById("ux-admin-q"); if(el)el.textContent=s.size;
-    }catch(e){}
-  };
-
-  window.uxSaveTestDraft=function(){
-    const name=document.getElementById("ux-test-name").value.trim()||"Untitled Test";
-    const data={name,questions:+document.getElementById("ux-test-count").value||20,durationMinutes:+document.getElementById("ux-test-duration").value||120,negative:+document.getElementById("ux-test-negative").value||0.25,randomQuestions:document.getElementById("ux-random-q").checked,randomOptions:document.getElementById("ux-random-o").checked,createdAt:firebase.firestore.FieldValue.serverTimestamp()};
-    const msg=document.getElementById("ux-builder-msg");
-    db.collection("tests").add(data).then(()=>msg.innerHTML="<div class='msg ok'>Test draft saved successfully.</div>").catch(e=>msg.innerHTML="<div class='msg err'>"+esc(e.message)+"</div>");
-  };
-
-  window.uxPreviewTest=function(){
-    const n=esc(document.getElementById("ux-test-name").value||"CPCT Mock");
-    const q=+document.getElementById("ux-test-count").value||20, d=+document.getElementById("ux-test-duration").value||120;
-    uxModal("Test Preview",`<div class="ux-card"><h2>${n}</h2><p>${q} Questions · ${d} Minutes</p><div class="ux-chip">Hindi + English</div><div class="ux-chip">Random Questions</div><div class="ux-chip">Mark for Review</div><div class="ux-chip">Auto Submit</div><div class="ux-actions"><button class="btn" onclick="uxCloseModal();startMockTest('cpct')">Start Demo</button></div></div>`);
-  };
-
-  window.uxProcessPDF=function(){
-    const f=document.getElementById("ux-pdf-file"), s=document.getElementById("ux-pdf-status");
-    if(!f?.files?.length){s.innerHTML="<div class='msg err'>PDF select karein.</div>";return}
-    s.innerHTML="<div class='msg ok'>PDF selected. OCR pipeline ready: Upload → OCR → Detect Questions → Detect Green Tick → Review → Approve.</div>";
-  };
-
-  window.uxAIStub=function(){
-    const topic=esc(document.getElementById("ux-ai-topic").value||"Computer Basics");
-    const count=+document.getElementById("ux-ai-count").value||10;
-    document.getElementById("ux-ai-output").innerHTML=`<div class="msg ok">AI draft request prepared for <b>${topic}</b> — ${count} questions. Production में server-side AI API integration जोड़ें.</div>`;
-  };
-
-  window.uxLoadStudent=async function(){
-    if(!window.currentUser)return;
-    try{
-      const [m,t]=await Promise.all([
-        db.collection("users").doc(currentUser.uid).collection("mockResults").orderBy("timestamp","desc").limit(50).get(),
-        db.collection("users").doc(currentUser.uid).collection("typingResults").orderBy("timestamp","desc").limit(50).get()
-      ]);
-      const ms=m.docs.map(x=>x.data()), ts=t.docs.map(x=>x.data());
-      const tests=document.getElementById("ux-kpi-tests"), best=document.getElementById("ux-kpi-best"), qs=document.getElementById("ux-kpi-questions"), wpm=document.getElementById("ux-kpi-wpm");
-      if(tests)tests.textContent=ms.length;
-      if(best)best.textContent=(ms.length?Math.max(...ms.map(x=>Math.round((x.correct||0)/(x.total||1)*100))):0)+"%";
-      if(qs)qs.textContent=ms.reduce((a,x)=>a+(x.total||0),0);
-      if(wpm)wpm.textContent=ts.length?Math.max(...ts.map(x=>+x.wpm||0)):0;
-      const weak=document.getElementById("ux-weak-topics");
-      if(weak){
-        const map={};ms.forEach(r=>Object.entries(r.perTopic||{}).forEach(([k,v])=>{map[k]??={c:0,t:0};map[k].c+=v.correct||0;map[k].t+=v.total||0}));
-        const arr=Object.entries(map).sort((a,b)=>(a[1].c/a[1].t)-(b[1].c/b[1].t)).slice(0,3);
-        weak.innerHTML=arr.length?arr.map(x=>`<div class="ux-chip">${esc(x[0])}: ${Math.round(x[1].c/x[1].t*100)}%</div>`).join(""):"Attempt a test to generate weak-topic recommendations.";
-      }
-    }catch(e){}
-  };
-
-  window.uxLoadPerformance=async function(){
-    if(!window.currentUser)return;
-    try{
-      const s=await db.collection("users").doc(currentUser.uid).collection("mockResults").orderBy("timestamp","desc").limit(100).get();
-      const ms=s.docs.map(x=>x.data());
-      if(!ms.length)return;
-      const total=ms.reduce((a,x)=>a+(x.total||0),0), correct=ms.reduce((a,x)=>a+(x.correct||0),0);
-      document.getElementById("ux-acc").textContent=Math.round(correct/Math.max(1,total)*100)+"%";
-      document.getElementById("ux-avg").textContent=Math.round(ms.reduce((a,x)=>a+(x.correct||0)/Math.max(1,x.total||1),0)/ms.length*100)+"%";
-      document.getElementById("ux-attempts").textContent=ms.length;
-      const sec={},top={};
-      ms.forEach(r=>{
-        Object.entries(r.perSection||{}).forEach(([k,v])=>{sec[k]??={c:0,t:0};sec[k].c+=v.correct||0;sec[k].t+=v.total||0});
-        Object.entries(r.perTopic||{}).forEach(([k,v])=>{top[k]??={c:0,t:0};top[k].c+=v.correct||0;top[k].t+=v.total||0});
-      });
-      const bars=o=>Object.entries(o).sort((a,b)=>(a[1].c/a[1].t)-(b[1].c/b[1].t)).map(([k,v])=>`<div class="bar-row"><div class="bar-label">${esc((typeof sectionName==="function"&&["computer","readcomp","maths","reasoning","gk"].includes(k))?sectionName(k):k)}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v.c/v.t*100)}%"></div></div><div class="bar-pct">${Math.round(v.c/v.t*100)}%</div></div>`).join("");
-      document.getElementById("ux-section-bars").innerHTML=bars(sec)||"No data";
-      document.getElementById("ux-topic-bars").innerHTML=bars(top)||"No data";
-      const weak=Object.entries(top).sort((a,b)=>(a[1].c/a[1].t)-(b[1].c/b[1].t)).slice(0,5);
-      document.getElementById("ux-recommendations").innerHTML=weak.map(x=>`<div class="ux-chip">Practice: ${esc(x[0])}</div>`).join("")||"No recommendations yet.";
-    }catch(e){}
-  };
-
-  /* Add complete platform navigation without removing the existing system. */
-  function addUXNav(){
-    const nav=document.getElementById("main-nav"); if(!nav)return;
-    if(!document.getElementById("ux-platform-nav")){
-      const b=document.createElement("button"); b.id="ux-platform-nav"; b.textContent="Platform"; b.onclick=()=>uxGo("ux-platform"); nav.appendChild(b);
-    }
-  }
-  setTimeout(addUXNav,500);
-  document.addEventListener("DOMContentLoaded",addUXNav);
-
-  /* Give the existing mock screen a Phase-1 timer and submit confirmation. */
-  let uxExamTimer=null, uxExamEnds=0;
-  const oldStart=window.startMockTest;
-  if(typeof oldStart==="function"){
-    window.startMockTest=async function(){
-      const r=await oldStart.apply(this,arguments);
-      clearInterval(uxExamTimer);
-      uxExamEnds=Date.now()+120*60*1000;
-      const panel=document.getElementById("mock");
-      if(panel && !document.getElementById("ux-exambar")){
-        const bar=document.createElement("div"); bar.id="ux-exambar"; bar.className="ux-exam-top";
-        bar.innerHTML="<div style='display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap'><b>CBT MODE</b><span class='ux-timer' id='ux-exam-timer'>120:00</span><button class='btn danger' id='ux-fast-submit'>Submit</button></div>";
-        panel.insertBefore(bar,panel.firstChild);
-        document.getElementById("ux-fast-submit").onclick=()=>uxConfirmSubmit();
-      }
-      uxExamTimer=setInterval(()=>{
-        const left=Math.max(0,uxExamEnds-Date.now()), sec=Math.ceil(left/1000);
-        const el=document.getElementById("ux-exam-timer"); if(el)el.textContent=Math.floor(sec/60).toString().padStart(2,"0")+":"+String(sec%60).padStart(2,"0");
-        if(sec<=0){clearInterval(uxExamTimer); if(typeof submitMock==="function")submitMock();}
-      },500);
-      return r;
-    };
-  }
-  window.uxConfirmSubmit=function(){
-    uxModal("Submit Exam?",`<p>Answered, review और unattempted status check करके final submit करें.</p><div class="ux-actions"><button class="btn danger" onclick="uxCloseModal();clearInterval(uxExamTimer);submitMock()">Submit Exam</button></div>`);
-  };
-})();
-</script>
-
-
-<script id="phase3-professional-js">
-/* Phase 3 Professional CBT layer.
-   Keeps Phase 2 import contract and adds:
-   - exact 75-MCQ CPCT composition: 52 Computer, 5 Read Comp, 6 Maths, 6 Reasoning, 6 GK
-   - custom test builder
-   - countdown timer + auto submit
-   - full question palette states
-   - configurable negative marking
-   - result scoring and section/topic analysis
-*/
-const P3_CPCT_COUNTS={computer:52,readcomp:5,maths:6,reasoning:6,gk:6};
-
-function p3ReadNum(id, fallback=0){
-  const n=parseInt(document.getElementById(id)?.value,10);
-  return Number.isFinite(n)&&n>=0?n:fallback;
-}
-function p3BuilderSummary(){
-  const type=document.getElementById("p3-test-type")?.value||"cpct";
-  const counts=type==="cpct"?P3_CPCT_COUNTS:{
-    computer:p3ReadNum("p3-c"),readcomp:p3ReadNum("p3-r"),maths:p3ReadNum("p3-m"),
-    reasoning:p3ReadNum("p3-re"),gk:p3ReadNum("p3-g")
-  };
-  const total=Object.values(counts).reduce((a,b)=>a+b,0);
-  const box=document.getElementById("p3-builder-summary");
-  if(!box)return;
-  box.innerHTML=Object.entries(counts).map(([k,v])=>`<span class="p3-chip">${sectionName(k)}: <b>${v}</b></span>`).join("")+
-    `<span class="p3-chip">Total: <b>${total}</b></span>`;
-  document.getElementById("p3-custom-box").style.display=type==="custom"?"block":"none";
-}
-document.getElementById("p3-test-type")?.addEventListener("change",p3BuilderSummary);
-["p3-c","p3-r","p3-m","p3-re","p3-g"].forEach(id=>document.getElementById(id)?.addEventListener("input",p3BuilderSummary));
-p3BuilderSummary();
-
-document.querySelectorAll("#home .card").forEach(c=>c.addEventListener("click",()=>{
-  if(c.dataset.action==="builder"){showView("test-builder");p3BuilderSummary();}
-}));
-
-document.getElementById("p3-cpct")?.addEventListener("click",()=>{
-  document.getElementById("p3-test-type").value="cpct";
-  p3BuilderSummary();
-  p3StartConfigured("cpct");
-});
-document.getElementById("p3-start")?.addEventListener("click",()=>{
-  p3StartConfigured(document.getElementById("p3-test-type").value);
-});
-
-let p3Timer=null;
-function p3Counts(){
-  if(document.getElementById("p3-test-type").value==="cpct")return {...P3_CPCT_COUNTS};
-  return {
-    computer:p3ReadNum("p3-c"),readcomp:p3ReadNum("p3-r"),maths:p3ReadNum("p3-m"),
-    reasoning:p3ReadNum("p3-re"),gk:p3ReadNum("p3-g")
-  };
-}
-async function p3GetQuestions(){
-  let all=[];
-  try{
-    const snap=await db.collection("questions").get();
-    all=snap.docs.map(d=>({id:d.id,...d.data()}));
-  }catch(e){
-    throw new Error("Question Bank load nahi ho saka: "+e.message);
-  }
-  all=all.map(q=>{
-    const sec=normalizeSectionId(q.section)||autoSection(textOf(q.question));
-    const topic=q.topic||autoTopic(textOf(q.question),sec);
-    return {...q,section:sec,topic};
-  }).filter(q=>q.type!=="typing" && Array.isArray(q.options) && q.options.length>=4);
-  return all;
-}
-async function p3StartConfigured(type){
-  const msg=document.getElementById("p3-builder-msg");
-  if(msg)msg.innerHTML='<div class="msg">Question Bank check ho raha hai...</div>';
-  const counts=p3Counts();
-  const total=Object.values(counts).reduce((a,b)=>a+b,0);
-  if(!total){if(msg)msg.innerHTML='<div class="msg err">Kam se kam 1 question select karein.</div>';return;}
-  const durationMin=p3ReadNum("p3-duration",120);
-  const negative=Number(document.getElementById("p3-negative").value)||0;
-  try{
-    const all=await p3GetQuestions();
-    const missing=[];
-    Object.entries(counts).forEach(([sec,n])=>{
-      const available=all.filter(q=>q.section===sec).length;
-      if(n>available)missing.push(`${sectionName(sec)}: ${n} chahiye, ${available} available`);
-    });
-    if(missing.length){
-      if(msg)msg.innerHTML='<div class="msg err"><b>Test start nahi hua.</b><br>'+missing.map(esc).join("<br>")+
-        '<br><br>Admin → Question Bank me required questions import karein.</div>';
-      return;
-    }
-    let qs=[];
-    Object.entries(counts).forEach(([sec,n])=>{
-      const pool=shuffle(all.filter(q=>q.section===sec));
-      qs.push(...pool.slice(0,n));
-    });
-    // Keep the CPCT section order; shuffle only inside each section.
-    mockState={
-      mode:type==="cpct"?"cpct":"custom",
-      value:null,sectionHint:null,
-      questions:qs,index:0,answers:Array(qs.length).fill(null),
-      marked:Array(qs.length).fill(false),notes:{},bookmarks:{},
-      duration:durationMin*60,timeLeft:durationMin*60,negativeMark:negative,
-      startedAt:Date.now(),submitted:false
-    };
-    clearInterval(p3Timer);
-    showView("mock");
-    document.getElementById("mock-mode-label").textContent=type==="cpct"?"Full CPCT Mock · 75 Questions":"Custom Mock · "+qs.length+" Questions";
-    p3RenderMock();
-    p3StartTimer();
-  }catch(e){
-    if(msg)msg.innerHTML=`<div class="msg err">${esc(e.message)}</div>`;
-  }
-}
-function p3StartTimer(){
-  clearInterval(p3Timer);
-  const tick=()=>{
-    if(!mockState||mockState.submitted)return;
-    mockState.timeLeft=Math.max(0,(mockState.timeLeft||0)-1);
-    p3UpdateTimer();
-    if(mockState.timeLeft<=0){
-      clearInterval(p3Timer);
-      saveCurrentNote();
-      submitMock(true);
-    }
-  };
-  p3UpdateTimer();
-  p3Timer=setInterval(tick,1000);
-}
-function p3UpdateTimer(){
-  const el=document.getElementById("p3-timer");
-  if(!el)return;
-  const sec=Math.max(0,mockState.timeLeft||0);
-  const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;
-  el.textContent=(h?String(h).padStart(2,"0")+":":"")+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
-  el.classList.toggle("danger",sec<=300);
-}
-function p3Palette(){
-  return mockState.questions.map((q,n)=>{
-    const cls=[n===mockState.index?"current":"",mockState.answers[n]!==null?"answered":"",mockState.marked[n]?"review":""].filter(Boolean).join(" ");
-    return `<button class="${cls}" data-p3-p="${n}" title="${esc(sectionName(q.section))}">${n+1}</button>`;
-  }).join("");
-}
-function p3RenderMock(){
-  const i=mockState.index,q=mockState.questions[i],sel=mockState.answers[i],body=document.getElementById("mock-body");
-  if(!q)return;
-  document.getElementById("mock-progress").style.width=((i+1)/mockState.questions.length*100)+"%";
-  body.innerHTML=`
-    <div class="p3-exambar">
-      <div><b>Question ${i+1} / ${mockState.questions.length}</b><div class="p3-meta">${esc(sectionName(q.section))} · ${esc(q.topic||"General")}</div></div>
-      <div id="p3-timer" class="p3-timer">00:00</div>
-    </div>
-    <div class="p3-palette">${p3Palette()}</div>
-    <div class="p3-legend">
-      <span><i class="p3-dot"></i>Not Visited</span>
-      <span><i class="p3-dot" style="border-color:var(--teal)"></i>Answered</span>
-      <span><i class="p3-dot" style="border-color:var(--red)"></i>Marked</span>
-      <span>Negative: -${mockState.negativeMark||0}</span>
-    </div>
-    <hr style="border-color:var(--border);margin:14px 0">
-    ${q.passage?`<div class="passbox">${esc(q.passage)}</div>`:""}
-    <div class="question-title">${esc(textOf(q.question))}</div>
-    ${q.questionImage?`<img src="${esc(q.questionImage)}" alt="Question" style="max-width:100%;max-height:280px;object-fit:contain;margin:8px 0">`:""}
-    <div>${q.options.map((o,j)=>`<button class="option ${sel===j?"selected":""}" data-p3-opt="${j}">${String.fromCharCode(65+j)}. ${esc(optText(o))}</button>`).join("")}</div>
-    <div class="question-tools">
-      <button class="btn ghost" id="p3-mark">${mockState.marked[i]?"🔴 Marked for Review":"⚪ Mark for Review"}</button>
-      <button class="btn ghost" id="p3-clear">${sel===null?"Clear Response":"✕ Clear Response"}</button>
-    </div>
-    <div class="note-box"><label>Personal Note</label><textarea id="question-note" rows="2" placeholder="Apni note likhein...">${esc(mockState.notes[q.id]||"")}</textarea></div>
-    <div class="row" style="margin-top:16px">
-      <button class="btn ghost" id="p3-prev" ${i===0?"disabled":""}>← Previous</button>
-      ${i<mockState.questions.length-1?'<button class="btn" id="p3-next">Save & Next →</button>':'<button class="btn" id="p3-submit">Final Submit</button>'}
-    </div>`;
-  body.querySelectorAll("[data-p3-p]").forEach(b=>b.onclick=()=>{
-    saveCurrentNote();mockState.index=Number(b.dataset.p3P);p3RenderMock();p3UpdateTimer();
-  });
-  body.querySelectorAll("[data-p3-opt]").forEach(b=>b.onclick=()=>{
-    mockState.answers[i]=Number(b.dataset.p3Opt);p3RenderMock();p3UpdateTimer();
-  });
-  document.getElementById("p3-prev").onclick=()=>{saveCurrentNote();mockState.index--;p3RenderMock();p3UpdateTimer();};
-  document.getElementById("p3-next")?.addEventListener("click",()=>{saveCurrentNote();mockState.index++;p3RenderMock();p3UpdateTimer();});
-  document.getElementById("p3-submit")?.addEventListener("click",()=>{
-    saveCurrentNote();
-    if(confirm("Test submit karna hai? Unattempted questions bhi final submit ho jayenge."))submitMock(false);
-  });
-  document.getElementById("p3-mark").onclick=()=>{mockState.marked[i]=!mockState.marked[i];p3RenderMock();p3UpdateTimer();};
-  document.getElementById("p3-clear").onclick=()=>{mockState.answers[i]=null;p3RenderMock();p3UpdateTimer();};
-  document.getElementById("bookmark-current").onclick=()=>toggleBookmark(q);
-  p3UpdateTimer();
-}
-async function p3SubmitMock(auto=false){
-  if(!mockState||mockState.submitted)return;
-  mockState.submitted=true;
-  clearInterval(p3Timer);
-  const qs=mockState.questions,ans=mockState.answers,neg=Number(mockState.negativeMark)||0;
-  let correct=0,wrong=0,unattempted=0,perSection={},perTopic={};
-  const review=qs.map((q,i)=>{
-    const selected=ans[i],ok=selected!==null&&Number(q.correctIndex)===selected;
-    if(selected===null)unattempted++;else if(ok)correct++;else wrong++;
-    for(const [key,obj] of [[q.section,perSection],[q.topic||"General",perTopic]]){
-      if(!obj[key])obj[key]={correct:0,wrong:0,unattempted:0,total:0};
-      obj[key].total++;
-      if(selected===null)obj[key].unattempted++;else if(ok)obj[key].correct++;else obj[key].wrong++;
-    }
-    return {questionId:q.id,section:q.section,topic:q.topic||"General",question:q.question,options:q.options,
-      passage:q.passage||"",selectedIndex:selected,correctIndex:Number(q.correctIndex),correct:ok,explanation:q.explanation||""};
-  });
-  const rawScore=correct-wrong*neg;
-  lastResult={
-    mode:mockState.mode,total:qs.length,correct,wrong,unattempted,
-    negativeMark:neg,rawScore,score:rawScore,
-    percentage:Math.max(0,Math.round(rawScore/qs.length*100)),
-    timeUsed:Math.max(0,(mockState.duration||0)-mockState.timeLeft),
-    autoSubmitted:auto,perSection,perTopic,answers:review
-  };
-  if(currentUser)try{
-    await db.collection("users").doc(currentUser.uid).collection("mockResults").add({
-      ...lastResult,timestamp:firebase.firestore.FieldValue.serverTimestamp()
-    });
-  }catch(e){}
-  renderResult();
-}
-window.submitMock=p3SubmitMock;
-window.startMockTest=async function(mode,value=null,sectionHint=null){
-  // Backward compatibility for old Home/Section/Topic buttons.
-  if(mode==="cpct"){showView("test-builder");document.getElementById("p3-test-type").value="cpct";p3BuilderSummary();return;}
-  const all=await p3GetQuestions();
-  const filtered=mode==="section"?all.filter(q=>q.section===value):all.filter(q=>q.topic===value&&(!sectionHint||q.section===sectionHint));
-  if(!filtered.length){showView("mock");document.getElementById("mock-body").innerHTML='<div class="msg err">Is test ke liye questions available nahi hain.</div>';return;}
-  const qs=shuffle(filtered).slice(0,20);
-  mockState={mode,value,sectionHint,questions:qs,index:0,answers:Array(qs.length).fill(null),marked:Array(qs.length).fill(false),
-    notes:{},bookmarks:{},duration:60*60,timeLeft:60*60,negativeMark:0,startedAt:Date.now(),submitted:false};
-  showView("mock");document.getElementById("mock-mode-label").textContent=mode==="section"?sectionName(value):"Topic: "+value;
-  p3RenderMock();p3StartTimer();
-};
-</script>
-
 </body>
 </html>
-
-<script>
-async function loadParagraphManageList(){
- const box=document.getElementById("paragraph-manage-list");if(!box)return;
- try{const s=await db.collection("typingParagraphs").orderBy("createdAt","desc").limit(100).get();
- box.innerHTML=s.empty?"<p class='sub'>No paragraphs.</p>":s.docs.map(d=>{const p=d.data();return`<div class="admin-list-item"><span><span class="topic-tag">${esc(p.language)}</span>${esc(p.title||"Paragraph")} · ${esc(p.difficulty||"")}</span><button class="btn danger" data-pdel="${d.id}" style="padding:6px 12px;font-size:11px">Delete</button></div>`}).join("");
- box.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=async()=>{if(confirm("Paragraph delete karein?")){await db.collection("typingParagraphs").doc(b.dataset.pdel).delete();loadParagraphManageList()}});
- }catch(e){box.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
-}
-</script>
