@@ -105,6 +105,60 @@ footer{text-align:center;padding:25px;color:var(--muted);font:11px var(--mono);b
 @media(max-width:800px){.ux-sidebar{grid-template-columns:1fr}.ux-side{display:flex;overflow:auto;gap:5px}.ux-side button{min-width:max-content;width:auto}.ux-palette-grid{grid-template-columns:repeat(6,1fr)}}
 @media(max-width:600px){.ux-hero h1{font-size:23px}.ux-search{display:block}.ux-search input{margin-bottom:8px}.ux-table{font-size:11px}}
 
+
+<!--
+CPCT IMPORT CONTRACT v2
+Future PDF→HTML→JSON generator should emit:
+{
+  "questionNo": 1,
+  "section": "computer|readcomp|maths|reasoning|gk",
+  "topic": "stable topic name",
+  "subtopic": "optional",
+  "type": "mcq|comprehension|typing",
+  "question": {"en":"...", "hi":"..."},
+  "options": [{"en":"...","hi":""}, ... exactly 4 for MCQ],
+  "correctIndex": 0,
+  "passage": "... optional shared passage ...",
+  "questionImage": "... optional image/data URL/path ...",
+  "source": "...",
+  "difficulty": "Easy|Medium|Hard"
+}
+Important: English + Hindi of the same question must be ONE object, not two questions.
+Comprehension 53–57 share one passage.
+Typing questions are type="typing" and do not require 4 options.
+-->
+
+
+<style id="phase3-professional-css">
+.p3-builder{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.p3-builder .full{grid-column:1/-1}
+.p3-counts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.p3-counts label{margin:0}
+.p3-counts input{margin-top:5px}
+.p3-summary{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.p3-chip{padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:var(--panel2);font-size:12px}
+.p3-exambar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.p3-timer{font:700 22px var(--mono);color:var(--amber);padding:7px 12px;border:1px solid var(--border);border-radius:9px;background:var(--panel2)}
+.p3-timer.danger{color:var(--red)}
+.p3-meta{font-size:12px;color:var(--muted)}
+.p3-palette{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:12px 0}
+.p3-palette button{padding:7px 2px;background:var(--panel2);color:var(--paper);border:1px solid var(--border);border-radius:6px;cursor:pointer}
+.p3-palette button.current{outline:2px solid var(--amber)}
+.p3-palette button.answered{border-color:var(--teal)}
+.p3-palette button.review{box-shadow:inset 0 0 0 2px var(--red)}
+.p3-palette button.answered.review{background:rgba(94,234,212,.10)}
+.p3-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.p3-dot{display:inline-block;width:10px;height:10px;border-radius:3px;border:1px solid var(--border);vertical-align:-1px;margin-right:3px}
+.p3-section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.p3-review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.p3-review-card{border:1px solid var(--border);border-radius:10px;padding:12px;background:var(--panel2)}
+@media(max-width:700px){
+  .p3-builder,.p3-review-grid{grid-template-columns:1fr}
+  .p3-counts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .p3-palette{grid-template-columns:repeat(6,1fr)}
+}
+</style>
+
 </head>
 <body>
 <header>
@@ -127,7 +181,7 @@ footer{text-align:center;padding:25px;color:var(--muted);font:11px var(--mono);b
 <section id="home" class="view">
   <div class="eyebrow">Dashboard</div><h2>Kya practice karna hai?</h2><p class="sub">Full mock, section test, topic practice ya typing test choose karein.</p>
   <div class="card-grid">
-    <div class="card" data-action="cpct"><div class="icon">▣</div><h3>Full CPCT Mock</h3><p>5 sections se balanced mock test.</p></div>
+    <div class="card" data-action="cpct"><div class="icon">▣</div><h3>Full CPCT Mock</h3><p>5 sections se balanced mock test.</p></div><div class="card" data-action="builder"><div class="icon">⚙</div><h3>Test Builder</h3><p>75-question CPCT ya custom test banayein.</p></div>
     <div class="card" data-action="sections"><div class="icon">☷</div><h3>Section Wise MCQ</h3><p>Computer & IT, Read Comp, Maths, Reasoning, GK.</p></div>
     <div class="card" data-action="topic-search"><div class="icon">⌕</div><h3>Topic Wise Test</h3><p>Topic search karke targeted practice.</p></div>
     <div class="card" data-action="typing-menu"><div class="icon">⌨</div><h3>Typing Practice</h3><p>English, Remington GAIL aur Krutidev.</p></div><div class="card" data-action="bookmarks"><div class="icon">🔖</div><h3>My Bookmarks</h3><p>Saved questions revise karein.</p></div><div class="card" data-action="mistakes"><div class="icon">↻</div><h3>My Mistakes</h3><p>Galat questions practice karein.</p></div>
@@ -186,6 +240,58 @@ footer{text-align:center;padding:25px;color:var(--muted);font:11px var(--mono);b
   </div>
 </section>
 
+
+<section id="test-builder" class="view">
+  <div class="eyebrow">Phase 3 · Test Builder</div>
+  <h2>Professional Test Builder</h2>
+  <p class="sub">CPCT paper structure ke hisab se full mock ya custom section test banayein.</p>
+  <div class="panel">
+    <div class="p3-builder">
+      <div>
+        <label>Test Type</label>
+        <select id="p3-test-type">
+          <option value="cpct">Full CPCT Pattern — 75 MCQ</option>
+          <option value="custom">Custom Test</option>
+        </select>
+      </div>
+      <div>
+        <label>Time Limit</label>
+        <select id="p3-duration">
+          <option value="30">30 minutes</option>
+          <option value="60">60 minutes</option>
+          <option value="90">90 minutes</option>
+          <option value="120" selected>120 minutes</option>
+          <option value="180">180 minutes</option>
+        </select>
+      </div>
+      <div class="full" id="p3-custom-box" style="display:none">
+        <label>Custom Question Counts</label>
+        <div class="p3-counts">
+          <label>Computer<input type="number" id="p3-c" min="0" value="20"></label>
+          <label>Read Comp<input type="number" id="p3-r" min="0" value="5"></label>
+          <label>Maths<input type="number" id="p3-m" min="0" value="6"></label>
+          <label>Reasoning<input type="number" id="p3-re" min="0" value="6"></label>
+          <label>GK<input type="number" id="p3-g" min="0" value="6"></label>
+        </div>
+      </div>
+      <div class="full">
+        <label>Negative Marking</label>
+        <select id="p3-negative">
+          <option value="0" selected>No Negative Marking</option>
+          <option value="0.25">-0.25 for each wrong answer</option>
+          <option value="0.50">-0.50 for each wrong answer</option>
+        </select>
+      </div>
+    </div>
+    <div id="p3-builder-summary" class="p3-summary"></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn" id="p3-start">Start Test</button>
+      <button class="btn ghost" id="p3-cpct">Quick Full CPCT</button>
+    </div>
+    <div id="p3-builder-msg"></div>
+  </div>
+</section>
+
 <section id="mock" class="view">
   <div class="eyebrow" id="mock-mode-label">Mock Test</div><h2>MCQ Test</h2>
   <p class="sub">Answer select karne par sirf selection save hoga. Sahi/galat final submit ke baad Analysis me dikhega.</p>
@@ -235,7 +341,7 @@ footer{text-align:center;padding:25px;color:var(--muted);font:11px var(--mono);b
   <div class="eyebrow">Admin Panel</div><h2>Content Manage Karein</h2><p class="sub">MCQ classification, bulk import aur custom typing paragraphs.</p>
   <div class="row" style="margin-bottom:18px">
     <button class="btn" data-admin-tab="add-q">+ Question</button>
-    <button class="btn ghost" data-admin-tab="bulk-q">Bulk JSON</button>
+    <button class="btn ghost" data-admin-tab="bulk-q">Bulk JSON</button><button class="btn ghost" data-admin-tab="import-safe">Import Validator</button>
     <button class="btn ghost" data-admin-tab="add-p">+ Typing Paragraph</button>
     <button class="btn ghost" data-admin-tab="manage">Manage</button>
   </div>
@@ -258,6 +364,18 @@ footer{text-align:center;padding:25px;color:var(--muted);font:11px var(--mono);b
     <div class="row"><button class="btn ghost" id="load-json-file">JSON Load</button><button class="btn ghost" id="clear-bulk">Clear</button></div>
     <textarea id="bulk-json" rows="10" placeholder='[{"section":"computer","topic":"Computer Basics","q":"CPU?","opts":["A","B","C","D"],"ans":0}]'></textarea>
     <button class="btn" id="save-bulk">Sab Add Karein</button><div id="bulk-msg"></div>
+  </div>
+
+
+  <div class="panel admin-tab hidden" id="admin-import-safe">
+    <h3>PDF → HTML → JSON Import Validator</h3>
+    <p class="sub">CPCT paper structure के हिसाब से bilingual MCQ, comprehension, typing, topic/subtopic, answer formats और image fields को normalize करता है। Import से पहले errors दिखेंगे।</p>
+    <div class="row">
+      <button class="btn ghost" id="validate-json-btn">Validate JSON</button>
+      <button class="btn ghost" id="download-normalized-btn">Download Normalized JSON</button>
+    </div>
+    <div id="import-safe-summary" class="msg" style="display:none"></div>
+    <pre id="import-safe-report" style="white-space:pre-wrap;max-height:360px;overflow:auto;margin-top:12px"></pre>
   </div>
 
   <div class="panel admin-tab hidden" id="admin-add-p">
@@ -407,11 +525,11 @@ firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth(), db=firebase.firestore();
 
 const SECTIONS=[
-  {id:"computer",name:"Computer & IT",icon:"💻"},
-  {id:"readcomp",name:"Read Comp",icon:"📖"},
-  {id:"maths",name:"Maths",icon:"∑"},
+  {id:"computer",name:"Computer Proficiency & General IT",icon:"💻"},
+  {id:"readcomp",name:"Reading Comprehension",icon:"📖"},
+  {id:"maths",name:"Quantitative Aptitude",icon:"∑"},
   {id:"reasoning",name:"Reasoning",icon:"◈"},
-  {id:"gk",name:"GK",icon:"🌐"}
+  {id:"gk",name:"General Awareness",icon:"🌐"}
 ];
 const sectionName=id=>(SECTIONS.find(s=>s.id===id)||{name:id||"General"}).name;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
@@ -548,26 +666,129 @@ async function finishTyping(){
 document.getElementById("restart-typing").onclick=()=>startTypingTest(typingState.mode||"english");
 document.getElementById("duration-select").onchange=()=>{if(typingState.text)loadPassage(typingState.text,typingState.mode,typingState.title)};
 
+function normalizeSectionId(v){
+  const s=String(v??"").toLowerCase().replace(/[^a-z0-9]+/g,"");
+  const aliases={
+    computer:"computer",computerandit:"computer",computerscience:"computer",
+    computerproficiency:"computer",generalitskills:"computer",networking:"computer",
+    readcomp:"readcomp",readingcomprehension:"readcomp",comprehension:"readcomp",
+    maths:"maths",math:"maths",quantitativeaptitude:"maths",
+    reasoning:"reasoning",generalmartabilityandreasoning:"reasoning",mentalability:"reasoning",
+    gk:"gk",generalknowledge:"gk",generalawareness:"gk",generalaawareness:"gk",
+    typing:"typing"
+  };
+  return aliases[s]||"";
+}
 function autoSection(text){
   const s=String(text).toLowerCase();
-  if(/computer|cpu|ram|rom|windows|internet|email|excel|word|powerpoint|hardware|software|network|keyboard|operating system|shortcut/.test(s))return"computer";
-  if(/passage|according to|paragraph|author|comprehension|read the following/.test(s))return"readcomp";
-  if(/percent|percentage|ratio|average|profit|loss|interest|number|fraction|equation|area|perimeter|speed|distance|time|math/.test(s))return"maths";
-  if(/series|analogy|coding|decoding|blood relation|direction|odd one|reasoning|pattern|syllogism/.test(s))return"reasoning";
+  if(/ms[-\s]?excel|openoffice calc|spreadsheet|workbook|worksheet|cell reference|chart|formula|percentage format|lookup function/.test(s))return"computer";
+  if(/ms[-\s]?word|mail merge|margins|ribbon menu|document/.test(s))return"computer";
+  if(/linux|unix|fedora|operating system|boot firmware/.test(s))return"computer";
+  if(/wifi|wlan|ethernet|tcp|udp|ftp|url|uri|browser|email|internet|broadband|hyperlink|e-governance|e-transport/.test(s))return"computer";
+  if(/computer|cpu|ram|rom|motherboard|keyboard|mouse|printer|plotter|hard disk|barcode|binary|hexadecimal|assembler|compiler|interpreter|software|malware|virus|trojan|animation/.test(s))return"computer";
+  if(/passage|according to|writer|author|gizmo|read the following|sub questions/.test(s))return"readcomp";
+  if(/percent|percentage|ratio|average|profit|loss|interest|fraction|equation|area|perimeter|speed|distance|time|simple interest|sets|universal set/.test(s))return"maths";
+  if(/series|analogy|coding|decoding|blood relation|direction|odd one|reasoning|pattern|syllogism|alphabetical order|number-pairs|code for/.test(s))return"reasoning";
   return"gk";
 }
 function autoTopic(text,section){
   const s=String(text).toLowerCase();
   const maps={
-    computer:[["MS Word",/word|docx/],["MS Excel",/excel|spreadsheet|formula/],["Internet",/internet|browser|url|http|email/],["Computer Basics",/cpu|ram|rom|hardware|software|input|output/],["Operating System",/windows|linux|operating system/]],
+    computer:[
+      ["MS Excel 2019",/ms[-\s]?excel|workbook|worksheet|spreadsheet|cell reference|lookup function|bar chart|doughnut chart|number format|percentage format/],
+      ["MS Word 2019",/ms[-\s]?word|mail merge|margins|ribbon menu/],
+      ["OpenOffice Calc",/openoffice calc/],
+      ["Software Testing",/software tester|bugs, errors|statement coverage|dead code|unused branches|testing/],
+      ["Operating Systems",/fedora|linux|unix|operating system|boot firmware|partitioning|raid arrays/],
+      ["Computer Fundamentals",/computer generation|third generation|binary|number system|cpu|ram|rom|motherboard|form factor|port|mouse|input device|swapping|language translating|assembler|compiler|interpreter/],
+      ["Storage & Devices",/optical disc|cd-recordable|floppy|hard drive|pen drive|hard disk|tracks|sectors|printer|plotter|dot matrix/],
+      ["Networking",/wlan|wi-fi|wifi|ethernet|tcp|udp|ftp|broadband|network|protocol/],
+      ["Internet & Web",/internet|browser|url|uri|hyperlink|www|email address|gmail|mailing lists|instant messaging|voip/],
+      ["E-Governance",/e-governance|e-transport|government services|vehicle registration|driving license/],
+      ["Cyber Security",/malware|virus|worm|trojan|encryption|intrusion detection/],
+      ["Multimedia & Graphics",/animation|low contrast images|intensity values|plotter|vector graphics/],
+      ["File Formats",/extension|\.wmv|\.mp4|csv|comma separated values/],
+      ["Cryptography",/block cipher|stream cipher|cipher/],
+      ["Keyboard & Shortcuts",/keyboard shortcut|ctrl \+|page down|function key|modifier keys|f9/],
+      ["Barcode & Inventory",/barcode|inventory management/]
+    ],
     readcomp:[["Reading Comprehension",/.*/]],
-    maths:[["Percentage",/percent|percentage/],["Ratio & Proportion",/ratio|proportion/],["Average",/average/],["Profit & Loss",/profit|loss/],["Time Speed Distance",/speed|distance/]],
-    reasoning:[["Series",/series|sequence/],["Coding-Decoding",/coding|decoding/],["Blood Relation",/blood relation|father|mother|brother|sister/],["Direction",/direction|north|south|east|west/],["Analogy",/analogy/]],
-    gk:[["General Knowledge",/.*/]]
+    maths:[
+      ["Simple Interest",/simple interest|rate of interest/],
+      ["Percentage",/percent|percentage/],
+      ["Algebra & Expressions",/x\s*=|y\s*=|z\s*=|algebraic|expression/],
+      ["Set Theory",/universal set|sets? a and b|complements|a'|b'|intersection/],
+      ["Number System",/number|integers|fraction|divisibility/],
+      ["Arithmetic",/.*/]
+    ],
+    reasoning:[
+      ["Number Pair / Odd One Out",/number-pairs|odd one|do not belong|group/],
+      ["Coding-Decoding",/code|coded|coding|decoding/],
+      ["Letter/Alphabet Analogy",/letters|alphabetical order|related to|same logic/],
+      ["Alphabetical Arrangement",/arranged in alphabetical order|position.*letters/],
+      ["Analogy",/analogy/],
+      ["Series & Pattern",/series|sequence|pattern/]
+    ],
+    gk:[["General Awareness",/.*/]]
   };
-  for(const [name,re] of maps[section]||maps.gk)if(re.test(s))return name;
+  for(const [name,re] of (maps[section]||maps.gk)) if(re.test(s)) return name;
   return sectionName(section);
 }
+const CPCT_TOPIC_OVERRIDES={
+  1:["computer","Software Testing"],
+  2:["computer","MS Excel 2019"],
+  3:["computer","OpenOffice Calc"],
+  4:["computer","Storage & Devices"],
+  5:["computer","Operating Systems"],
+  6:["computer","MS Word 2019"],
+  7:["computer","Barcode & Inventory"],
+  8:["computer","Computer Fundamentals"],
+  9:["computer","Storage & Devices"],
+  10:["computer","Barcode & Inventory"],
+  11:["computer","Computer Fundamentals"],
+  12:["computer","Computer Fundamentals"],
+  13:["computer","Computer Fundamentals"],
+  14:["computer","Operating Systems"],
+  15:["computer","Computer Fundamentals"],
+  16:["computer","Storage & Devices"],
+  17:["computer","Computer Fundamentals"],
+  18:["computer","Cryptography"],
+  19:["computer","Networking"],
+  20:["computer","Storage & Devices"],
+  21:["computer","Keyboard & Shortcuts"],
+  22:["computer","Operating Systems"],
+  23:["computer","File Formats"],
+  24:["computer","File Formats"],
+  25:["computer","File Formats"],
+  26:["computer","Multimedia & Graphics"],
+  27:["computer","Multimedia & Graphics"],
+  28:["computer","Computer Fundamentals"],
+  29:["computer","Cyber Security"],
+  30:["computer","Software Testing"],
+  31:["computer","Internet & Web"],
+  32:["computer","Internet & Web"],
+  33:["computer","Internet & Web"],
+  34:["computer","Networking"],
+  35:["computer","E-Governance"],
+  36:["computer","E-Governance"],
+  37:["computer","Networking"],
+  38:["computer","Internet & Web"],
+  39:["computer","Internet & Web"],
+  40:["computer","Internet & Web"],
+  41:["computer","Internet & Web"],
+  42:["computer","MS Word 2019"],
+  43:["computer","Operating Systems"],
+  44:["computer","Computer Fundamentals"],
+  45:["computer","Computer Fundamentals"],
+  46:["computer","MS Excel 2019"],
+  47:["computer","MS Excel 2019"],
+  48:["computer","MS Excel 2019"],
+  49:["computer","MS Excel 2019"],
+  50:["computer","MS Excel 2019"],
+  51:["computer","MS Excel 2019"],
+  52:["computer","MS Excel 2019"]
+};
+
 async function loadTopicSearchList(){
   const box=document.getElementById("topic-buttons"), q=document.getElementById("topic-filter-input").value.trim().toLowerCase(), sec=document.getElementById("topic-section-filter").value;
   let docs=[];try{const s=await db.collection("questions").get();docs=s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){}
@@ -703,18 +924,140 @@ document.getElementById("save-question").onclick=async()=>{
 };
 
 function normalizeImportedJSON(raw){
-  const arr=Array.isArray(raw)?raw:(raw&&Array.isArray(raw.questions)?raw.questions:null);if(!arr)throw new Error("questions array nahi mila.");
-  return arr.map((it,i)=>{
-    const question=it.question??it.q, options=it.options??it.opts, correct=Number(it.correctIndex??it.correctAnswer??it.ans);
-    if(!question||!Array.isArray(options)||options.length!==4||!Number.isInteger(correct)||correct<0||correct>3)throw new Error(`Question ${i+1} invalid.`);
-    const passage=String(it.passage??it.paragraph??"").trim(), plain=textOf(question)+" "+passage, section=String(it.section||autoSection(plain)).toLowerCase().replace(/\s+/g,"");
-    const sec=SECTIONS.some(s=>s.id===section)?section:autoSection(plain), topic=String(it.topic||autoTopic(plain,sec)).trim();
-    return{section:sec,topic,question,options,correctIndex:correct,explanation:String(it.explanation||""),...(passage?{passage}:{}),...(it.questionImage?{questionImage:String(it.questionImage)}:{})};
+  const source=raw&&typeof raw==="object"?raw:{};
+  const arr=Array.isArray(raw)?raw:(Array.isArray(source.questions)?source.questions:(Array.isArray(source.items)?source.items:null));
+  if(!arr)throw new Error("JSON में questions/questions array नहीं मिला.");
+
+  const out=[],errors=[],seen=new Set();
+  const sectionAliases={computer:"computer",readcomp:"readcomp",maths:"maths",reasoning:"reasoning",gk:"gk"};
+  const asText=v=>typeof v==="string"?v:(v&&typeof v==="object"?String(v.text??v.value??""):"");
+  const normalizeBilingual=(v)=>{
+    if(v&&typeof v==="object"&&!Array.isArray(v)) return {
+      en:String(v.en??v.english??v.text??"").trim(),
+      hi:String(v.hi??v.hindi??"").trim()
+    };
+    return {en:String(v??"").trim(),hi:""};
+  };
+  const normalizeOptions=(v)=>{
+    if(!Array.isArray(v))return [];
+    return v.map(x=>{
+      if(x&&typeof x==="object"&&!Array.isArray(x))
+        return {en:String(x.en??x.english??x.text??x.value??"").trim(),hi:String(x.hi??x.hindi??"").trim()};
+      return {en:String(x??"").trim(),hi:""};
+    });
+  };
+  const normalizeAnswer=(it,options)=>{
+    const candidates=[it.correctIndex,it.correctAnswer,it.answerIndex,it.ans,it.answer,it.correctOption,it.correct];
+    for(const rawAns of candidates){
+      if(rawAns===undefined||rawAns===null||rawAns==="")continue;
+      if(typeof rawAns==="number" && Number.isInteger(rawAns)){
+        if(rawAns>=0&&rawAns<options.length)return rawAns;
+        if(rawAns>=1&&rawAns<=options.length)return rawAns-1;
+      }
+      const s=String(rawAns).trim().toUpperCase();
+      if(/^[ABCD]$/.test(s))return s.charCodeAt(0)-65;
+      if(/^[1-4]$/.test(s))return Number(s)-1;
+      const idx=options.findIndex(o=>o.en.toLowerCase()===s.toLowerCase()||o.hi.toLowerCase()===String(rawAns).toLowerCase());
+      if(idx>=0)return idx;
+    }
+    return null;
+  };
+
+  arr.forEach((it,i)=>{
+    try{
+      const qNo=Number(it.questionNo??it.questionNumber??it.number??(i+1));
+      const q=normalizeBilingual(it.question??it.q??it.text);
+      const options=normalizeOptions(it.options??it.opts??it.choices);
+      const passage=String(it.passage??it.comprehension?.passage??it.paragraph??"").trim();
+      const explicitSection=normalizeSectionId(it.section??it.sectionName??it.subject);
+      const section=sectionAliases[explicitSection]?explicitSection:autoSection([q.en,q.hi,passage].join(" "));
+      const override=CPCT_TOPIC_OVERRIDES[qNo];
+      const topic=String(it.topic??(override?override[1]:"")).trim() || autoTopic([q.en,q.hi,passage].join(" "),section);
+      const subtopic=String(it.subtopic??it.subTopic??it.chapter??"").trim() || "";
+      const type=String(it.type??it.questionType??(passage?"comprehension":"mcq")).toLowerCase();
+      const correctIndex=normalizeAnswer(it,options);
+      const key=String(qNo)+"|"+q.en+"|"+q.hi;
+      if(seen.has(key))throw new Error("duplicate question");
+      seen.add(key);
+
+      if(!q.en&&!q.hi)throw new Error("question text missing");
+      if(type!=="typing"&&type!=="typing test"&&options.length!==4)throw new Error(`options must be 4 (got ${options.length})`);
+      if(type!=="typing"&&type!=="typing test"&&correctIndex===null)throw new Error("correct answer missing/invalid");
+
+      out.push({
+        id:String(it.id??it.questionId??`import-${qNo}`),
+        questionNo:qNo,
+        section,
+        topic,
+        ...(subtopic?{subtopic}:{}),
+        type:type==="typing test"?"typing":type,
+        question:q,
+        options,
+        ...(correctIndex!==null?{correctIndex}:{}),
+        ...(passage?{passage}:{}),
+        ...(it.explanation?{explanation:String(it.explanation)}:{}),
+        ...(it.questionImage||it.image||it.imageUrl?{questionImage:String(it.questionImage??it.image??it.imageUrl)}:{}),
+        ...(it.passageId?{passageId:String(it.passageId)}:{}),
+        source:String(it.source??"CPCT PDF import"),
+        difficulty:String(it.difficulty??"Medium")
+      });
+    }catch(e){errors.push(`Q${i+1}: ${e.message}`)}
   });
+
+  // Preserve section order used by CPCT rather than alphabetical sorting.
+  const order={computer:1,readcomp:2,maths:3,reasoning:4,gk:5,typing:6};
+  out.sort((a,b)=>(order[a.section]||99)-(order[b.section]||99)||a.questionNo-b.questionNo);
+
+  if(errors.length)throw new Error("Import validation failed:\n"+errors.join("\n"));
+  return out;
 }
+
+
+function getBulkRawJSON(){
+  const txt=document.getElementById("bulk-json").value.trim();
+  if(!txt)throw new Error("पहले JSON paste/load करें.");
+  try{return JSON.parse(txt)}catch(e){throw new Error("Invalid JSON: "+e.message)}
+}
+function buildImportReport(arr){
+  const counts={};
+  arr.forEach(q=>{
+    const k=(q.section||"unknown")+" → "+(q.topic||"General");
+    counts[k]=(counts[k]||0)+1;
+  });
+  const lines=[
+    `Valid questions: ${arr.length}`,
+    "",
+    ...Object.entries(counts).sort().map(([k,v])=>`${k}: ${v}`)
+  ];
+  return lines.join("\n");
+}
+document.getElementById("validate-json-btn").onclick=()=>{
+  const box=document.getElementById("import-safe-report"),sum=document.getElementById("import-safe-summary");
+  try{
+    const arr=normalizeImportedJSON(getBulkRawJSON());
+    box.textContent=buildImportReport(arr);
+    sum.style.display="block";sum.className="msg ok";
+    sum.textContent=`✓ ${arr.length} questions valid हैं और import के लिए normalized हैं.`;
+    window.__lastNormalizedImport=arr;
+  }catch(e){
+    box.textContent=e.message;
+    sum.style.display="block";sum.className="msg err";
+    sum.textContent="✕ Import में समस्या है. नीचे report देखें.";
+    window.__lastNormalizedImport=null;
+  }
+};
+document.getElementById("download-normalized-btn").onclick=()=>{
+  try{
+    const arr=window.__lastNormalizedImport||normalizeImportedJSON(getBulkRawJSON());
+    const blob=new Blob([JSON.stringify({version:"cpct-v2",questions:arr},null,2)],{type:"application/json"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+    a.download="cpct-normalized-import.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  }catch(e){alert(e.message)}
+};
+
 document.getElementById("load-json-file").onclick=async()=>{const f=document.getElementById("bulk-file").files[0],m=document.getElementById("bulk-msg");if(!f){m.innerHTML='<div class="msg err">JSON file select karein.</div>';return}try{const t=await f.text();JSON.parse(t);document.getElementById("bulk-json").value=t;m.innerHTML='<div class="msg ok">JSON loaded.</div>'}catch(e){m.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}};
 document.getElementById("clear-bulk").onclick=()=>{document.getElementById("bulk-json").value="";document.getElementById("bulk-file").value="";document.getElementById("bulk-msg").innerHTML=""};
-document.getElementById("save-bulk").onclick=async()=>{const m=document.getElementById("bulk-msg");try{const arr=normalizeImportedJSON(JSON.parse(document.getElementById("bulk-json").value));for(let i=0;i<arr.length;i+=400){const batch=db.batch();arr.slice(i,i+400).forEach(x=>batch.set(db.collection("questions").doc(),x));await batch.commit()}m.innerHTML=`<div class="msg ok">${arr.length} questions add ho gaye.</div>`}catch(e){m.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}};
+document.getElementById("save-bulk").onclick=async()=>{const m=document.getElementById("bulk-msg");try{const arr=normalizeImportedJSON(JSON.parse(document.getElementById("bulk-json").value));window.__lastNormalizedImport=arr;for(let i=0;i<arr.length;i+=400){const batch=db.batch();arr.slice(i,i+400).forEach(x=>batch.set(db.collection("questions").doc(),x));await batch.commit()}m.innerHTML=`<div class="msg ok">${arr.length} questions add ho gaye.</div>`}catch(e){m.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}};
 
 document.getElementById("save-paragraph").onclick=async()=>{
   const language=document.getElementById("p-lang").value,text=document.getElementById("p-text").value.trim(),title=document.getElementById("p-title").value.trim()||"Practice Paragraph",difficulty=document.getElementById("p-level").value,msg=document.getElementById("p-msg");
@@ -916,6 +1259,242 @@ async function loadManageList(){
     uxModal("Submit Exam?",`<p>Answered, review और unattempted status check करके final submit करें.</p><div class="ux-actions"><button class="btn danger" onclick="uxCloseModal();clearInterval(uxExamTimer);submitMock()">Submit Exam</button></div>`);
   };
 })();
+</script>
+
+
+<script id="phase3-professional-js">
+/* Phase 3 Professional CBT layer.
+   Keeps Phase 2 import contract and adds:
+   - exact 75-MCQ CPCT composition: 52 Computer, 5 Read Comp, 6 Maths, 6 Reasoning, 6 GK
+   - custom test builder
+   - countdown timer + auto submit
+   - full question palette states
+   - configurable negative marking
+   - result scoring and section/topic analysis
+*/
+const P3_CPCT_COUNTS={computer:52,readcomp:5,maths:6,reasoning:6,gk:6};
+
+function p3ReadNum(id, fallback=0){
+  const n=parseInt(document.getElementById(id)?.value,10);
+  return Number.isFinite(n)&&n>=0?n:fallback;
+}
+function p3BuilderSummary(){
+  const type=document.getElementById("p3-test-type")?.value||"cpct";
+  const counts=type==="cpct"?P3_CPCT_COUNTS:{
+    computer:p3ReadNum("p3-c"),readcomp:p3ReadNum("p3-r"),maths:p3ReadNum("p3-m"),
+    reasoning:p3ReadNum("p3-re"),gk:p3ReadNum("p3-g")
+  };
+  const total=Object.values(counts).reduce((a,b)=>a+b,0);
+  const box=document.getElementById("p3-builder-summary");
+  if(!box)return;
+  box.innerHTML=Object.entries(counts).map(([k,v])=>`<span class="p3-chip">${sectionName(k)}: <b>${v}</b></span>`).join("")+
+    `<span class="p3-chip">Total: <b>${total}</b></span>`;
+  document.getElementById("p3-custom-box").style.display=type==="custom"?"block":"none";
+}
+document.getElementById("p3-test-type")?.addEventListener("change",p3BuilderSummary);
+["p3-c","p3-r","p3-m","p3-re","p3-g"].forEach(id=>document.getElementById(id)?.addEventListener("input",p3BuilderSummary));
+p3BuilderSummary();
+
+document.querySelectorAll("#home .card").forEach(c=>c.addEventListener("click",()=>{
+  if(c.dataset.action==="builder"){showView("test-builder");p3BuilderSummary();}
+}));
+
+document.getElementById("p3-cpct")?.addEventListener("click",()=>{
+  document.getElementById("p3-test-type").value="cpct";
+  p3BuilderSummary();
+  p3StartConfigured("cpct");
+});
+document.getElementById("p3-start")?.addEventListener("click",()=>{
+  p3StartConfigured(document.getElementById("p3-test-type").value);
+});
+
+let p3Timer=null;
+function p3Counts(){
+  if(document.getElementById("p3-test-type").value==="cpct")return {...P3_CPCT_COUNTS};
+  return {
+    computer:p3ReadNum("p3-c"),readcomp:p3ReadNum("p3-r"),maths:p3ReadNum("p3-m"),
+    reasoning:p3ReadNum("p3-re"),gk:p3ReadNum("p3-g")
+  };
+}
+async function p3GetQuestions(){
+  let all=[];
+  try{
+    const snap=await db.collection("questions").get();
+    all=snap.docs.map(d=>({id:d.id,...d.data()}));
+  }catch(e){
+    throw new Error("Question Bank load nahi ho saka: "+e.message);
+  }
+  all=all.map(q=>{
+    const sec=normalizeSectionId(q.section)||autoSection(textOf(q.question));
+    const topic=q.topic||autoTopic(textOf(q.question),sec);
+    return {...q,section:sec,topic};
+  }).filter(q=>q.type!=="typing" && Array.isArray(q.options) && q.options.length>=4);
+  return all;
+}
+async function p3StartConfigured(type){
+  const msg=document.getElementById("p3-builder-msg");
+  if(msg)msg.innerHTML='<div class="msg">Question Bank check ho raha hai...</div>';
+  const counts=p3Counts();
+  const total=Object.values(counts).reduce((a,b)=>a+b,0);
+  if(!total){if(msg)msg.innerHTML='<div class="msg err">Kam se kam 1 question select karein.</div>';return;}
+  const durationMin=p3ReadNum("p3-duration",120);
+  const negative=Number(document.getElementById("p3-negative").value)||0;
+  try{
+    const all=await p3GetQuestions();
+    const missing=[];
+    Object.entries(counts).forEach(([sec,n])=>{
+      const available=all.filter(q=>q.section===sec).length;
+      if(n>available)missing.push(`${sectionName(sec)}: ${n} chahiye, ${available} available`);
+    });
+    if(missing.length){
+      if(msg)msg.innerHTML='<div class="msg err"><b>Test start nahi hua.</b><br>'+missing.map(esc).join("<br>")+
+        '<br><br>Admin → Question Bank me required questions import karein.</div>';
+      return;
+    }
+    let qs=[];
+    Object.entries(counts).forEach(([sec,n])=>{
+      const pool=shuffle(all.filter(q=>q.section===sec));
+      qs.push(...pool.slice(0,n));
+    });
+    // Keep the CPCT section order; shuffle only inside each section.
+    mockState={
+      mode:type==="cpct"?"cpct":"custom",
+      value:null,sectionHint:null,
+      questions:qs,index:0,answers:Array(qs.length).fill(null),
+      marked:Array(qs.length).fill(false),notes:{},bookmarks:{},
+      duration:durationMin*60,timeLeft:durationMin*60,negativeMark:negative,
+      startedAt:Date.now(),submitted:false
+    };
+    clearInterval(p3Timer);
+    showView("mock");
+    document.getElementById("mock-mode-label").textContent=type==="cpct"?"Full CPCT Mock · 75 Questions":"Custom Mock · "+qs.length+" Questions";
+    p3RenderMock();
+    p3StartTimer();
+  }catch(e){
+    if(msg)msg.innerHTML=`<div class="msg err">${esc(e.message)}</div>`;
+  }
+}
+function p3StartTimer(){
+  clearInterval(p3Timer);
+  const tick=()=>{
+    if(!mockState||mockState.submitted)return;
+    mockState.timeLeft=Math.max(0,(mockState.timeLeft||0)-1);
+    p3UpdateTimer();
+    if(mockState.timeLeft<=0){
+      clearInterval(p3Timer);
+      saveCurrentNote();
+      submitMock(true);
+    }
+  };
+  p3UpdateTimer();
+  p3Timer=setInterval(tick,1000);
+}
+function p3UpdateTimer(){
+  const el=document.getElementById("p3-timer");
+  if(!el)return;
+  const sec=Math.max(0,mockState.timeLeft||0);
+  const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;
+  el.textContent=(h?String(h).padStart(2,"0")+":":"")+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  el.classList.toggle("danger",sec<=300);
+}
+function p3Palette(){
+  return mockState.questions.map((q,n)=>{
+    const cls=[n===mockState.index?"current":"",mockState.answers[n]!==null?"answered":"",mockState.marked[n]?"review":""].filter(Boolean).join(" ");
+    return `<button class="${cls}" data-p3-p="${n}" title="${esc(sectionName(q.section))}">${n+1}</button>`;
+  }).join("");
+}
+function p3RenderMock(){
+  const i=mockState.index,q=mockState.questions[i],sel=mockState.answers[i],body=document.getElementById("mock-body");
+  if(!q)return;
+  document.getElementById("mock-progress").style.width=((i+1)/mockState.questions.length*100)+"%";
+  body.innerHTML=`
+    <div class="p3-exambar">
+      <div><b>Question ${i+1} / ${mockState.questions.length}</b><div class="p3-meta">${esc(sectionName(q.section))} · ${esc(q.topic||"General")}</div></div>
+      <div id="p3-timer" class="p3-timer">00:00</div>
+    </div>
+    <div class="p3-palette">${p3Palette()}</div>
+    <div class="p3-legend">
+      <span><i class="p3-dot"></i>Not Visited</span>
+      <span><i class="p3-dot" style="border-color:var(--teal)"></i>Answered</span>
+      <span><i class="p3-dot" style="border-color:var(--red)"></i>Marked</span>
+      <span>Negative: -${mockState.negativeMark||0}</span>
+    </div>
+    <hr style="border-color:var(--border);margin:14px 0">
+    ${q.passage?`<div class="passbox">${esc(q.passage)}</div>`:""}
+    <div class="question-title">${esc(textOf(q.question))}</div>
+    ${q.questionImage?`<img src="${esc(q.questionImage)}" alt="Question" style="max-width:100%;max-height:280px;object-fit:contain;margin:8px 0">`:""}
+    <div>${q.options.map((o,j)=>`<button class="option ${sel===j?"selected":""}" data-p3-opt="${j}">${String.fromCharCode(65+j)}. ${esc(optText(o))}</button>`).join("")}</div>
+    <div class="question-tools">
+      <button class="btn ghost" id="p3-mark">${mockState.marked[i]?"🔴 Marked for Review":"⚪ Mark for Review"}</button>
+      <button class="btn ghost" id="p3-clear">${sel===null?"Clear Response":"✕ Clear Response"}</button>
+    </div>
+    <div class="note-box"><label>Personal Note</label><textarea id="question-note" rows="2" placeholder="Apni note likhein...">${esc(mockState.notes[q.id]||"")}</textarea></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn ghost" id="p3-prev" ${i===0?"disabled":""}>← Previous</button>
+      ${i<mockState.questions.length-1?'<button class="btn" id="p3-next">Save & Next →</button>':'<button class="btn" id="p3-submit">Final Submit</button>'}
+    </div>`;
+  body.querySelectorAll("[data-p3-p]").forEach(b=>b.onclick=()=>{
+    saveCurrentNote();mockState.index=Number(b.dataset.p3P);p3RenderMock();p3UpdateTimer();
+  });
+  body.querySelectorAll("[data-p3-opt]").forEach(b=>b.onclick=()=>{
+    mockState.answers[i]=Number(b.dataset.p3Opt);p3RenderMock();p3UpdateTimer();
+  });
+  document.getElementById("p3-prev").onclick=()=>{saveCurrentNote();mockState.index--;p3RenderMock();p3UpdateTimer();};
+  document.getElementById("p3-next")?.addEventListener("click",()=>{saveCurrentNote();mockState.index++;p3RenderMock();p3UpdateTimer();});
+  document.getElementById("p3-submit")?.addEventListener("click",()=>{
+    saveCurrentNote();
+    if(confirm("Test submit karna hai? Unattempted questions bhi final submit ho jayenge."))submitMock(false);
+  });
+  document.getElementById("p3-mark").onclick=()=>{mockState.marked[i]=!mockState.marked[i];p3RenderMock();p3UpdateTimer();};
+  document.getElementById("p3-clear").onclick=()=>{mockState.answers[i]=null;p3RenderMock();p3UpdateTimer();};
+  document.getElementById("bookmark-current").onclick=()=>toggleBookmark(q);
+  p3UpdateTimer();
+}
+async function p3SubmitMock(auto=false){
+  if(!mockState||mockState.submitted)return;
+  mockState.submitted=true;
+  clearInterval(p3Timer);
+  const qs=mockState.questions,ans=mockState.answers,neg=Number(mockState.negativeMark)||0;
+  let correct=0,wrong=0,unattempted=0,perSection={},perTopic={};
+  const review=qs.map((q,i)=>{
+    const selected=ans[i],ok=selected!==null&&Number(q.correctIndex)===selected;
+    if(selected===null)unattempted++;else if(ok)correct++;else wrong++;
+    for(const [key,obj] of [[q.section,perSection],[q.topic||"General",perTopic]]){
+      if(!obj[key])obj[key]={correct:0,wrong:0,unattempted:0,total:0};
+      obj[key].total++;
+      if(selected===null)obj[key].unattempted++;else if(ok)obj[key].correct++;else obj[key].wrong++;
+    }
+    return {questionId:q.id,section:q.section,topic:q.topic||"General",question:q.question,options:q.options,
+      passage:q.passage||"",selectedIndex:selected,correctIndex:Number(q.correctIndex),correct:ok,explanation:q.explanation||""};
+  });
+  const rawScore=correct-wrong*neg;
+  lastResult={
+    mode:mockState.mode,total:qs.length,correct,wrong,unattempted,
+    negativeMark:neg,rawScore,score:rawScore,
+    percentage:Math.max(0,Math.round(rawScore/qs.length*100)),
+    timeUsed:Math.max(0,(mockState.duration||0)-mockState.timeLeft),
+    autoSubmitted:auto,perSection,perTopic,answers:review
+  };
+  if(currentUser)try{
+    await db.collection("users").doc(currentUser.uid).collection("mockResults").add({
+      ...lastResult,timestamp:firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }catch(e){}
+  renderResult();
+}
+window.submitMock=p3SubmitMock;
+window.startMockTest=async function(mode,value=null,sectionHint=null){
+  // Backward compatibility for old Home/Section/Topic buttons.
+  if(mode==="cpct"){showView("test-builder");document.getElementById("p3-test-type").value="cpct";p3BuilderSummary();return;}
+  const all=await p3GetQuestions();
+  const filtered=mode==="section"?all.filter(q=>q.section===value):all.filter(q=>q.topic===value&&(!sectionHint||q.section===sectionHint));
+  if(!filtered.length){showView("mock");document.getElementById("mock-body").innerHTML='<div class="msg err">Is test ke liye questions available nahi hain.</div>';return;}
+  const qs=shuffle(filtered).slice(0,20);
+  mockState={mode,value,sectionHint,questions:qs,index:0,answers:Array(qs.length).fill(null),marked:Array(qs.length).fill(false),
+    notes:{},bookmarks:{},duration:60*60,timeLeft:60*60,negativeMark:0,startedAt:Date.now(),submitted:false};
+  showView("mock");document.getElementById("mock-mode-label").textContent=mode==="section"?sectionName(value):"Topic: "+value;
+  p3RenderMock();p3StartTimer();
+};
 </script>
 
 </body>
